@@ -1,0 +1,35 @@
+services:
+  browser:
+    image: browser
+    shm_size: "2gb"
+    container_name: browser
+    cap_add:
+      - "SYS_ADMIN"
+    command: |
+      ffmpeg -re -f lavfi -i testsrc=duration=1:size=1280x720:rate=30 -pix_fmt rgb24 -f v4l2 /dev/video0
+      xvfb-run -a node dist/script.js
+    depends_on:
+      - emulator
+    ports:
+      - 8090:8090
+    volumes:
+      - browser-data:/home/pptruser/data
+  emulator:
+    image: emulator
+    container_name: emulator
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    ports:
+      - 3000:3000
+      - 80:80
+      - 4001:4001
+    volumes:
+      - emulator-config:/config
+      - emulator-data:/data
+      - ./roms/red.gb:/data/roms/red.gb
+volumes:
+  emulator-config:
+  emulator-data:
+  browser-data:

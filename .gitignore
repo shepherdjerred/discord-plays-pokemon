@@ -1,0 +1,4 @@
+dist
+roms
+node_modules
+.env
