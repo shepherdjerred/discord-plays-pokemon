@@ -5,14 +5,13 @@ services:
     container_name: browser
     cap_add:
       - "SYS_ADMIN"
-    command: xvfb-run -a node dist/script.js
+    command: bash -c "ffmpeg -re -f lavfi -i testsrc=duration=1:size=1280x720:rate=30 -pix_fmt rgb24 -f v4l2 /dev/video0 && xvfb-run -a node dist/script.js"
     depends_on:
       - emulator
     volumes:
       - browser-data:/home/pptruser/data
     devices:
       - /dev/video0:/dev/video0
-      - /dev/snd:/dev/snd
     init: true
   emulator:
     image: emulator

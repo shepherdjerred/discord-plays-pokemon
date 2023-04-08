@@ -33,3 +33,7 @@ up:
   WITH DOCKER --compose compose.yml --load=+emulator --load=+browser
     RUN docker-compose up
   END
+
+attach:
+  LOCALLY
+  RUN docker exec -it browser /bin/bash

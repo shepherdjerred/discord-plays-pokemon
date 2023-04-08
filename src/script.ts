@@ -11,77 +11,83 @@ import { exec } from "child_process";
       height: 768,
     },
     executablePath: puppeteer.executablePath(),
-    userDataDir: "~/data",
+    // userDataDir: "/home/pptruser/data",
     args: ["--use-fake-ui-for-media-stream"],
   });
 
   console.log("visiting discord");
-  const webClient = (await browser.pages())[0];
+  const [discordPage] = await browser.pages();
 
-  await webClient.goto(
+  await discordPage.goto(
     `https://discord.com/channels/${configuration.serverId}/${configuration.textChannelId}`,
     {
       waitUntil: "networkidle0",
     }
   );
 
+  console.log("loggging in");
   // enter email
-  const emailtarget = await webClient.waitForSelector("input[name=email]", {
+  const emailtarget = await discordPage.waitForSelector("input[name=email]", {
     visible: true,
   });
   await emailtarget!.type(configuration.username);
 
   // enter password
-  const passtarget = await webClient.waitForSelector("input[name=password]", {
+  const passtarget = await discordPage.waitForSelector("input[name=password]", {
     visible: true,
   });
   await passtarget!.type(configuration.password);
 
   // submit
-  const submitBtn = await webClient.waitForSelector("button[type=submit]", {
+  const submitBtn = await discordPage.waitForSelector("button[type=submit]", {
     visible: true,
   });
   await submitBtn!.click();
 
   // wait for redirection
-  await webClient.waitForNavigation();
+  await discordPage.waitForNavigation();
   console.log("logged in");
 
   // Attempt to join the voice channel.
   console.log("trying to join voice chat");
   const voiceChannelSelector = `a[data-list-item-id="channels___${configuration.voiceChannelId}"]`;
-
-  await webClient.waitForSelector(voiceChannelSelector, { timeout: 0 });
-  await webClient.evaluate(
+  await discordPage.waitForSelector(voiceChannelSelector, { timeout: 0 });
+  await discordPage.evaluate(
     (v) => (document.querySelector(v)! as any).click(),
     voiceChannelSelector
   );
 
-  await webClient.evaluate(() => {
-    const enableVideoButton = document.querySelector(
-      'button[aria-label="Turn On Camera"]'
+  try {
+    await discordPage.waitForSelector(
+      'button[aria-label="Camera Unavailable"]'
     );
-    const disableVideoButton = document.querySelector(
-      'button[aria-label="Turn Off Camera"]'
-    );
+    console.log("camera not working...");
+  } catch (error) {
+    // happy path
+  }
 
-    if (disableVideoButton !== null) return;
+  console.log("turning on video");
+  const videoSelector = 'button[aria-label="Turn On Camera"]';
+  await discordPage.waitForSelector(videoSelector, { timeout: 0 });
+  await discordPage.evaluate(
+    (v) => (document.querySelector(v)! as any).click(),
+    videoSelector
+  );
 
-    if (enableVideoButton !== null) return (enableVideoButton as any).click();
-  });
+  console.log("video is streaming...");
 
-  const page = await browser.newPage();
+  const emulatorPage = await browser.newPage();
 
   console.log("connecting");
-  await page.goto("http://emulator");
+  await emulatorPage.goto("http://emulator");
   console.log("connected");
 
   await delay(1000);
-  page.keyboard.press("ArrowRight");
+  emulatorPage.keyboard.press("ArrowRight");
   await delay(1000);
-  page.keyboard.press("ArrowRight");
+  emulatorPage.keyboard.press("ArrowRight");
 
-  const stream = await getStream(page, { video: true, audio: true });
+  const stream = await getStream(emulatorPage, { video: true, audio: true });
 
   const ffmpeg = exec(
     `ffmpeg -re -i - -vf 'scale=1280:720,fps=30' -pix_fmt rgb24 -f v4l2 /dev/video0 -f alsa -ac 2 -ar 48000 -c:a pcm_s32le hw:0,1,0`
@@ -91,39 +97,40 @@ import { exec } from "child_process";
   });
 
   stream.pipe(ffmpeg.stdin!);
+  emulatorPage.bringToFront();
 
   client.on("message", async (interaction) => {
     switch (interaction.content) {
       case "LEFT":
-        page.keyboard.press("ArrowLeft");
+        emulatorPage.keyboard.press("ArrowLeft");
         interaction.reply("Detected LEFT");
         break;
       case "RIGHT":
-        page.keyboard.press("ArrowRight");
+        emulatorPage.keyboard.press("ArrowRight");
         interaction.reply("Detected RIGHT");
         break;
       case "UP":
-        page.keyboard.press("ArrowUp");
+        emulatorPage.keyboard.press("ArrowUp");
         interaction.reply("Detected UP");
         break;
       case "DOWN":
-        page.keyboard.press("ArrowDown");
+        emulatorPage.keyboard.press("ArrowDown");
         interaction.reply("Detected DOWN");
         break;
       case "A":
-        page.keyboard.press("A");
+        emulatorPage.keyboard.press("A");
         interaction.reply("Detected A");
         break;
       case "B":
-        page.keyboard.press("B");
+        emulatorPage.keyboard.press("B");
         interaction.reply("Detected B");
         break;
       case "SELECT":
-        page.keyboard.press("Shift");
+        emulatorPage.keyboard.press("Shift");
         interaction.reply("Detected SELECT");
         break;
       case "START":
-        page.keyboard.press("Enter");
+        emulatorPage.keyboard.press("Enter");
         interaction.reply("Detected START");
         break;
     }

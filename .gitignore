@@ -1,4 +1,5 @@
 dist
 roms/*
+!roms/.gitkeep
 node_modules
 .env
