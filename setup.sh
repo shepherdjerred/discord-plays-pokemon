@@ -11,32 +11,9 @@ set -xeuo
 sudo apt install build-essential make gcc linux-headers-$(uname -r) git
 
 # gstreamer
-apt-get install libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libgstreamer-plugins-bad1.0-dev gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly gstreamer1.0-libav gstreamer1.0-tools gstreamer1.0-x gstreamer1.0-alsa gstreamer1.0-gl gstreamer1.0-gtk3 gstreamer1.0-qt5 gstreamer1.0-pulseaudio
+sudo apt-get install libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libgstreamer-plugins-bad1.0-dev gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly gstreamer1.0-libav gstreamer1.0-tools gstreamer1.0-x gstreamer1.0-alsa gstreamer1.0-gl gstreamer1.0-gtk3 gstreamer1.0-qt5 gstreamer1.0-pulseaudio
 
-# video loopback module
-sudo apt-get install linux-generic
-sudo apt install dkms
-
-git clone https://github.com/umlaeute/v4l2loopback
-pushd v4l2loopback
-make
-sudo make install
-# sudo modprobe v4l2loopback exclusive_caps=1
-
-sudo cp -R . /usr/src/v4l2loopback-1.1
-sudo dkms add -m v4l2loopback -v 1.1
-sudo dkms build -m v4l2loopback -v 1.1
-sudo dkms install -m v4l2loopback -v 1.1
-
-popd
-
-# verify virtual displays
-ls -1 /sys/devices/virtual/video4linux
-
-# audio loopback module
-sudo apt-get install linux-image-generic alsa-utils
-sudo apt install linux-modules-extra-`uname -r`
-sudo modprobe snd-aloop pcm_substreams=1
+sudo apt-get install v4l2loopback-dkms
 
 # create a fake video device at /dev/video0
 device=/dev/video0
