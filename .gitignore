@@ -1,4 +1,4 @@
 dist
-roms
+roms/*
 node_modules
 .env

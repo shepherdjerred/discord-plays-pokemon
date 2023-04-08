@@ -1,7 +1,6 @@
 import puppeteer from "puppeteer";
 import { launch, getStream } from "puppeteer-stream";
 import client from "./client.js";
-import { Events } from "discord.js";
 import configuration from "./configuration.js";
 import { exec } from "child_process";
 
@@ -13,17 +12,43 @@ import { exec } from "child_process";
     },
     executablePath: puppeteer.executablePath(),
     userDataDir: "~/data",
+    args: ["--use-fake-ui-for-media-stream"],
   });
 
+  console.log("visiting discord");
   const webClient = (await browser.pages())[0];
+
   await webClient.goto(
-    `https://discord.com/channels/${configuration.serverId}`,
+    `https://discord.com/channels/${configuration.serverId}/${configuration.textChannelId}`,
     {
       waitUntil: "networkidle0",
     }
   );
 
+  // enter email
+  const emailtarget = await webClient.waitForSelector("input[name=email]", {
+    visible: true,
+  });
+  await emailtarget!.type(configuration.username);
+
+  // enter password
+  const passtarget = await webClient.waitForSelector("input[name=password]", {
+    visible: true,
+  });
+  await passtarget!.type(configuration.password);
+
+  // submit
+  const submitBtn = await webClient.waitForSelector("button[type=submit]", {
+    visible: true,
+  });
+  await submitBtn!.click();
+
+  // wait for redirection
+  await webClient.waitForNavigation();
+  console.log("logged in");
+
   // Attempt to join the voice channel.
+  console.log("trying to join voice chat");
   const voiceChannelSelector = `a[data-list-item-id="channels___${configuration.voiceChannelId}"]`;
 
   await webClient.waitForSelector(voiceChannelSelector, { timeout: 0 });
@@ -67,7 +92,7 @@ import { exec } from "child_process";
 
   stream.pipe(ffmpeg.stdin!);
 
-  client.on(Events.MessageCreate, async (interaction) => {
+  client.on("message", async (interaction) => {
     switch (interaction.content) {
       case "LEFT":
         page.keyboard.press("ArrowLeft");

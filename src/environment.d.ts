@@ -5,6 +5,8 @@ declare global {
       SERVER_ID: string;
       TEXT_CHANNEL_ID: string;
       VOICE_CHANNEL_ID: string;
+      USERNAME: string;
+      PASSWORD: string;
     }
   }
 }
