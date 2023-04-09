@@ -29,4 +29,4 @@ const discordPage = await browser.newPage();
 await shareScreen(discordPage);
 await emulatorPage.bringToFront();
 
-handleCommands(emulatorPage);
+await handleCommands(emulatorPage);

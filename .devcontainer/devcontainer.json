@@ -34,7 +34,9 @@
         "mkhl.shfmt",
         "redhat.vscode-yaml",
         "arahata.linter-actionlint",
-        "exiasr.hadolint"
+        "exiasr.hadolint",
+        "dbaeumer.vscode-eslint",
+        "github.vscode-github-actions"
       ],
       "settings": {
         "editor.defaultFormatter": "esbenp.prettier-vscode",

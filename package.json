@@ -1,25 +1,39 @@
 {
   "type": "module",
   "scripts": {
-    "build": "tsc"
+    "build": "npx tsc",
+    "watch": "npx tsc --watch",
+    "lint": "npm run lint:check",
+    "lint:fix": "npm run lint:prettier:fix && npm run lint:eslint:fix",
+    "lint:check": "npm run lint:eslint:check && npm run lint:prettier:check",
+    "lint:eslint:check": "npx eslint .",
+    "lint:eslint:fix": "npx eslint . --fix",
+    "lint:prettier:check": "npx prettier --check .",
+    "lint:prettier:fix": "npx prettier --write .",
+    "test": "npx jest",
+    "test:watch": "npx jest --watch"
   },
   "dependencies": {
-    "puppeteer": "19.8.5",
-    "puppeteer-core": "19.8.5",
-    "puppeteer-stream": "3.0.3",
-    "discord.js": "11.6.4",
+    "discord.js": "^14.9.0",
     "dotenv": "^16.0.3",
-    "env-var": "^7.3.0"
+    "env-var": "^7.3.0",
+    "lodash": "4.17.21",
+    "puppeteer": "19.8.5",
+    "puppeteer-core": "19.8.5"
   },
   "devDependencies": {
-    "@types/node": "18.15.11",
     "@tsconfig/recommended": "1.0.2",
-    "typescript": "5.0.4",
+    "@types/jest": "^29.5.0",
+    "@types/lodash": "^4.14.192",
+    "@types/node": "18.15.11",
     "@typescript-eslint/eslint-plugin": "^5.53.0",
     "@typescript-eslint/parser": "^5.53.0",
     "eslint": "^8.34.0",
     "eslint-config-prettier": "^8.8.0",
     "prettier": "^2.8.4",
-    "tslib": "^2.4.1"
+    "ts-jest": "^29.1.0",
+    "ts-node": "^10.9.1",
+    "tslib": "^2.4.1",
+    "typescript": "5.0.4"
   }
 }

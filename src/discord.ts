@@ -17,28 +17,37 @@ async function loginToDiscordWebsite(page: Page) {
     const retryLogin = await page.waitForSelector("button[type=submit]", {
       visible: true,
     });
-    await retryLogin!.click();
+    if (retryLogin) {
+      await retryLogin.click();
+    }
   } catch (e) {
     // ignore
+    console.log("could not find retry login button");
   }
 
   // enter email
   const emailtarget = await page.waitForSelector("input[name=email]", {
     visible: true,
   });
-  await emailtarget!.type(configuration.username);
+  if (emailtarget) {
+    await emailtarget.type(configuration.username);
+  }
 
   // enter password
   const passtarget = await page.waitForSelector("input[name=password]", {
     visible: true,
   });
-  await passtarget!.type(configuration.password);
+  if (passtarget) {
+    await passtarget.type(configuration.password);
+  }
 
   // submit
   const submitBtn = await page.waitForSelector("button[type=submit]", {
     visible: true,
   });
-  await submitBtn!.click();
+  if (submitBtn) {
+    await submitBtn.click();
+  }
 
   // wait for redirection
   await page.waitForNavigation();
@@ -54,14 +63,14 @@ export async function navigateToTextChannel(page: Page) {
 
 export async function joinVoiceChat(page: Page) {
   await loginToDiscordWebsite(page);
-  // Attempt to join the voice channel.
+
   console.log("trying to join voice chat");
   const voiceChannelSelector = `a[data-list-item-id="channels___${configuration.voiceChannelId}"]`;
-  await page.waitForSelector(voiceChannelSelector, { timeout: 0 });
-  await page.evaluate(
-    (v) => (document.querySelector(v)! as any).click(),
-    voiceChannelSelector
-  );
+  const target = await page.waitForSelector(voiceChannelSelector, { timeout: 0 });
+  if (target) {
+    await target.click();
+    console.log("joined voice chat");
+  }
 }
 
 export async function shareScreen(page: Page) {
@@ -69,10 +78,9 @@ export async function shareScreen(page: Page) {
 
   console.log("trying to share screen");
   const videoSelector = 'button[aria-label="Share Your Screen"]';
-  await page.waitForSelector(videoSelector, { timeout: 0 });
-  await page.evaluate(
-    (v) => (document.querySelector(v)! as any).click(),
-    videoSelector
-  );
-  console.log("screen sharing on");
+  const target = await page.waitForSelector(videoSelector, { timeout: 0 });
+  if (target) {
+    await target.click();
+    console.log("screen sharing on");
+  }
 }

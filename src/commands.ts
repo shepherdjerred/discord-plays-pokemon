@@ -1,6 +1,6 @@
 import { Page, KeyInput } from "puppeteer";
 import configuration from "./configuration.js";
-import { Client } from "discord.js";
+import { Client, Events } from "discord.js";
 
 const left = ["left", "l"];
 type Left = (typeof left)[number];
@@ -50,16 +50,7 @@ function isStart(input: string): input is Start {
   return start.includes(input);
 }
 
-const command = [
-  ...left,
-  ...right,
-  ...up,
-  ...down,
-  ...a,
-  ...b,
-  ...select,
-  ...start,
-];
+const command = [...left, ...right, ...up, ...down, ...a, ...b, ...select, ...start];
 type Command = (typeof command)[number];
 function isCommand(input: string): input is Command {
   return command.includes(input.toLowerCase());
@@ -92,7 +83,7 @@ function toCommandInput(input: string): CommandInput | Error {
   let quantity = 1;
   if (hasQuantity) {
     let splitInput = [input[0], input.slice(1)];
-    console.log(`${splitInput} quantity provided`);
+    console.log(`${splitInput.toString()} quantity provided`);
     const [quantityString, _] = splitInput;
     quantity = Number(quantityString);
     splitInput = [splitInput[1]];
@@ -119,46 +110,44 @@ function toChord(input: string): Chord | Error {
 }
 
 export async function handleCommands(page: Page) {
-  const client = new Client({});
+  const client = new Client({ intents: [] });
 
   console.log("logging in via api");
   await client.login(configuration.discordToken);
 
-  client.on("message", async (interaction) => {
-    if (interaction.author.id === configuration.self) {
+  client.once(Events.ClientReady, (c) => {
+    console.log(`Ready! Logged in as ${c.user.tag}`);
+  });
+
+  client.on(Events.MessageCreate, async (event) => {
+    if (event.author.id === configuration.botId) {
       return;
     }
-    const chord = toChord(interaction.content);
+    const chord = toChord(event.content);
     console.log(chord);
     if (chord instanceof Error) {
       console.error(chord);
-      interaction.reply(
-        `Something went wrong when executing your commands: ${chord}.`
-      );
+      await event.reply(`Something went wrong when executing your commands: ${JSON.stringify(chord)}.`);
     } else {
       const maxCommands = 7;
       if (chord.length > 7) {
-        interaction.reply(
-          `You tried to executed ${chord.length} commands, but the max is ${maxCommands}.`
-        );
+        await event.reply(`You tried to executed ${chord.length} commands, but the max is ${maxCommands}.`);
         return;
       }
       const maxQuantity = 4;
-      const highQuantityCommands = chord.filter(
-        (command) => command.quantity > maxQuantity
-      );
+      const highQuantityCommands = chord.filter((command) => command.quantity > maxQuantity);
       if (highQuantityCommands.length > 0) {
-        interaction.reply(
-          `You can't repeat a command more than ${maxQuantity} times. These commands are invalid: ${highQuantityCommands}.`
+        await event.reply(
+          `You can't repeat a command more than ${maxQuantity} times. These commands are invalid: ${JSON.stringify(
+            highQuantityCommands
+          )}.`
         );
         return;
       }
       const maxTotal = 15;
-      const total = chord
-        .map((command) => command.quantity)
-        .reduce((a, b) => a + b, 0);
+      const total = chord.map((command) => command.quantity).reduce((a, b) => a + b, 0);
       if (total > maxTotal) {
-        interaction.reply(
+        await event.reply(
           `You can't perform more than ${maxTotal} total actions in one message. You tried to execute ${total}.`
         );
         return;
@@ -168,14 +157,15 @@ export async function handleCommands(page: Page) {
         for (let i = 0; i < commandInput.quantity; i++) {
           const key = toKeyInput(commandInput.command);
           if (!key) {
-            console.error(`unknown key ${commandInput}`);
-            interaction.react(`An error occurred when executing your command`);
+            console.error(`unknown key ${JSON.stringify(commandInput)}`);
+            await event.react(`An error occurred when executing your command`);
+          } else {
+            console.log(`sending ${JSON.stringify(key)}`);
+            await page.keyboard.press(key);
           }
-          console.log(`sending ${key}`);
-          await page.keyboard.press(key as KeyInput);
         }
       }
-      await interaction.reply(`Executed ${JSON.stringify(chord)}`);
+      await event.reply(`Executed ${JSON.stringify(chord)}`);
     }
   });
 }

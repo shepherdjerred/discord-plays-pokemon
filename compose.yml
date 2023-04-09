@@ -10,12 +10,10 @@ services:
     volumes:
       - browser-data:/home/pptruser/data
     init: true
-    environment:
-      - LANGUAGE=env
     ports:
       - 5900:5900
   emulator:
-    image: emulator
+    image: lscr.io/linuxserver/emulatorjs
     container_name: emulator
     environment:
       - PUID=1000
@@ -28,7 +26,7 @@ services:
     volumes:
       - emulator-config:/config
       - emulator-data:/data
-      - ./roms/red.gb:/data/roms/red.gb
+      - ./roms:/data/roms
 volumes:
   emulator-config:
   emulator-data:
