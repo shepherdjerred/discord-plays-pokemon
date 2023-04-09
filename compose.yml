@@ -10,9 +10,9 @@ services:
       - emulator
     volumes:
       - browser-data:/home/pptruser/data
-    devices:
-      - /dev/video0:/dev/video0
     init: true
+    environment:
+      - LANGUAGE=env
   emulator:
     image: emulator
     container_name: emulator
