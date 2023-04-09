@@ -34,9 +34,6 @@ v4l2-ctl --list-devices
 # <<        /dev/video0
 
 device=/dev/video0
-sudo /usr/local/bin/v4l2loopback-ctl set-caps $device "RBG:1024x768"
-# send blank frames every 3 seconds if no input
-v4l2-ctl -d $device -c timeout=3000
+sudo v4l2-ctl -d $device -c timeout=3000
 
-# write something to the device
-ffmpeg -re -f lavfi -i testsrc=duration=1:size=1280x720:rate=30 -pix_fmt rgb24 -f v4l2 /dev/video0
+ffmpeg -re -f lavfi -i testsrc=duration=1:size=1280x720:rate=30 -pix_fmt yuv420p -f v4l2 $device

@@ -11,6 +11,7 @@ emulator:
 browser:
   FROM +puppeteer.build
   COPY .env .
+  RUN mkdir ~/data
   SAVE IMAGE browser
 
 puppeteer.deps:
