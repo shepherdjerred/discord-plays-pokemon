@@ -10,4 +10,5 @@ export default {
   voiceChannelId: env.get("VOICE_CHANNEL_ID").required().asString(),
   username: env.get("USERNAME").required().asString(),
   password: env.get("PASSWORD").required().asString(),
+  self: env.get("SELF").required().asString(),
 };

@@ -1,11 +1,6 @@
-import puppeteer from "puppeteer";
-import { Browser } from "puppeteer-core";
-import { launch } from "puppeteer-stream";
+import puppeteer, { Browser, launch } from "puppeteer";
 import { handleCommands } from "./commands.js";
-import {
-  setupGame,
-  streamPageToVirtualDisplay as streamPageToVirtualCamera,
-} from "./emulator.js";
+import { setupGame } from "./emulator.js";
 import { shareScreen } from "./discord.js";
 
 async function startBrowser(): Promise<Browser> {
@@ -15,20 +10,14 @@ async function startBrowser(): Promise<Browser> {
     userDataDir: "/home/pptruser/data",
     args: [
       "--enable-usermedia-screen-capturing",
-      "--auto-select-desktop-capture-source=Entire Screen",
+      "--auto-select-desktop-capture-source=red",
     ],
     defaultViewport: {
-      width: 1280,
-      height: 720,
+      width: 640,
+      height: 576,
     },
+    headless: false,
   });
-
-  console.log("overriding permissions");
-  const context = browser.defaultBrowserContext();
-  await context.overridePermissions("https://discord.com", [
-    "camera",
-    "microphone",
-  ]);
   return browser;
 }
 

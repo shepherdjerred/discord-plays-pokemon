@@ -1,15 +1,17 @@
-import { Page } from "puppeteer-core";
+import { Page } from "puppeteer";
 import { delay } from "./util.js";
 
-
 export async function setupGame(emulatorPage: Page) {
-  console.log("connecting");
+  console.log("navigating to emulator webpage");
   await emulatorPage.goto("http://emulator");
-  console.log("connected");
 
+  console.log("pressed right arrow");
   await emulatorPage.keyboard.press("ArrowRight");
-  delay(1000);
+  await delay(1000);
 
+  console.log("pressed right arrow");
   await emulatorPage.keyboard.press("ArrowRight");
-  delay(1000);
+  await delay(1000);
+
+  console.log("navigated to the game page");
 }

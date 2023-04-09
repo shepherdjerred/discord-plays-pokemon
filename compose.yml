@@ -5,7 +5,6 @@ services:
     container_name: browser
     cap_add:
       - "SYS_ADMIN"
-    command: xvfb-run --auto-servernum --server-args='-screen 0, 1920x1080x24' node dist/script.js
     depends_on:
       - emulator
     volumes:
@@ -13,6 +12,8 @@ services:
     init: true
     environment:
       - LANGUAGE=env
+    ports:
+      - 5900:5900
   emulator:
     image: emulator
     container_name: emulator

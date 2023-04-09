@@ -1,6 +1,5 @@
-import { Page } from "puppeteer-core";
+import { Page } from "puppeteer";
 import configuration from "./configuration.js";
-import { exit } from "process";
 
 async function loginToDiscordWebsite(page: Page) {
   await navigateToTextChannel(page);

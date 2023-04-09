@@ -7,6 +7,7 @@ declare global {
       VOICE_CHANNEL_ID: string;
       USERNAME: string;
       PASSWORD: string;
+      SELF: string;
     }
   }
 }
