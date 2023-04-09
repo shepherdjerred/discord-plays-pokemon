@@ -1,6 +1,6 @@
 import { Page, KeyInput } from "puppeteer";
 import configuration from "./configuration.js";
-import { Client, Events } from "discord.js";
+import { Client, Events, GatewayIntentBits } from "discord.js";
 
 const left = ["left", "l"];
 type Left = (typeof left)[number];
@@ -68,8 +68,8 @@ function toKeyInput(command: Command): KeyInput | undefined {
   if (isRight(command)) return "ArrowRight";
   if (isUp(command)) return "ArrowUp";
   if (isDown(command)) return "ArrowDown";
-  if (isA(command)) return "A";
-  if (isB(command)) return "B";
+  if (isA(command)) return "X";
+  if (isB(command)) return "Z";
   if (isSelect(command)) return "Shift";
   if (isStart(command)) return "Enter";
   return undefined;
@@ -110,7 +110,9 @@ function toChord(input: string): Chord | Error {
 }
 
 export async function handleCommands(page: Page) {
-  const client = new Client({ intents: [] });
+  const client = new Client({
+    intents: [GatewayIntentBits.Guilds, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildMessages],
+  });
 
   console.log("logging in via api");
   await client.login(configuration.discordToken);
@@ -120,36 +122,43 @@ export async function handleCommands(page: Page) {
   });
 
   client.on(Events.MessageCreate, async (event) => {
-    if (event.author.id === configuration.botId) {
+    if (event.author.bot) {
+      return;
+    }
+    if (event.channelId !== configuration.textChannelId) {
       return;
     }
     const chord = toChord(event.content);
     console.log(chord);
     if (chord instanceof Error) {
       console.error(chord);
-      await event.reply(`Something went wrong when executing your commands: ${JSON.stringify(chord)}.`);
+      await event.react("💀");
+      return;
     } else {
       const maxCommands = 7;
       if (chord.length > 7) {
-        await event.reply(`You tried to executed ${chord.length} commands, but the max is ${maxCommands}.`);
+        console.error(`You tried to executed ${chord.length} commands, but the max is ${maxCommands}.`);
+        await event.react(`⛔`);
         return;
       }
       const maxQuantity = 4;
       const highQuantityCommands = chord.filter((command) => command.quantity > maxQuantity);
       if (highQuantityCommands.length > 0) {
-        await event.reply(
+        console.error(
           `You can't repeat a command more than ${maxQuantity} times. These commands are invalid: ${JSON.stringify(
             highQuantityCommands
           )}.`
         );
+        await event.react(`⛔`);
         return;
       }
       const maxTotal = 15;
       const total = chord.map((command) => command.quantity).reduce((a, b) => a + b, 0);
       if (total > maxTotal) {
-        await event.reply(
+        console.error(
           `You can't perform more than ${maxTotal} total actions in one message. You tried to execute ${total}.`
         );
+        await event.react(`⛔`);
         return;
       }
       console.log(`valid chord: ${JSON.stringify(chord)}`);
@@ -158,14 +167,17 @@ export async function handleCommands(page: Page) {
           const key = toKeyInput(commandInput.command);
           if (!key) {
             console.error(`unknown key ${JSON.stringify(commandInput)}`);
-            await event.react(`An error occurred when executing your command`);
+            await event.react(`💀`);
           } else {
             console.log(`sending ${JSON.stringify(key)}`);
-            await page.keyboard.press(key);
+            await page.keyboard.press(key, {
+              delay: 50,
+            });
           }
         }
       }
-      await event.reply(`Executed ${JSON.stringify(chord)}`);
+      await event.react(`👍`);
+      console.log(`Executed ${JSON.stringify(chord)}`);
     }
   });
 }

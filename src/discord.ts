@@ -1,7 +1,18 @@
 import { Page } from "puppeteer";
 import configuration from "./configuration.js";
+import fs from "fs/promises";
 
 async function loginToDiscordWebsite(page: Page) {
+  try {
+    const contents = (await fs.readFile("/home/pptruser/data/cookies.json")).toString("utf-8");
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const cookies = JSON.parse(contents);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+    await page.setCookie(...cookies);
+  } catch (error) {
+    console.log(error);
+  }
+
   await navigateToTextChannel(page);
   if (page.url().startsWith("https://discord.com/login")) {
     console.log("not logged in");
@@ -52,6 +63,10 @@ async function loginToDiscordWebsite(page: Page) {
   // wait for redirection
   await page.waitForNavigation();
   console.log("logged in");
+
+  const cookiesToSave = await page.cookies();
+  const cookiesToSaveJson = JSON.stringify(cookiesToSave);
+  await fs.writeFile("/home/pptruser/data/cookies.json", cookiesToSaveJson);
 }
 
 export async function navigateToTextChannel(page: Page) {
@@ -66,7 +81,7 @@ export async function joinVoiceChat(page: Page) {
 
   console.log("trying to join voice chat");
   const voiceChannelSelector = `a[data-list-item-id="channels___${configuration.voiceChannelId}"]`;
-  const target = await page.waitForSelector(voiceChannelSelector, { timeout: 0 });
+  const target = await page.waitForSelector(voiceChannelSelector);
   if (target) {
     await target.click();
     console.log("joined voice chat");
@@ -78,7 +93,7 @@ export async function shareScreen(page: Page) {
 
   console.log("trying to share screen");
   const videoSelector = 'button[aria-label="Share Your Screen"]';
-  const target = await page.waitForSelector(videoSelector, { timeout: 0 });
+  const target = await page.waitForSelector(videoSelector);
   if (target) {
     await target.click();
     console.log("screen sharing on");

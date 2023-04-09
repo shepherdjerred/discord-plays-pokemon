@@ -2,6 +2,7 @@ import { Browser, launch } from "puppeteer";
 import { setupGame } from "./emulator.js";
 import { shareScreen } from "./discord.js";
 import configuration from "./configuration.js";
+import { handleCommands } from "./commands.js";
 
 async function startBrowser(): Promise<Browser> {
   console.log("starting browser");
@@ -21,10 +22,11 @@ async function startBrowser(): Promise<Browser> {
 }
 
 const browser = await startBrowser();
-const emulatorPage = await browser.newPage();
+const emulatorPage = (await browser.pages())[0];
 await setupGame(emulatorPage);
 const discordPage = await browser.newPage();
 await shareScreen(discordPage);
+await handleCommands(emulatorPage);
 await emulatorPage.bringToFront();
 
 // await handleCommands(emulatorPage);
