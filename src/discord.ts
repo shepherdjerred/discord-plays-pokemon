@@ -11,7 +11,17 @@ async function loginToDiscordWebsite(page: Page) {
     return;
   }
 
-  console.log("logging in");
+  console.log("logging in via website");
+  // submit
+  try {
+    const retryLogin = await page.waitForSelector("button[type=submit]", {
+      visible: true,
+    });
+    await retryLogin!.click();
+  } catch (e) {
+    // ignore
+  }
+
   // enter email
   const emailtarget = await page.waitForSelector("input[name=email]", {
     visible: true,

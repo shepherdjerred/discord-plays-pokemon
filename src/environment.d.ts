@@ -8,6 +8,7 @@ declare global {
       USERNAME: string;
       PASSWORD: string;
       SELF: string;
+      ROM_NAME: string;
     }
   }
 }

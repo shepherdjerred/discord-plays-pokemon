@@ -11,4 +11,5 @@ export default {
   username: env.get("USERNAME").required().asString(),
   password: env.get("PASSWORD").required().asString(),
   self: env.get("SELF").required().asString(),
+  romName: env.get("ROM_NAME").required().asString(),
 };

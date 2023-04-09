@@ -31,6 +31,11 @@
 1. Run `docker-compose down`
 1. Run `earthly +up`
 
+## TODO
+
+- [ ] Check savings works
+- [ ] Get Discord to remember logins
+
 ## Resources
 
 * <https://aixxe.net/2021/04/discord-video-bot>
