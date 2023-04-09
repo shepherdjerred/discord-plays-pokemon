@@ -1,7 +1,7 @@
 VERSION 0.7
 
 pipenv:
-  FROM python:3.11
+  FROM python:3.8 # Netlify uses Python 3.8
   WORKDIR /workspace
   RUN pip install --upgrade pip
   RUN pip install pipenv
@@ -17,6 +17,12 @@ deps:
   WORKDIR docs
   COPY Pipfile* .
   RUN pipenv install --deploy --system
+
+lock:
+  FROM +pipenv
+  COPY Pipfile* .
+  RUN pipenv lock
+  SAVE ARTIFACT Pipfile* AS LOCAL .
 
 src:
   FROM +deps
