@@ -8,32 +8,29 @@ set -euxo pipefail
 # This virtual input device will be passed into Docker file streaming
 
 # compiler, headers, etc.
-sudo apt install build-essential make gcc linux-headers-$(uname -r) git gdb help2man
+sudo apt install -y build-essential make gcc linux-headers-$(uname -r) git gdb help2man
 
 # gstreamer
-sudo apt-get install libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libgstreamer-plugins-bad1.0-dev gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly gstreamer1.0-libav gstreamer1.0-tools gstreamer1.0-x gstreamer1.0-alsa gstreamer1.0-gl gstreamer1.0-gtk3 gstreamer1.0-qt5 gstreamer1.0-pulseaudio
+sudo apt-get install -y libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libgstreamer-plugins-bad1.0-dev gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly gstreamer1.0-libav gstreamer1.0-tools gstreamer1.0-x gstreamer1.0-alsa gstreamer1.0-gl gstreamer1.0-gtk3 gstreamer1.0-qt5 gstreamer1.0-pulseaudio
 
-# used for testing
-sudo apt-get install ffmpeg
+# https://johnvansickle.com/ffmpeg/
+wget https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz
+tar -xf ffmpeg-release-amd64-static.tar.xz
+sudo mv ffmpeg-6.0-amd64-static/ffmpeg /usr/local/bin/
+sudo mv ffmpeg-6.0-amd64-static/ffprobe /usr/local/bin/
+rm ffmpeg-release-amd64-static.tar.xz
+rm -rfv ffmpeg-6.0-amd64-static
 
 # install kernel module
-sudo apt install v4l-utils
-sudo apt install v4l2loopback-source module-assistant
+sudo apt install -y v4l-utils
+sudo apt install -y v4l2loopback-source module-assistant
 sudo module-assistant auto-install v4l2loopback-source
-sudo modprobe v4l2loopback exclusive_caps=1
 
 # install cli
+pushd ~
 git clone https://github.com/umlaeute/v4l2loopback
 pushd v4l2loopback
 make
 sudo make install-utils install-man
-
-# Verify
-v4l2-ctl --list-devices
-# << Dummy video device (0x0000) (platform:v4l2loopback-000):
-# <<        /dev/video0
-
-device=/dev/video0
-sudo v4l2-ctl -d $device -c timeout=3000
-
-ffmpeg -re -f lavfi -i testsrc=duration=1:size=1280x720:rate=30 -pix_fmt yuv420p -f v4l2 $device
+popd
+popd

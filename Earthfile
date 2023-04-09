@@ -1,8 +1,5 @@
 VERSION 0.7
 
-ubuntu:
-  FROM ubuntu:jammy
-
 emulator:
   FROM lscr.io/linuxserver/emulatorjs
   COPY roms /data/roms
@@ -27,14 +24,10 @@ puppeteer.build:
   RUN npm run build
   SAVE ARTIFACT dist
 
-bot:
-
 up:
   LOCALLY
+  RUN ./unload.sh
+  RUN ./load.sh
   WITH DOCKER --compose compose.yml --load=+emulator --load=+browser
-    RUN docker-compose up
+    RUN docker-compose up --abort-on-container-exit
   END
-
-attach:
-  LOCALLY
-  RUN docker exec -it browser /bin/bash
