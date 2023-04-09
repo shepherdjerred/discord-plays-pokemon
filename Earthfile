@@ -59,7 +59,7 @@ test:
   SAVE ARTIFACT coverage AS LOCAL coverage
 
 image:
-  FROM puppeteer
+  FROM ghcr.io/puppeteer/puppeteer
   USER root
   RUN apt-get update \
     && apt-get install -yq \
