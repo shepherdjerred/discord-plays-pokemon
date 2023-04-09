@@ -10,7 +10,7 @@ v4l2-ctl --list-devices
 # <<        /dev/video0
 
 device=/dev/video0
-sudo v4l2loopback-ctl set-caps $device "UYVY:1280x720@30/1"
+sudo v4l2loopback-ctl set-caps $device "RGB3:1280x720@30"
 sudo v4l2-ctl -d $device -c timeout=3000
 
-ffmpeg -re -f lavfi -i testsrc=duration=1:size=1280x720:rate=30 -pix_fmt yuv420p -f v4l2 $device
+ffmpeg -re -f lavfi -i testsrc=duration=1:size=1280x720:rate=30 -pix_fmt rgb24 -f v4l2 /dev/video0

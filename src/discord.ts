@@ -3,7 +3,7 @@ import configuration from "./configuration.js";
 import { exit } from "process";
 
 async function loginToDiscordWebsite(page: Page) {
-  navigateToTextChannel(page)
+  await navigateToTextChannel(page)
   if (page.url().startsWith("https://discord.com/login")) {
     console.log("not logged in");
   } else {
@@ -12,7 +12,7 @@ async function loginToDiscordWebsite(page: Page) {
     return;
   }
 
-    console.log("loggging in");
+    console.log("logging in");
     // enter email
     const emailtarget = await page.waitForSelector("input[name=email]", {
       visible: true,

@@ -21,7 +21,7 @@ export async function setupGame(emulatorPage: Page) {
 export async function streamPageToVirtualDisplay(page: Page) {
   const stream = await getStream(page, {
     video: true,
-    audio: false,
+    audio: true,
     audioBitsPerSecond: 128000,
     videoBitsPerSecond: 2500000,
     mimeType: "video/webm",
@@ -29,7 +29,7 @@ export async function streamPageToVirtualDisplay(page: Page) {
 
   console.log("pipeing to ffmpeg");
   const ffmpeg = exec(
-    "ffmpeg -f webm -i pipe: -vf 'scale=1280:720,fps=30' -f v4l2 -vcodec rawvideo -pix_fmt yuv420p /dev/video0",
+    "ffmpeg -re -i pipe: -vf 'scale=1280:720,fps=30' -pix_fmt rgb24 -f v4l2 /dev/video0",
     (error, stdout, stderr) => {
       console.error(stderr);
       console.log(stdout);
