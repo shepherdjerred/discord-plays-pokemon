@@ -2,36 +2,61 @@ VERSION 0.7
 ARG --global EARTHLY_CI
 
 ci:
+  BUILD +markdownlint
+  BUILD ./docs+build
   BUILD +image
   BUILD +lint
   BUILD +test
 
-deps:
+markdownlint:
+  FROM davidanson/markdownlint-cli2
+  COPY . .
+  IF [ "$EARTHLY_CI" = "false" ]
+    RUN markdownlint-cli2-fix '**/*.md'
+    SAVE ARTIFACT ./* AS LOCAL .
+  ELSE
+    RUN markdownlint-cli2 '**/*.md'
+  END
+
+node:
   FROM node:lts
   WORKDIR /workspace
+  CACHE $(npm config get cache)
+
+deps:
+  FROM +node
   COPY package*.json .
   RUN npm ci
   SAVE ARTIFACT *
 
-lint:
+src:
   FROM +deps
-  COPY .eslintrc* .
+  COPY tsconfig.json .
+  COPY src src
+
+lint:
+  FROM +src
+  COPY .eslint* .
   COPY .prettier* .
-  COPY src .
-  COPY test .
+  COPY test test
   IF [ $EARTHLY_CI = "true" ]
     RUN npm run lint:check
   ELSE
     RUN npm run lint:fix
-    SAVE ARTIFACT * AS LOCAL .
+    SAVE ARTIFACT ./* AS LOCAL .
   END
 
 build:
-  FROM +deps
-  COPY src .
-  COPY tsconfig.json .
+  FROM +src
   RUN npm run build
-  SAVE ARTIFACT dist
+  SAVE ARTIFACT dist AS LOCAL dist
+
+test:
+  FROM +src
+  COPY jest* .
+  COPY test .
+  RUN npm run test
+  SAVE ARTIFACT coverage AS LOCAL coverage
 
 image:
   FROM puppeteer
