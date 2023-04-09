@@ -65,7 +65,9 @@ image:
     && apt-get install -yq \
       xvfb \
       x11vnc
-  COPY .env .
+  IF [ $EARTHLY_CI = "false" ]
+    COPY .env .
+  END
   RUN mkdir ~/data
   COPY entrypoint.sh .
   COPY +build/ .
