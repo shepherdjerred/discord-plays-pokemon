@@ -1,6 +1,18 @@
 import { KeyInput } from "puppeteer";
 import _ from "lodash";
 
+const save = ["save"];
+type Save = (typeof save)[number];
+function isSave(input: string): input is Save {
+  return save.includes(input);
+}
+
+const load = ["load"];
+type Load = (typeof load)[number];
+function isLoad(input: string): input is Load {
+  return load.includes(input);
+}
+
 const left = ["left", "l"];
 type Left = (typeof left)[number];
 function isLeft(input: string): input is Left {
@@ -49,7 +61,7 @@ function isStart(input: string): input is Start {
   return start.includes(input);
 }
 
-const command = [...left, ...right, ...up, ...down, ...a, ...b, ...select, ...start];
+const command = [...left, ...right, ...up, ...down, ...a, ...b, ...select, ...start, ...save, ...load];
 type Command = (typeof command)[number];
 function isCommand(input: string): input is Command {
   return command.includes(input.toLowerCase());
@@ -62,6 +74,10 @@ interface CommandInput {
   quantity: number;
 }
 
+export function isRestricted(command: Command) {
+  return isSave(command) && isLoad(command);
+}
+
 export function toKeyInput(command: Command): KeyInput {
   if (isLeft(command)) return "ArrowLeft";
   if (isRight(command)) return "ArrowRight";
@@ -71,6 +87,8 @@ export function toKeyInput(command: Command): KeyInput {
   if (isB(command)) return "Z";
   if (isSelect(command)) return "Shift";
   if (isStart(command)) return "Enter";
+  if (isSave(command)) return "F2";
+  if (isLoad(command)) return "F4";
   throw Error("illegal command");
 }
 
