@@ -115,7 +115,7 @@ export default {
   // resetModules: false,
 
   // A path to a custom resolver
-  // resolver: undefined,
+  resolver: "ts-jest-resolver",
 
   // Automatically restore mock state and implementation before every test
   // restoreMocks: false,
