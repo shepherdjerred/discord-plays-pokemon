@@ -3,6 +3,13 @@ services:
     image: browser
     shm_size: "4gb"
     container_name: browser
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
     cap_add:
       - "SYS_ADMIN"
     depends_on:
@@ -26,7 +33,6 @@ services:
     volumes:
       - emulator-config:/config
       - emulator-data:/data
-      - ./roms:/data/roms
 volumes:
   emulator-config:
   emulator-data:

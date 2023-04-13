@@ -1,19 +1,18 @@
 import { Browser, launch } from "puppeteer";
-import { setupGame } from "./emulator.js";
+import { setupGame, startGame } from "./emulator.js";
 import { shareScreen } from "./discord.js";
-import configuration from "./configuration.js";
 import { handleCommands } from "./commandHandler.js";
 
 async function startBrowser(): Promise<Browser> {
   console.log("starting browser");
-  const width = 1280;
-  const height = 720;
+  const width = 1920;
+  const height = 1080;
   const browser = await launch({
     executablePath: "google-chrome-stable",
     userDataDir: "/home/pptruser/data",
     args: [
       "--enable-usermedia-screen-capturing",
-      `--auto-select-desktop-capture-source=${configuration.romName}`,
+      `--auto-select-desktop-capture-source=Emulator JS`,
       `--window-size=${width},${height}`,
     ],
     headless: false,
@@ -26,5 +25,6 @@ const emulatorPage = (await browser.pages())[0];
 await setupGame(emulatorPage);
 const discordPage = await browser.newPage();
 await shareScreen(discordPage);
-await emulatorPage.bringToFront();
+await startGame(emulatorPage);
 await handleCommands(emulatorPage);
+(await browser.newPage()).bringToFront();
