@@ -12,8 +12,11 @@ async function startBrowser(): Promise<Browser> {
     userDataDir: "/home/pptruser/data",
     args: [
       "--enable-usermedia-screen-capturing",
-      `--auto-select-desktop-capture-source=Emulator JS`,
+      `--auto-select-desktop-capture-source=EmulatorJS`,
       `--window-size=${width},${height}`,
+      `--ignore-gpu-blacklist`,
+      `--no-sandbox`,
+      `--use-gl=desktop`
     ],
     headless: false,
   });
@@ -21,6 +24,9 @@ async function startBrowser(): Promise<Browser> {
 }
 
 const browser = await startBrowser();
+const gpu = await browser.newPage();
+gpu.goto("chrome://gpu");
+gpu.bringToFront();
 const emulatorPage = (await browser.pages())[0];
 await setupGame(emulatorPage);
 const discordPage = await browser.newPage();

@@ -12,13 +12,14 @@ services:
               capabilities: [gpu]
     cap_add:
       - "SYS_ADMIN"
+    privileged: true
     depends_on:
       - emulator
     volumes:
       - browser-data:/home/pptruser/data
     init: true
     ports:
-      - 5900:5900
+      - 8080:8080
   emulator:
     image: lscr.io/linuxserver/emulatorjs
     container_name: emulator

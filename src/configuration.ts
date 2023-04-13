@@ -12,4 +12,5 @@ export default {
   password: env.get("PASSWORD").required().asString(),
   botId: env.get("BOT_ID").required().asString(),
   romName: env.get("ROM_NAME").required().asString(),
+  serverName: env.get("SERVER_NAME").required().asString(),
 };

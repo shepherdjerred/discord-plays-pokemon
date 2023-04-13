@@ -80,6 +80,17 @@ export async function joinVoiceChat(page: Page) {
   await loginToDiscordWebsite(page);
 
   console.log("trying to join voice chat");
+  const channelUrl = `https://discord.com/channels/${configuration.serverId}/${configuration.textChannelId}`;
+  await page.goto(channelUrl, {
+    waitUntil: "networkidle0",
+  });
+  const serverSelector = `div[data-dnd-name="${configuration.serverName}"]`;
+  const serverTarget = await page.waitForSelector(serverSelector);
+  if (serverTarget) {
+    await serverTarget.click();
+    await serverTarget.click();
+    console.log("selected server");
+  }
   const voiceChannelSelector = `a[data-list-item-id="channels___${configuration.voiceChannelId}"]`;
   const target = await page.waitForSelector(voiceChannelSelector);
   if (target) {
