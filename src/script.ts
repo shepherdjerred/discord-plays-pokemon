@@ -9,14 +9,30 @@ async function startBrowser(): Promise<Browser> {
   const height = 1080;
   const browser = await launch({
     executablePath: "google-chrome-stable",
-    userDataDir: "/home/pptruser/data",
+    userDataDir: "/home/user/data",
     args: [
       "--enable-usermedia-screen-capturing",
-      `--auto-select-desktop-capture-source=EmulatorJS`,
+      "--auto-select-desktop-capture-source=EmulatorJS",
       `--window-size=${width},${height}`,
-      `--ignore-gpu-blacklist`,
-      `--no-sandbox`,
-      `--use-gl=desktop`
+      "--disable-software-rasterizer",
+      "--disable-frame-rate-limit",
+      "--disable-gpu-driver-bug-workarounds",
+      "--disable-gpu-driver-workarounds",
+      "--disable-gpu-vsync",
+      "--enable-accelerated-2d-canvas",
+      "--enable-accelerated-video-decode",
+      "--enable-accelerated-mjpeg-decode",
+      "--enable-unsafe-webgpu",
+      "--enable-features=Vulkan,UseSkiaRenderer,VaapiVideoEncoder,VaapiVideoDecoder,CanvasOopRasterization",
+      "--disable-features=UseOzonePlatform,UseChromeOSDirectVideoDecoder",
+      "--enable-gpu-compositing",
+      "--enable-native-gpu-memory-buffers",
+      "--enable-gpu-rasterization",
+      "--enable-oop-rasterization",
+      "--enable-raw-draw",
+      "--enable-zero-copy",
+      "--ignore-gpu-blocklist",
+      "--use-gl=desktop"
     ],
     headless: false,
   });
@@ -34,3 +50,7 @@ await shareScreen(discordPage);
 await startGame(emulatorPage);
 await handleCommands(emulatorPage);
 (await browser.newPage()).bringToFront();
+await emulatorPage.setViewport({
+  height: 160,
+  width: 240
+})

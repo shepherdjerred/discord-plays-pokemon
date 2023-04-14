@@ -10,7 +10,7 @@ export async function handleCommands(page: Page) {
   });
 
   console.log("logging in via api");
-  await client.login(configuration.discordToken);
+  await client.login(configuration.botDiscordToken);
 
   client.once(Events.ClientReady, (c) => {
     console.log(`Ready! Logged in as ${c.user.tag}`);

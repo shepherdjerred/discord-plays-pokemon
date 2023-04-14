@@ -3,6 +3,8 @@ services:
     image: browser
     shm_size: "4gb"
     container_name: browser
+    stdin_open: true
+    tty: true
     deploy:
       resources:
         reservations:
@@ -10,14 +12,19 @@ services:
             - driver: nvidia
               count: 1
               capabilities: [gpu]
-    cap_add:
-      - "SYS_ADMIN"
-    privileged: true
     depends_on:
       - emulator
+    privileged: true
+    cap_add:
+    - SYS_ADMIN
     volumes:
-      - browser-data:/home/pptruser/data
-    init: true
+      - browser-data:/home/user/data
+    environment:
+      SIZEW: 1920
+      SIZEH: 1080
+      REFRESH: 60
+      PASSWD: password
+      BASIC_AUTH_PASSWORD: password
     ports:
       - 8080:8080
   emulator:
