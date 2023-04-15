@@ -18,3 +18,7 @@ export async function startGame(emulatorPage: Page) {
 
   console.log("navigated to the game page");
 }
+
+export async function saveGame(emulatorPage: Page) {
+  emulatorPage.keyboard.press("F2");
+}

@@ -1,8 +1,9 @@
 import { Browser, launch } from "puppeteer";
-import { setupGame, startGame } from "./puppeteer/emulator.js";
+import { saveGame, setupGame, startGame } from "./puppeteer/emulator.js";
 import { shareScreen } from "./puppeteer/discord.js";
 import { handleMessages } from "./discord/messageHandler.js";
 import configuration from "./configuration.js";
+import { delay } from "./util.js";
 
 const width = configuration.width;
 const height = configuration.height;
@@ -54,3 +55,8 @@ await emulatorPage.setViewport({
   height,
   width,
 });
+
+while (true) {
+  await saveGame(emulatorPage);
+  delay(1000 * configuration.autosaveIntervalInSeconds);
+}

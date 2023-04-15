@@ -10,7 +10,7 @@ export function toGameboyAdvanceKeyInput(command: Command): KeyInput {
   if (isDown(command)) return "ArrowDown";
   if (isA(command)) return "X";
   if (isB(command)) return "Z";
-  if (isSelect(command)) return "Shift";
+  if (isSelect(command)) return "ShiftRight";
   if (isStart(command)) return "Enter";
   if (isSave(command)) return "F2";
   if (isLoad(command)) return "F4";

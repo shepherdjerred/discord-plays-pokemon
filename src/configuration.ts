@@ -19,4 +19,5 @@ export default {
   width: env.get("WIDTH").required().asInt(),
   height: env.get("HEIGHT").required().asInt(),
   userDataPath: env.get("USER_DATA_PATH").required().asString(),
+  autosaveIntervalInSeconds: env.get("AUTOSAVE_INTERVAL_IN_SECONDS").required().asInt(),
 };
