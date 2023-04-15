@@ -32,7 +32,7 @@ export function handleMessages(page: Page) {
       return;
     }
 
-    if (await isValid(chord, event.author.id)) {
+    if (isValid(chord, event.author.id)) {
       await execute(chord, page);
       await event.react(`👍`);
     } else {

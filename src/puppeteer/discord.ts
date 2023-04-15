@@ -2,9 +2,11 @@ import { Page } from "puppeteer";
 import configuration from "../configuration.js";
 import fs from "fs/promises";
 
+const cookiesFile = `${configuration.userDataPath}/cookies.json`;
+
 async function loginToDiscordWebsite(page: Page) {
   try {
-    const contents = (await fs.readFile("/home/user/data/cookies.json")).toString("utf-8");
+    const contents = (await fs.readFile(cookiesFile)).toString("utf-8");
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const cookies = JSON.parse(contents);
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
@@ -66,7 +68,7 @@ async function loginToDiscordWebsite(page: Page) {
 
   const cookiesToSave = await page.cookies();
   const cookiesToSaveJson = JSON.stringify(cookiesToSave);
-  await fs.writeFile("/home/user/data/cookies.json", cookiesToSaveJson);
+  await fs.writeFile(cookiesFile, cookiesToSaveJson);
 }
 
 export async function navigateToTextChannel(page: Page) {

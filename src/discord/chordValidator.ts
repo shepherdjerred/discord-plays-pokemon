@@ -2,7 +2,7 @@ import { type Chord } from "../command/chord.js";
 import { isSave, isLoad, Command } from "../command/command.js";
 import configuration from "../configuration.js";
 
-export async function isValid(chord: Chord, sender: string): Promise<boolean> {
+export function isValid(chord: Chord, sender: string): boolean {
   if (chord.length > configuration.chordMaxCommands) {
     return false;
   }

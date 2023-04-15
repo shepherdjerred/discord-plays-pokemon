@@ -2,14 +2,16 @@ import { Browser, launch } from "puppeteer";
 import { setupGame, startGame } from "./puppeteer/emulator.js";
 import { shareScreen } from "./puppeteer/discord.js";
 import { handleMessages } from "./discord/messageHandler.js";
+import configuration from "./configuration.js";
+
+const width = configuration.width;
+const height = configuration.height;
 
 async function startBrowser(): Promise<Browser> {
   console.log("starting browser");
-  const width = 1920;
-  const height = 1080;
   const browser = await launch({
     executablePath: "google-chrome-stable",
-    userDataDir: "/home/user/data",
+    userDataDir: configuration.userDataPath,
     args: [
       "--enable-usermedia-screen-capturing",
       "--auto-select-desktop-capture-source=EmulatorJS",
@@ -32,7 +34,6 @@ async function startBrowser(): Promise<Browser> {
       "--enable-raw-draw",
       "--enable-zero-copy",
       "--ignore-gpu-blocklist",
-      "--use-gl=desktop",
     ],
     headless: false,
   });
@@ -41,16 +42,15 @@ async function startBrowser(): Promise<Browser> {
 
 const browser = await startBrowser();
 const gpu = await browser.newPage();
-gpu.goto("chrome://gpu");
-gpu.bringToFront();
+await gpu.goto("chrome://gpu");
+await gpu.bringToFront();
 const emulatorPage = (await browser.pages())[0];
 await setupGame(emulatorPage);
 const discordPage = await browser.newPage();
 await shareScreen(discordPage);
 await startGame(emulatorPage);
-await handleMessages(emulatorPage);
-(await browser.newPage()).bringToFront();
+handleMessages(emulatorPage);
 await emulatorPage.setViewport({
-  height: 160,
-  width: 240,
+  height,
+  width,
 });
