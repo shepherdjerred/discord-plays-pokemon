@@ -50,6 +50,6 @@ await emulatorPage.setViewport({
 });
 
 while (true) {
-  await saveGame(emulatorPage);
   delay(1000 * configuration.autosaveIntervalInSeconds);
+  await saveGame(emulatorPage);
 }
