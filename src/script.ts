@@ -1,7 +1,7 @@
 import { Browser, launch } from "puppeteer";
-import { setupGame, startGame } from "./emulator.js";
-import { shareScreen } from "./discord.js";
-import { handleCommands } from "./commandHandler.js";
+import { setupGame, startGame } from "./puppeteer/emulator.js";
+import { shareScreen } from "./puppeteer/discord.js";
+import { handleMessages } from "./discord/messageHandler.js";
 
 async function startBrowser(): Promise<Browser> {
   console.log("starting browser");
@@ -32,7 +32,7 @@ async function startBrowser(): Promise<Browser> {
       "--enable-raw-draw",
       "--enable-zero-copy",
       "--ignore-gpu-blocklist",
-      "--use-gl=desktop"
+      "--use-gl=desktop",
     ],
     headless: false,
   });
@@ -48,9 +48,9 @@ await setupGame(emulatorPage);
 const discordPage = await browser.newPage();
 await shareScreen(discordPage);
 await startGame(emulatorPage);
-await handleCommands(emulatorPage);
+await handleMessages(emulatorPage);
 (await browser.newPage()).bringToFront();
 await emulatorPage.setViewport({
   height: 160,
-  width: 240
-})
+  width: 240,
+});

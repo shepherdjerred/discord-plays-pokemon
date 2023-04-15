@@ -1,5 +1,5 @@
 import { Page } from "puppeteer";
-import configuration from "./configuration.js";
+import configuration from "../configuration.js";
 import fs from "fs/promises";
 
 async function loginToDiscordWebsite(page: Page) {
@@ -84,13 +84,7 @@ export async function joinVoiceChat(page: Page) {
   await page.goto(channelUrl, {
     waitUntil: "networkidle0",
   });
-  const serverSelector = `div[data-dnd-name="${configuration.serverName}"]`;
-  const serverTarget = await page.waitForSelector(serverSelector);
-  if (serverTarget) {
-    await serverTarget.click();
-    await serverTarget.click();
-    console.log("selected server");
-  }
+
   const voiceChannelSelector = `a[data-list-item-id="channels___${configuration.voiceChannelId}"]`;
   const target = await page.waitForSelector(voiceChannelSelector);
   if (target) {

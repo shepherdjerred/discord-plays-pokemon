@@ -16,7 +16,7 @@ services:
       - emulator
     privileged: true
     cap_add:
-    - SYS_ADMIN
+      - SYS_ADMIN
     volumes:
       - browser-data:/home/user/data
     environment:
