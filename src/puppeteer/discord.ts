@@ -1,10 +1,18 @@
 import { Page } from "puppeteer";
 import configuration from "../configuration.js";
 import fs from "fs/promises";
+import { delay } from "../util.js";
 
 const cookiesFile = `${configuration.userDataPath}/cookies.json`;
+const textChannelUrl = `https://discord.com/channels/${configuration.serverId}/${configuration.textChannelId}`;
 
-async function loginToDiscordWebsite(page: Page) {
+async function saveCookies(page: Page) {
+  const cookiesToSave = await page.cookies();
+  const cookiesToSaveJson = JSON.stringify(cookiesToSave);
+  await fs.writeFile(cookiesFile, cookiesToSaveJson);
+}
+
+async function loadCookies(page: Page) {
   try {
     const contents = (await fs.readFile(cookiesFile)).toString("utf-8");
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -14,18 +22,21 @@ async function loginToDiscordWebsite(page: Page) {
   } catch (error) {
     console.log(error);
   }
+}
 
+async function isLoggedIn(page: Page): Promise<boolean> {
   await navigateToTextChannel(page);
   if (page.url().startsWith("https://discord.com/login")) {
     console.log("not logged in");
+    return false;
   } else {
     console.log(page.url());
     console.log("already logged in");
-    return;
+    return true;
   }
+}
 
-  console.log("logging in via website");
-  // submit
+async function retryLogin(page: Page) {
   try {
     const retryLogin = await page.waitForSelector("button[type=submit]", {
       visible: true,
@@ -37,6 +48,16 @@ async function loginToDiscordWebsite(page: Page) {
     // ignore
     console.log("could not find retry login button");
   }
+}
+
+export async function login(page: Page) {
+  console.log("logging in via website");
+  await loadCookies(page);
+  if (await isLoggedIn(page)) {
+    return;
+  }
+
+  await retryLogin(page);
 
   // enter email
   const emailtarget = await page.waitForSelector("input[name=email]", {
@@ -64,28 +85,18 @@ async function loginToDiscordWebsite(page: Page) {
 
   // wait for redirection
   await page.waitForNavigation();
+  await saveCookies(page);
   console.log("logged in");
-
-  const cookiesToSave = await page.cookies();
-  const cookiesToSaveJson = JSON.stringify(cookiesToSave);
-  await fs.writeFile(cookiesFile, cookiesToSaveJson);
 }
 
 export async function navigateToTextChannel(page: Page) {
-  const channelUrl = `https://discord.com/channels/${configuration.serverId}/${configuration.textChannelId}`;
-  await page.goto(channelUrl, {
-    waitUntil: "networkidle0",
-  });
+  await page.goto(textChannelUrl);
+  await delay(5000);
 }
 
 export async function joinVoiceChat(page: Page) {
-  await loginToDiscordWebsite(page);
-
   console.log("trying to join voice chat");
-  const channelUrl = `https://discord.com/channels/${configuration.serverId}/${configuration.textChannelId}`;
-  await page.goto(channelUrl, {
-    waitUntil: "networkidle0",
-  });
+  await navigateToTextChannel(page);
 
   const voiceChannelSelector = `a[data-list-item-id="channels___${configuration.voiceChannelId}"]`;
   const target = await page.waitForSelector(voiceChannelSelector);
@@ -96,8 +107,6 @@ export async function joinVoiceChat(page: Page) {
 }
 
 export async function shareScreen(page: Page) {
-  await joinVoiceChat(page);
-
   console.log("trying to share screen");
   const videoSelector = 'button[aria-label="Share Your Screen"]';
   const target = await page.waitForSelector(videoSelector);

@@ -1,24 +1,14 @@
-import { Page } from "puppeteer";
-import { delay } from "../util.js";
+import { ElementHandle, Page } from "puppeteer";
 
-export async function setupGame(emulatorPage: Page) {
-  console.log("navigating to emulator webpage");
-  await emulatorPage.goto("http://emulator");
-  await delay(1000);
+export async function setupGame(page: Page) {
+  console.log("navigating to emulator page");
+  await page.goto("http://server");
+  const [playNowButton] = (await page.$x('//a[text()="Play Now"]')) as ElementHandle[];
+  console.log("clicking play now button");
+  await playNowButton.click();
+  console.log("clicked button");
 }
 
-export async function startGame(emulatorPage: Page) {
-  console.log("pressed right arrow");
-  await emulatorPage.keyboard.press("ArrowRight");
-  await delay(5000);
-
-  console.log("pressed right arrow");
-  await emulatorPage.keyboard.press("ArrowRight");
-  await delay(5000);
-
-  console.log("navigated to the game page");
-}
-
-export async function saveGame(emulatorPage: Page) {
-  emulatorPage.keyboard.press("F2");
+export async function saveGame(page: Page) {
+  await page.keyboard.press("F2");
 }

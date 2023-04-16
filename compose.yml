@@ -13,7 +13,7 @@ services:
               count: 1
               capabilities: [gpu]
     depends_on:
-      - emulator
+      - server
     privileged: true
     cap_add:
       - SYS_ADMIN
@@ -27,21 +27,14 @@ services:
       BASIC_AUTH_PASSWORD: password
     ports:
       - 8080:8080
-  emulator:
-    image: lscr.io/linuxserver/emulatorjs
-    container_name: emulator
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=Etc/UTC
-    ports:
-      - 3000:3000
-      - 80:80
-      - 4001:4001
+  server:
+    image: caddy
+    container_name: server
     volumes:
-      - emulator-config:/config
-      - emulator-data:/data
+      - ./static/:/usr/share/caddy/
+      - caddy-data:/data
+    ports:
+      - 8081:80
 volumes:
-  emulator-config:
-  emulator-data:
   browser-data:
+  caddy-data:

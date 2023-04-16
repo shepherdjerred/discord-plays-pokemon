@@ -1,5 +1,5 @@
-export function delay(time: number): Promise<void> {
+export function delay(milliseconds: number): Promise<void> {
   return new Promise(function (resolve) {
-    setTimeout(resolve, time);
+    setTimeout(resolve, milliseconds);
   });
 }

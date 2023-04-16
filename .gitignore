@@ -1,6 +1,6 @@
 dist
-roms/*
-!roms/.gitkeep
+static/roms/*
+!static/roms/README.md
 node_modules
 .env
 coverage

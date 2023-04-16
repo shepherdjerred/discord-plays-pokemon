@@ -1,6 +1,6 @@
 import { Browser, launch } from "puppeteer";
-import { saveGame, setupGame, startGame } from "./puppeteer/emulator.js";
-import { shareScreen } from "./puppeteer/discord.js";
+import { saveGame, setupGame } from "./puppeteer/emulator.js";
+import { joinVoiceChat, login, shareScreen } from "./puppeteer/discord.js";
 import { handleMessages } from "./discord/messageHandler.js";
 import configuration from "./configuration.js";
 import { delay } from "./util.js";
@@ -11,38 +11,25 @@ const height = configuration.height;
 async function startBrowser(): Promise<Browser> {
   console.log("starting browser");
   const browser = await launch({
-    executablePath: "google-chrome-stable",
+    product: "firefox",
+    executablePath: "firefox",
     userDataDir: configuration.userDataPath,
-    args: [
-      "--enable-usermedia-screen-capturing",
-      "--auto-select-desktop-capture-source=EmulatorJS",
-      `--window-size=${width},${height}`,
-      "--enable-accelerated-2d-canvas",
-      "--enable-accelerated-video-decode",
-      "--enable-accelerated-mjpeg-decode",
-      "--enable-unsafe-webgpu",
-      "--enable-features=Vulkan,UseSkiaRenderer,VaapiVideoEncoder,VaapiVideoDecoder,CanvasOopRasterization",
-      "--enable-gpu-compositing",
-      "--enable-native-gpu-memory-buffers",
-      "--enable-gpu-rasterization",
-      "--enable-oop-rasterization",
-      "--enable-raw-draw",
-      "--enable-zero-copy",
-    ],
+    args: [],
     headless: false,
   });
   return browser;
 }
 
 const browser = await startBrowser();
-const gpu = await browser.newPage();
-await gpu.goto("chrome://gpu");
-await gpu.bringToFront();
+
 const emulatorPage = (await browser.pages())[0];
 await setupGame(emulatorPage);
+
 const discordPage = await browser.newPage();
+await login(discordPage);
+await joinVoiceChat(discordPage);
 await shareScreen(discordPage);
-await startGame(emulatorPage);
+
 handleMessages(emulatorPage);
 await emulatorPage.setViewport({
   height,
@@ -50,6 +37,7 @@ await emulatorPage.setViewport({
 });
 
 while (true) {
-  delay(1000 * configuration.autosaveIntervalInSeconds);
+  await delay(1000 * configuration.autosaveIntervalInSeconds);
+  console.log("saving game");
   await saveGame(emulatorPage);
 }
