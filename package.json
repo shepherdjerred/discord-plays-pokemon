@@ -19,7 +19,7 @@
     "env-var": "^7.3.0",
     "lodash": "4.17.21",
     "puppeteer": "19.9.0",
-    "puppeteer-core": "19.8.5"
+    "puppeteer-core": "19.9.0"
   },
   "devDependencies": {
     "@tsconfig/recommended": "1.0.2",
