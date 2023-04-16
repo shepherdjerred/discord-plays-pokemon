@@ -3,6 +3,8 @@ import { ElementHandle, Page } from "puppeteer";
 export async function setupGame(page: Page) {
   console.log("navigating to emulator page");
   await page.goto("http://server");
+  console.log("waiting for play now button");
+  await page.waitForXPath('//a[text()="Play Now"]');
   const [playNowButton] = (await page.$x('//a[text()="Play Now"]')) as ElementHandle[];
   console.log("clicking play now button");
   await playNowButton.click();

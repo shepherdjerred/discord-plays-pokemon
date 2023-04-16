@@ -7,6 +7,7 @@ import { execute } from "./chordExecutor.js";
 import { isValid } from "./chordValidator.js";
 
 export function handleMessages(page: Page) {
+  console.log("handling commands");
   client.on(Events.MessageCreate, async (event) => {
     // ignore bots
     if (event.author.bot) {

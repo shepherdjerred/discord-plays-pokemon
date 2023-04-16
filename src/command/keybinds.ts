@@ -8,8 +8,8 @@ export function toGameboyAdvanceKeyInput(command: Command): KeyInput {
   if (isRight(command)) return "ArrowRight";
   if (isUp(command)) return "ArrowUp";
   if (isDown(command)) return "ArrowDown";
-  if (isA(command)) return "X";
-  if (isB(command)) return "Z";
+  if (isA(command)) return "Z";
+  if (isB(command)) return "X";
   if (isSelect(command)) return "ShiftRight";
   if (isStart(command)) return "Enter";
   if (isSave(command)) return "F2";

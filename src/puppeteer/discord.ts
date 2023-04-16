@@ -1,7 +1,6 @@
 import { Page } from "puppeteer";
 import configuration from "../configuration.js";
 import fs from "fs/promises";
-import { delay } from "../util.js";
 
 const cookiesFile = `${configuration.userDataPath}/cookies.json`;
 const textChannelUrl = `https://discord.com/channels/${configuration.serverId}/${configuration.textChannelId}`;
@@ -52,10 +51,11 @@ async function retryLogin(page: Page) {
 
 export async function login(page: Page) {
   console.log("logging in via website");
+  await page.goto("https://discord.com/login");
   await loadCookies(page);
-  if (await isLoggedIn(page)) {
-    return;
-  }
+  // if (await isLoggedIn(page)) {
+  // return;
+  // }
 
   await retryLogin(page);
 
@@ -90,19 +90,27 @@ export async function login(page: Page) {
 }
 
 export async function navigateToTextChannel(page: Page) {
-  await page.goto(textChannelUrl);
-  await delay(5000);
+  console.log("navigating to text channel");
+  // firefox is bizarre
+  try {
+    await page.goto(textChannelUrl, {
+      timeout: 5000,
+    });
+  } catch {
+    console.log("timeout expected");
+  }
+  console.log("navigated to text channel");
 }
 
 export async function joinVoiceChat(page: Page) {
   console.log("trying to join voice chat");
-  await navigateToTextChannel(page);
-
   const voiceChannelSelector = `a[data-list-item-id="channels___${configuration.voiceChannelId}"]`;
   const target = await page.waitForSelector(voiceChannelSelector);
   if (target) {
     await target.click();
     console.log("joined voice chat");
+  } else {
+    console.error("could not join voice chat");
   }
 }
 
@@ -113,5 +121,7 @@ export async function shareScreen(page: Page) {
   if (target) {
     await target.click();
     console.log("screen sharing on");
+  } else {
+    console.error("could not share screen");
   }
 }
