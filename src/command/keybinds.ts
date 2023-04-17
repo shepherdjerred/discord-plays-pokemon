@@ -3,17 +3,17 @@ import { parseChord } from "./chord.js";
 import { CommandInput } from "./commandInput.js";
 import { Key } from "selenium-webdriver";
 
-export type KeyInput = (string | number | Promise<string | number>)[];
+export type KeyInput = string;
 
 export function toGameboyAdvanceKeyInput(command: Command): KeyInput {
-  if (isLeft(command)) return [Key.ARROW_LEFT];
-  if (isRight(command)) return [Key.ARROW_RIGHT];
-  if (isUp(command)) return [Key.ARROW_UP];
-  if (isDown(command)) return [Key.ARROW_DOWN];
-  if (isA(command)) return ["Z"];
-  if (isB(command)) return ["X"];
-  if (isSelect(command)) return [Key.SHIFT, Key.SHIFT];
-  if (isStart(command)) return [Key.ENTER];
+  if (isLeft(command)) return Key.ARROW_LEFT;
+  if (isRight(command)) return Key.ARROW_RIGHT;
+  if (isUp(command)) return Key.ARROW_UP;
+  if (isDown(command)) return Key.ARROW_DOWN;
+  if (isA(command)) return "Z";
+  if (isB(command)) return "X";
+  if (isSelect(command)) return Key.SHIFT, Key.SHIFT;
+  if (isStart(command)) return Key.ENTER;
   throw Error("illegal command");
 }
 

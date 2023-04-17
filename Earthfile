@@ -71,9 +71,8 @@ image:
   WORKDIR /home/user
   RUN mkdir -p data
   USER user
-  # disable screen locking
-  RUN kwriteconfig5 --file kscreensaverrc --group Daemon --key Autolock false
-  # RUN qdbus-qt5 org.freedesktop.ScreenSaver /MainApplication reparseConfiguration
+  RUN kwriteconfig5 --file kscreenlockerrc --group Daemon --key Autolock false
+  RUN kwriteconfig5 --file ~/.config/powermanagementprofilesrc --group AC --group DPMSControl --key idleTime 540
   COPY package* .
   COPY +build/ .
   COPY +deps/node_modules node_modules

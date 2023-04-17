@@ -18,4 +18,5 @@ export default {
   width: env.get("WIDTH").required().asInt(),
   height: env.get("HEIGHT").required().asInt(),
   userDataPath: env.get("USER_DATA_PATH").required().asString(),
+  applicationId: env.get("APPLICATION_ID").required().asString(),
 };

@@ -3,17 +3,17 @@ import { sendGameKey } from "./browser/game.js";
 import { start } from "./browser/index.js";
 import { KeyInput } from "./command/keybinds.js";
 import { handleMessages } from "./discord/messageHandler.js";
-import { Browser, Builder } from "selenium-webdriver";
+import { Browser, Builder, Key } from "selenium-webdriver";
 import { writeFile } from "fs/promises";
 import { Options } from "selenium-webdriver/firefox.js";
 import configuration from "./configuration.js";
+import { handleCommands } from "./discord/commands/index.js";
+import { watchForSaves } from "./discord/client.js";
 
 const driver = await new Builder()
   .forBrowser(Browser.FIREFOX)
   .setFirefoxOptions(
-    new Options()
-      .addArguments("--user-data-dir", configuration.userDataPath)
-      .setPreference("media.navigator.permission.disabled", true)
+    new Options().setPreference("media.navigator.permission.disabled", true).setProfile(configuration.userDataPath)
   )
   .build();
 
@@ -26,6 +26,14 @@ try {
   exit(1);
 }
 
-handleMessages(async (key: KeyInput) => {
-  return await sendGameKey(driver, key);
+console.log("fullscreening");
+// Make the game fullscreen
+await sendGameKey(driver, Key.F11);
+await driver.manage().window().fullscreen();
+
+handleMessages(async (key: KeyInput): Promise<void> => {
+  await sendGameKey(driver, key);
 });
+
+handleCommands(driver);
+await watchForSaves();
