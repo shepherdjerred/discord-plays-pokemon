@@ -6,14 +6,15 @@ import { handleMessages } from "./discord/messageHandler.js";
 import { Browser, Builder, Key } from "selenium-webdriver";
 import { writeFile } from "fs/promises";
 import { Options } from "selenium-webdriver/firefox.js";
-import configuration from "./configuration.js";
 import { handleCommands } from "./discord/commands/index.js";
 import { watchForSaves } from "./discord/client.js";
 
 const driver = await new Builder()
   .forBrowser(Browser.FIREFOX)
   .setFirefoxOptions(
-    new Options().setPreference("media.navigator.permission.disabled", true).setProfile(configuration.userDataPath)
+    new Options()
+      .setPreference("media.navigator.permission.disabled", true)
+      .setPreference("media.autoplay.block-webaudio", false)
   )
   .build();
 
@@ -27,8 +28,6 @@ try {
 }
 
 console.log("fullscreening");
-// Make the game fullscreen
-await sendGameKey(driver, Key.F11);
 await driver.manage().window().fullscreen();
 
 handleMessages(async (key: KeyInput): Promise<void> => {
@@ -36,4 +35,6 @@ handleMessages(async (key: KeyInput): Promise<void> => {
 });
 
 handleCommands(driver);
+
+console.log("waiting for save games");
 await watchForSaves();

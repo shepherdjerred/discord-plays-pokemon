@@ -87,7 +87,11 @@ image:
 
 up:
   LOCALLY
-  RUN docker-compose down
+  RUN earthly +down
   WITH DOCKER --compose compose.yml --load=+image
     RUN docker-compose up --abort-on-container-exit
   END
+
+down:
+  LOCALLY
+  RUN docker-compose down

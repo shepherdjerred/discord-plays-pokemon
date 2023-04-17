@@ -6,7 +6,7 @@ import { stopCommand } from "./commands/stop.js";
 
 // the commands API is rate limited.
 // we only need to update commands when the interfaces have changed.
-const updateCommands = true;
+const updateCommands = false;
 
 const rest = new REST({ version: "10" }).setToken(configuration.botDiscordToken);
 

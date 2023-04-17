@@ -13,6 +13,9 @@ export default client;
 export async function watchForSaves() {
   const watcher = watch("/home/user/Downloads");
   for await (const event of watcher) {
+    if (event.filename.includes(".part")) {
+      return;
+    }
     const channel = client.channels.cache.get(configuration.textChannelId);
     if (channel) {
       const contents = await readFile(event.filename);
