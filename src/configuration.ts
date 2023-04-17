@@ -13,11 +13,9 @@ export default {
   chordMaxCommands: env.get("CHORD_MAX_COMMANDS").required().asInt(),
   commandMaxQuantity: env.get("COMMAND_MAX_QUANTITY").required().asInt(),
   chordMaxTotal: env.get("CHORD_MAX_TOTAL").required().asInt(),
-  trustedUsers: env.get("TRUSTED_USERS").required().asString().split(","),
   keyPressDuration: env.get("KEY_PRESS_DURATION").required().asInt(),
   commandQuantityInterval: env.get("COMMAND_QUANTITY_INTERVAL").required().asInt(),
   width: env.get("WIDTH").required().asInt(),
   height: env.get("HEIGHT").required().asInt(),
   userDataPath: env.get("USER_DATA_PATH").required().asString(),
-  autosaveIntervalInSeconds: env.get("AUTOSAVE_INTERVAL_IN_SECONDS").required().asInt(),
 };

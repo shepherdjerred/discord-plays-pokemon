@@ -1,8 +1,7 @@
 import { type Chord } from "../command/chord.js";
-import { isSave, isLoad, Command } from "../command/command.js";
 import configuration from "../configuration.js";
 
-export function isValid(chord: Chord, sender: string): boolean {
+export function isValid(chord: Chord): boolean {
   if (chord.length > configuration.chordMaxCommands) {
     return false;
   }
@@ -14,17 +13,5 @@ export function isValid(chord: Chord, sender: string): boolean {
   if (total > configuration.chordMaxTotal) {
     return false;
   }
-  const hasRestrictedCommand = chord.filter((command) => {
-    return isRestricted(command.command);
-  });
-  if (hasRestrictedCommand.length) {
-    if (!configuration.trustedUsers.includes(sender)) {
-      return false;
-    }
-  }
   return true;
-}
-
-export function isRestricted(command: Command) {
-  return isSave(command) && isLoad(command);
 }

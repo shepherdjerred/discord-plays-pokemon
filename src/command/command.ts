@@ -1,15 +1,3 @@
-const save = ["save"];
-type Save = (typeof save)[number];
-export function isSave(input: string): input is Save {
-  return save.includes(input);
-}
-
-const load = ["load"];
-type Load = (typeof load)[number];
-export function isLoad(input: string): input is Load {
-  return load.includes(input);
-}
-
 const left = ["left", "l"];
 type Left = (typeof left)[number];
 export function isLeft(input: string): input is Left {
@@ -58,7 +46,7 @@ export function isStart(input: string): input is Start {
   return start.includes(input);
 }
 
-const command = [...left, ...right, ...up, ...down, ...a, ...b, ...select, ...start, ...save, ...load];
+const command = [...left, ...right, ...up, ...down, ...a, ...b, ...select, ...start];
 export type Command = (typeof command)[number];
 export function isCommand(input: string): input is Command {
   return command.includes(input.toLowerCase());

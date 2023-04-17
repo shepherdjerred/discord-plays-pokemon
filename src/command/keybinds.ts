@@ -1,19 +1,19 @@
-import { KeyInput } from "puppeteer";
-import { Command, isLeft, isRight, isUp, isDown, isA, isB, isSelect, isStart, isSave, isLoad } from "./command.js";
+import { Command, isLeft, isRight, isUp, isDown, isA, isB, isSelect, isStart } from "./command.js";
 import { parseChord } from "./chord.js";
 import { CommandInput } from "./commandInput.js";
+import { Key } from "selenium-webdriver";
+
+export type KeyInput = (string | number | Promise<string | number>)[];
 
 export function toGameboyAdvanceKeyInput(command: Command): KeyInput {
-  if (isLeft(command)) return "ArrowLeft";
-  if (isRight(command)) return "ArrowRight";
-  if (isUp(command)) return "ArrowUp";
-  if (isDown(command)) return "ArrowDown";
-  if (isA(command)) return "Z";
-  if (isB(command)) return "X";
-  if (isSelect(command)) return "ShiftRight";
-  if (isStart(command)) return "Enter";
-  if (isSave(command)) return "F2";
-  if (isLoad(command)) return "F4";
+  if (isLeft(command)) return [Key.ARROW_LEFT];
+  if (isRight(command)) return [Key.ARROW_RIGHT];
+  if (isUp(command)) return [Key.ARROW_UP];
+  if (isDown(command)) return [Key.ARROW_DOWN];
+  if (isA(command)) return ["Z"];
+  if (isB(command)) return ["X"];
+  if (isSelect(command)) return [Key.SHIFT, Key.SHIFT];
+  if (isStart(command)) return [Key.ENTER];
   throw Error("illegal command");
 }
 

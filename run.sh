@@ -2,4 +2,5 @@
 
 set -euxo pipefail
 
-node dist/main.js
+pkill firefox || true
+node dist/index.js

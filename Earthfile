@@ -63,13 +63,17 @@ image:
   ARG DEBIAN_FRONTEND=noninteractive
   USER root
   RUN apt update
-  RUN apt install -y curl
+  RUN apt upgrade -y
+  RUN apt install -y curl kde-config-screenlocker
   RUN curl -sL https://deb.nodesource.com/setup_lts.x -o /tmp/nodesource_setup.sh
   RUN bash /tmp/nodesource_setup.sh
   RUN apt install -y nodejs
   WORKDIR /home/user
   RUN mkdir -p data
   USER user
+  # disable screen locking
+  RUN kwriteconfig5 --file kscreensaverrc --group Daemon --key Autolock false
+  # RUN qdbus-qt5 org.freedesktop.ScreenSaver /MainApplication reparseConfiguration
   COPY package* .
   COPY +build/ .
   COPY +deps/node_modules node_modules
@@ -77,6 +81,9 @@ image:
     COPY .env .env
   END
   COPY run.sh .
+  COPY supervisord.conf .
+  RUN cat supervisord.conf | sudo tee -a /etc/supervisord.conf
+  RUN rm supervisord.conf
   SAVE IMAGE browser
 
 up:

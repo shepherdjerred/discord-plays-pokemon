@@ -20,8 +20,8 @@ services:
     volumes:
       - browser-data:/home/user/data
     environment:
-      SIZEW: 1920
-      SIZEH: 1080
+      SIZEW: 1280
+      SIZEH: 720
       REFRESH: 60
       PASSWD: password
       BASIC_AUTH_PASSWORD: password
