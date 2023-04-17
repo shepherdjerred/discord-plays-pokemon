@@ -22,4 +22,5 @@ export default {
   burstPressDelay: env.get("BURST_PRESS_DELAY").required().asInt(),
   burstPressQuantity: env.get("BURST_PRESS_QUANTITY").required().asInt(),
   holdDuration: env.get("HOLD_DURATION").required().asInt(),
+  minimumMembersInVoiceChannel: env.get("MINIMUM_MEMBERS_IN_VOICE_CHANNEL").required().asInt(),
 };

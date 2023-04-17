@@ -18,12 +18,10 @@ export function handleMessages(fn: (key: KeyInput) => Promise<void>) {
 }
 
 async function handleMessage(event: Message, fn: (key: KeyInput) => Promise<void>) {
-  // ignore bots
   if (event.author.bot) {
     return;
   }
 
-  // only handle commands in our text chat channel
   if (event.channelId !== configuration.commandTextChannelId) {
     return;
   }
@@ -31,15 +29,10 @@ async function handleMessage(event: Message, fn: (key: KeyInput) => Promise<void
   const channel = client.channels.cache.get(configuration.voiceChannelId);
   if (!channel) {
     await event.react("💀");
-    console.error("could not find voice channel");
     return;
   }
 
-  const isInVoiceChat =
-    (channel as VoiceChannel).members.filter((member) => {
-      return member.id === event.author.id;
-    }).size == 1;
-  if (!isInVoiceChat) {
+  if (event.member?.voice.channelId !== configuration.voiceChannelId) {
     await event.reply(`You have to be in ${channelMention(configuration.voiceChannelId)} to play`);
     return;
   }
@@ -47,8 +40,12 @@ async function handleMessage(event: Message, fn: (key: KeyInput) => Promise<void
   const memberCount = (channel as VoiceChannel).members.filter((member) => {
     return !member.user.bot;
   }).size;
-  if (memberCount < 2) {
-    await event.reply(`You can't play by yourself 😕`);
+  if (memberCount < configuration.minimumMembersInVoiceChannel) {
+    await event.reply(
+      `You can't play unless there are at least ${configuration.minimumMembersInVoiceChannel} in ${channelMention(
+        configuration.voiceChannelId
+      )} 😕`
+    );
     return;
   }
 
