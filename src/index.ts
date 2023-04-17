@@ -3,11 +3,10 @@ import { sendGameKey } from "./browser/game.js";
 import { start } from "./browser/index.js";
 import { KeyInput } from "./command/keybinds.js";
 import { handleMessages } from "./discord/messageHandler.js";
-import { Browser, Builder, Key } from "selenium-webdriver";
+import { Browser, Builder } from "selenium-webdriver";
 import { writeFile } from "fs/promises";
 import { Options } from "selenium-webdriver/firefox.js";
 import { handleCommands } from "./discord/commands/index.js";
-import { watchForSaves } from "./discord/client.js";
 
 const driver = await new Builder()
   .forBrowser(Browser.FIREFOX)
@@ -35,6 +34,3 @@ handleMessages(async (key: KeyInput): Promise<void> => {
 });
 
 handleCommands(driver);
-
-console.log("waiting for save games");
-await watchForSaves();

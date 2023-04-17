@@ -43,5 +43,25 @@ describe("commandInput", () => {
       // invaid command with quantity
       expect(parseCommandInput("2z")).toEqual(undefined);
     });
+
+    test("can parse modifier", () => {
+      expect(parseCommandInput("_a")).toEqual({
+        command: "a",
+        quantity: 1,
+        modifier: "_",
+      });
+
+      expect(parseCommandInput("-a")).toEqual({
+        command: "a",
+        quantity: 1,
+        modifier: "-",
+      });
+
+      expect(parseCommandInput("2-a")).toEqual({
+        command: "a",
+        quantity: 2,
+        modifier: "-",
+      });
+    });
   });
 });

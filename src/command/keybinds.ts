@@ -12,7 +12,7 @@ export function toGameboyAdvanceKeyInput(command: Command): KeyInput {
   if (isDown(command)) return Key.ARROW_DOWN;
   if (isA(command)) return "Z";
   if (isB(command)) return "X";
-  if (isSelect(command)) return Key.SHIFT, Key.SHIFT;
+  if (isSelect(command)) return Key.SHIFT;
   if (isStart(command)) return Key.ENTER;
   throw Error("illegal command");
 }

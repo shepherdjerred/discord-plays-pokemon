@@ -5,6 +5,7 @@ import { makeScreenshot } from "./commands/screenshot.js";
 import { start } from "./commands/start.js";
 import { stop } from "./commands/stop.js";
 import { WebDriver } from "selenium-webdriver";
+import { help } from "./commands/help.js";
 
 export function handleCommands(driver: WebDriver) {
   console.log("handling slash commands");
@@ -22,6 +23,8 @@ export function handleCommands(driver: WebDriver) {
       case "screenshot":
         await makeScreenshot(driver)(interaction);
         break;
+      case "help":
+        await help(interaction);
     }
   });
 }
