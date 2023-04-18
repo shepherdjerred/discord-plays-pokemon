@@ -1,5 +1,5 @@
 import { exit } from "process";
-import { sendGameCommand } from "./browser/game.js";
+import { loopExportSave, sendGameCommand } from "./browser/game.js";
 import { start } from "./browser/index.js";
 import { handleMessages } from "./discord/messageHandler.js";
 import { Browser, Builder } from "selenium-webdriver";
@@ -40,3 +40,4 @@ handleCommands(driver);
 
 await sendStartupMessage();
 await stopIfInactive();
+await loopExportSave(driver);

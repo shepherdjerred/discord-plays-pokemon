@@ -17,6 +17,7 @@ export async function setupGame(driver: WebDriver) {
 export async function sendGameCommand(driver: WebDriver, command: CommandInput) {
   const element = await driver.findElement(By.css("body"));
   const key = toGameboyAdvanceKeyInput(command.command);
+  // TODO form the list first, then execute, so the command input executes atomically
   for (let i = 0; i < command.quantity; i++) {
     if (command.modifier === undefined) {
       await driver.actions().click(element).keyDown(key).pause(configuration.keyPressDuration).keyUp(key).perform();
@@ -33,8 +34,7 @@ export async function sendGameCommand(driver: WebDriver, command: CommandInput) 
       await driver
         .actions()
         .click(element)
-        .keyDown("X")
-        .keyDown(key)
+        .sendKeys("X", key)
         .pause(configuration.holdDuration)
         .keyUp(key)
         .keyUp("X")
@@ -43,5 +43,32 @@ export async function sendGameCommand(driver: WebDriver, command: CommandInput) 
       console.error("unknown");
       throw new Error(`unknown modifier ${JSON.stringify(command)}`);
     }
+  }
+}
+
+export async function exportSave(driver: WebDriver) {
+  console.log("waiting for export save button");
+  const exportSaveButton = await driver.wait(until.elementLocated(By.css("div[title=Export save file]")));
+  console.log("clicking export save button");
+  await exportSaveButton.click();
+  console.log("clicked button");
+  // TODO: diff
+  // TODO: upload to chat
+}
+
+export async function importSave(driver: WebDriver) {
+  console.log("waiting for import save button");
+  const importSaveButton = await driver.wait(until.elementLocated(By.css("div[title=Import save file]")));
+  console.log("clicking import save button");
+  await importSaveButton.click();
+  console.log("clicked button");
+  // TODO select file
+}
+
+export async function loopExportSave(driver: WebDriver) {
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition, no-constant-condition
+  while (true) {
+    await exportSave(driver);
+    await delay(configuration.exportSaveSeconds);
   }
 }

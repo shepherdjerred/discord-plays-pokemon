@@ -27,4 +27,5 @@ export default {
   ec2InstanceId: env.get("EC2_INSTANCE_ID").required().asString(),
   maxInactivePeriodMinutes: env.get("MAX_INACTIVE_PERIOD_MINUTES").required().asInt(),
   inactiveCheckIntervalSeconds: env.get("INACTIVE_CHECK_INTERVAL_SECONDS").required().asInt(),
+  exportSaveSeconds: env.get("EXPORT_SAVE_INTERVAL_SECONDS").required().asInt(),
 };

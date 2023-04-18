@@ -5,18 +5,20 @@ import { delay } from "../util.js";
 import { EC2Client, StopInstancesCommand } from "@aws-sdk/client-ec2";
 
 export async function stopIfInactive() {
-  const now = new Date();
-  if (differenceInMinutes(lastCommand, now) > configuration.maxInactivePeriodMinutes) {
-    const client = new EC2Client({});
-    const stopCommand = new StopInstancesCommand({
-      InstanceIds: [configuration.ec2InstanceId],
-    });
-    try {
-      await client.send(stopCommand);
-    } catch (error) {
-      console.log(error);
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition, no-constant-condition
+  while (true) {
+    const now = new Date();
+    if (differenceInMinutes(lastCommand, now) > configuration.maxInactivePeriodMinutes) {
+      const client = new EC2Client({});
+      const stopCommand = new StopInstancesCommand({
+        InstanceIds: [configuration.ec2InstanceId],
+      });
+      try {
+        await client.send(stopCommand);
+      } catch (error) {
+        console.log(error);
+      }
     }
+    await delay(configuration.inactiveCheckIntervalSeconds);
   }
-  await delay(configuration.inactiveCheckIntervalSeconds);
-  await stopIfInactive();
 }
