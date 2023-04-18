@@ -33,11 +33,11 @@ export async function sendGameCommand(driver: WebDriver, command: CommandInput) 
       await driver
         .actions()
         .click(element)
-        .keyDown("B")
+        .keyDown("X")
         .keyDown(key)
         .pause(configuration.holdDuration)
         .keyUp(key)
-        .keyUp(key)
+        .keyUp("X")
         .perform();
     } else {
       console.error("unknown");

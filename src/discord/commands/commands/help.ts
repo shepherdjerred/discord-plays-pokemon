@@ -6,7 +6,11 @@ import { burst, hold, hold_b } from "../../../command/commandInput.js";
 export const helpCommand = new SlashCommandBuilder().setName("help").setDescription("View Pokébot help");
 
 export async function help(interaction: CommandInteraction) {
-  const modifiers = [`Hold: ${hold.join(", ")}`, `Burst: ${burst.join("\n")}`, `Hold B: ${hold_b.join("\n")}`];
+  const modifiers = [
+    `Hold a button down: ${hold.join(", ")}`,
+    `Burst/rapid-press a button: ${burst.join("\n")}`,
+    `Hold the B button while pressing another button: ${hold_b.join("\n")}`,
+  ];
   const modifiersString = modifiers
     .map((modifier) => {
       return `* ${modifier}`;
@@ -49,6 +53,7 @@ export async function help(interaction: CommandInteraction) {
     `You can perform a maximum of ${
       configuration.chordMaxTotal
     } actions in a single message. For example, the message ${inlineCode("2a 2b")} results in a total of four actions.`,
+    ``,
     `${bold("Modifiers")}`,
     `You can add modifiers to commands to change how the button presses occur.`,
     `The burst modifier will rapidly press a button ${configuration.burstPressQuantity} times.`,
@@ -57,7 +62,12 @@ export async function help(interaction: CommandInteraction) {
     `For example ${inlineCode("2-a 2_b")} will cause A to be pressed ${
       configuration.burstPressQuantity * 2
     } times and B to be held for ${configuration.holdDuration * 2} milliseconds.`,
+    ``,
     `${bold("Action List:")}`,
+    `You can perform the listed action by providing any of the words listed. For example, to press Up you can send ${inlineCode(
+      "up"
+    )} or ${inlineCode("u")}.`,
+    `All words are case insensitive.`,
     commandString,
     ``,
     `${bold("Modifier List:")}`,
