@@ -17,33 +17,39 @@ export async function setupGame(driver: WebDriver) {
 export async function sendGameCommand(driver: WebDriver, command: CommandInput) {
   const element = await driver.findElement(By.css("body"));
   const key = toGameboyAdvanceKeyInput(command.command);
-  // TODO form the list first, then execute, so the command input executes atomically
-  for (let i = 0; i < command.quantity; i++) {
-    if (command.modifier === undefined) {
+  if (!command.modifier) {
+    for (let i = 0; i < command.quantity; i++) {
       await driver.actions().click(element).keyDown(key).pause(configuration.keyPressDuration).keyUp(key).perform();
-    } else if (isBurst(command.modifier)) {
-      for (let i = 0; i < configuration.burstPressQuantity; i++) {
-        await driver.actions().click(element).keyDown(key).pause(configuration.burstPressDuration).keyUp(key).perform();
-        if (configuration.burstPressDelay > 0) {
-          await delay(configuration.burstPressDelay);
-        }
-      }
-    } else if (isHold(command.modifier)) {
-      await driver.actions().click(element).keyDown(key).pause(configuration.holdDuration).keyUp(key).perform();
-    } else if (isHoldB(command.modifier)) {
-      await driver
-        .actions()
-        .click(element)
-        .sendKeys("X", key)
-        .pause(configuration.holdDuration)
-        .keyUp(key)
-        .keyUp("X")
-        .perform();
-    } else {
-      console.error("unknown");
-      throw new Error(`unknown modifier ${JSON.stringify(command)}`);
     }
+    return;
   }
+  if (isHoldB(command.modifier)) {
+    await driver
+      .actions()
+      .click(element)
+      .sendKeys("X", key)
+      .pause(configuration.holdDuration * command.quantity)
+      .keyUp(key)
+      .keyUp("X")
+      .perform();
+    return;
+  } else if (isHold(command.modifier)) {
+    await driver.actions().click(element).keyDown(key).pause(configuration.holdDuration).keyUp(key).perform();
+    return;
+  }
+
+  if (isBurst(command.modifier)) {
+    for (let i = 0; i < configuration.burstPressQuantity * command.quantity; i++) {
+      await driver.actions().click(element).keyDown(key).pause(configuration.burstPressDuration).keyUp(key).perform();
+      if (configuration.burstPressDelay > 0) {
+        await delay(configuration.burstPressDelay);
+      }
+    }
+    return;
+  }
+
+  console.error("unknown");
+  throw new Error(`unknown modifier ${JSON.stringify(command)}`);
 }
 
 export async function exportSave(driver: WebDriver) {
