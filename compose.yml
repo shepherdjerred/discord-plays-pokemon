@@ -18,7 +18,7 @@ services:
     cap_add:
       - SYS_ADMIN
     volumes:
-      - browser-data:/home/user/data
+      - browser-downloads:/home/user/Downloads
     environment:
       SIZEW: 1280
       SIZEH: 720
@@ -36,5 +36,5 @@ services:
     ports:
       - 8081:80
 volumes:
-  browser-data:
+  browser-downloads:
   caddy-data:

@@ -1,12 +1,12 @@
 import { exit } from "process";
-import { sendGameKey } from "./browser/game.js";
+import { sendGameCommand } from "./browser/game.js";
 import { start } from "./browser/index.js";
-import { KeyInput } from "./command/keybinds.js";
 import { handleMessages } from "./discord/messageHandler.js";
 import { Browser, Builder } from "selenium-webdriver";
 import { writeFile } from "fs/promises";
 import { Options } from "selenium-webdriver/firefox.js";
-import { handleCommands } from "./discord/commands/index.js";
+import { handleCommands, sendStartupMessage } from "./discord/commands/index.js";
+import { CommandInput } from "./command/commandInput.js";
 
 const driver = await new Builder()
   .forBrowser(Browser.FIREFOX)
@@ -14,6 +14,8 @@ const driver = await new Builder()
     new Options()
       .setPreference("media.navigator.permission.disabled", true)
       .setPreference("media.autoplay.block-webaudio", false)
+      .setPreference("privacy.webrtc.legacyGlobalIndicator", false)
+      .setPreference("privacy.webrtc.hideGlobalIndicator", true)
   )
   .build();
 
@@ -29,8 +31,10 @@ try {
 console.log("fullscreening");
 await driver.manage().window().fullscreen();
 
-handleMessages(async (key: KeyInput): Promise<void> => {
-  await sendGameKey(driver, key);
+handleMessages(async (commandInput: CommandInput): Promise<void> => {
+  await sendGameCommand(driver, commandInput);
 });
 
 handleCommands(driver);
+
+await sendStartupMessage();

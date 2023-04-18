@@ -1,5 +1,8 @@
 import { By, WebDriver, until } from "selenium-webdriver";
-import { KeyInput } from "../command/keybinds.js";
+import { CommandInput, isBurst, isHold } from "../command/commandInput.js";
+import configuration from "../configuration.js";
+import { toGameboyAdvanceKeyInput } from "../command/keybinds.js";
+import { delay } from "../util.js";
 
 export async function setupGame(driver: WebDriver) {
   console.log("navigating to emulator page");
@@ -11,7 +14,22 @@ export async function setupGame(driver: WebDriver) {
   console.log("clicked button");
 }
 
-export async function sendGameKey(driver: WebDriver, key: KeyInput) {
+export async function sendGameCommand(driver: WebDriver, command: CommandInput) {
   const element = await driver.findElement(By.css("body"));
-  await driver.actions().click(element).keyDown(key).pause(10).keyUp(key).perform();
+  const key = toGameboyAdvanceKeyInput(command.command);
+  if (command.modifier === undefined) {
+    await driver.actions().click(element).keyDown(key).pause(configuration.keyPressDuration).keyUp(key).perform();
+  } else if (isBurst(command.modifier)) {
+    for (let i = 0; i < configuration.burstPressQuantity; i++) {
+      await driver.actions().click(element).keyDown(key).pause(configuration.burstPressDuration).keyUp(key).perform();
+      if (configuration.burstPressDelay > 0) {
+        await delay(configuration.burstPressDelay);
+      }
+    }
+  } else if (isHold(command.modifier)) {
+    await driver.actions().click(element).keyDown(key).pause(configuration.holdDuration).keyUp(key).perform();
+  } else {
+    console.error("unknown");
+    throw new Error(`unknown modifier ${JSON.stringify(command)}`);
+  }
 }

@@ -5,8 +5,9 @@ import client from "./client.js";
 import { execute } from "./chordExecutor.js";
 import { isValid } from "./chordValidator.js";
 import { KeyInput } from "../command/keybinds.js";
+import { CommandInput } from "../command/commandInput.js";
 
-export function handleMessages(fn: (key: KeyInput) => Promise<void>) {
+export function handleMessages(fn: (commandInput: CommandInput) => Promise<void>) {
   console.log("ready to handle commands");
   client.on(Events.MessageCreate, async (event) => {
     try {
@@ -17,7 +18,7 @@ export function handleMessages(fn: (key: KeyInput) => Promise<void>) {
   });
 }
 
-async function handleMessage(event: Message, fn: (key: KeyInput) => Promise<void>) {
+async function handleMessage(event: Message, fn: (commandInput: CommandInput) => Promise<void>) {
   if (event.author.bot) {
     return;
   }

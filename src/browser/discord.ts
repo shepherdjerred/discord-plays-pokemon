@@ -1,6 +1,7 @@
 import { By, WebDriver, until } from "selenium-webdriver";
 import configuration from "../configuration.js";
 import { delay } from "../util.js";
+import { readFile } from "fs/promises";
 
 export async function setupDiscord(driver: WebDriver) {
   if (await isLoggedIn(driver)) {
@@ -10,8 +11,15 @@ export async function setupDiscord(driver: WebDriver) {
     await login(driver);
   }
   await navigateToTextChannel(driver);
+  await setVoiceSettings(driver);
   await joinVoiceChat(driver);
   await shareScreen(driver);
+}
+
+async function setVoiceSettings(driver: WebDriver) {
+  await navigateToTextChannel(driver);
+  const settings = await readFile("MediaEngineStore.json", "utf-8");
+  await driver.executeScript("localStorage.setItem(MediaEngineStore, arguments[0])", JSON.stringify(settings));
 }
 
 async function isLoggedIn(driver: WebDriver): Promise<boolean> {

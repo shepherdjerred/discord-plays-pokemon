@@ -17,6 +17,7 @@ export default {
   chordMaxTotal: env.get("CHORD_MAX_TOTAL").required().asInt(),
   keyPressDuration: env.get("KEY_PRESS_DURATION").required().asInt(),
   commandQuantityInterval: env.get("COMMAND_QUANTITY_INTERVAL").required().asInt(),
+  chordDelay: env.get("CHORD_DELAY").required().asInt(),
   applicationId: env.get("APPLICATION_ID").required().asString(),
   burstPressDuration: env.get("BURST_PRESS_DURATION").required().asInt(),
   burstPressDelay: env.get("BURST_PRESS_DELAY").required().asInt(),
