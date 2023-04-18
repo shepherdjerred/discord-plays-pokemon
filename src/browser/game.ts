@@ -54,7 +54,7 @@ export async function sendGameCommand(driver: WebDriver, command: CommandInput) 
 
 export async function exportSave(driver: WebDriver) {
   console.log("waiting for export save button");
-  const exportSaveButton = await driver.wait(until.elementLocated(By.css("div[title=Export save file]")));
+  const exportSaveButton = await driver.wait(until.elementLocated(By.css('div[title="Export save file"]')));
   console.log("clicking export save button");
   await exportSaveButton.click();
   console.log("clicked button");
@@ -64,7 +64,7 @@ export async function exportSave(driver: WebDriver) {
 
 export async function importSave(driver: WebDriver) {
   console.log("waiting for import save button");
-  const importSaveButton = await driver.wait(until.elementLocated(By.css("div[title=Import save file]")));
+  const importSaveButton = await driver.wait(until.elementLocated(By.css('div[title="Import save file"]')));
   console.log("clicking import save button");
   await importSaveButton.click();
   console.log("clicked button");

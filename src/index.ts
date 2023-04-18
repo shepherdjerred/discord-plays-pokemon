@@ -39,5 +39,5 @@ handleMessages(async (commandInput: CommandInput): Promise<void> => {
 handleCommands(driver);
 
 await sendStartupMessage();
-await stopIfInactive();
-await loopExportSave(driver);
+// await stopIfInactive();
+// await loopExportSave(driver);

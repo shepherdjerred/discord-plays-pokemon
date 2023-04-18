@@ -29,9 +29,10 @@ export function handleCommands(driver: WebDriver) {
 export async function sendStartupMessage() {
   const channel = client.channels.cache.get(configuration.notificationsTextChannelId);
   if (channel) {
-    await (channel as TextChannel).send({
-      content: `@here The Pokébot has started! Join ${channelMention(configuration.voiceChannelId)} to play along.`,
-    });
+    // TODO enable when this is less annoying
+    // await (channel as TextChannel).send({
+    //   content: `@here The Pokébot has started! Join ${channelMention(configuration.voiceChannelId)} to play along.`,
+    // });
   } else {
     console.error("unable to find channel");
   }
