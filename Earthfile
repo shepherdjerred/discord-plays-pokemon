@@ -90,7 +90,7 @@ up:
   LOCALLY
   RUN earthly +down
   WITH DOCKER --compose compose.yml --load=+image
-    RUN docker-compose up --abort-on-container-exit -d
+    RUN docker-compose up -d
   END
 
 down:

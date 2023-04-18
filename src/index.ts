@@ -7,6 +7,7 @@ import { writeFile } from "fs/promises";
 import { Options } from "selenium-webdriver/firefox.js";
 import { handleCommands, sendStartupMessage } from "./discord/commands/index.js";
 import { CommandInput } from "./command/commandInput.js";
+import { stopIfInactive } from "./ec2/index.js";
 
 const driver = await new Builder()
   .forBrowser(Browser.FIREFOX)
@@ -38,3 +39,4 @@ handleMessages(async (commandInput: CommandInput): Promise<void> => {
 handleCommands(driver);
 
 await sendStartupMessage();
+await stopIfInactive();

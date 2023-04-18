@@ -6,6 +6,8 @@ import { execute } from "./chordExecutor.js";
 import { isValid } from "./chordValidator.js";
 import { CommandInput } from "../command/commandInput.js";
 
+export let lastCommand = new Date();
+
 export function handleMessages(fn: (commandInput: CommandInput) => Promise<void>) {
   console.log("ready to handle commands");
   client.on(Events.MessageCreate, async (event) => {
@@ -66,6 +68,7 @@ async function handleMessage(event: Message, fn: (commandInput: CommandInput) =>
   if (isValid(chord)) {
     await execute(chord, fn);
     await event.react(`👍`);
+    lastCommand = new Date();
   } else {
     await event.react(`⛔`);
     return;

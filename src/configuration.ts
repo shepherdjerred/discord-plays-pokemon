@@ -24,4 +24,7 @@ export default {
   burstPressQuantity: env.get("BURST_PRESS_QUANTITY").required().asInt(),
   holdDuration: env.get("HOLD_DURATION").required().asInt(),
   minimumMembersInVoiceChannel: env.get("MINIMUM_MEMBERS_IN_VOICE_CHANNEL").required().asInt(),
+  ec2InstanceId: env.get("EC2_INSTANCE_ID").required().asString(),
+  maxInactivePeriodMinutes: env.get("MAX_INACTIVE_PERIOD_MINUTES").required().asInt(),
+  inactiveCheckIntervalSeconds: env.get("INACTIVE_CHECK_INTERVAL_SECONDS").required().asInt(),
 };
