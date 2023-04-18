@@ -34,6 +34,7 @@ async function handleMessage(event: Message, fn: (commandInput: CommandInput) =>
     return;
   }
 
+  // TODO: check that the sender is in the voice channel
   // if (event.member?.voice.channelId !== configuration.voiceChannelId) {
   //   await event.reply(`You have to be in ${channelMention(configuration.voiceChannelId)} to play`);
   //   return;
