@@ -11,7 +11,7 @@ export async function setupDiscord(driver: WebDriver) {
     await login(driver);
   }
   await navigateToTextChannel(driver);
-  await setVoiceSettings(driver);
+  // await setVoiceSettings(driver);
   await joinVoiceChat(driver);
   await shareScreen(driver);
 }
@@ -19,7 +19,7 @@ export async function setupDiscord(driver: WebDriver) {
 async function setVoiceSettings(driver: WebDriver) {
   await navigateToTextChannel(driver);
   const settings = await readFile("MediaEngineStore.json", "utf-8");
-  await driver.executeScript("localStorage.setItem(MediaEngineStore, arguments[0])", JSON.stringify(settings));
+  await driver.executeScript("window.localStorage.setItem(MediaEngineStore, arguments[0])", JSON.stringify(settings));
 }
 
 async function isLoggedIn(driver: WebDriver): Promise<boolean> {

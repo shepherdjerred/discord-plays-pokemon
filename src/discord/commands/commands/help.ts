@@ -1,15 +1,17 @@
 import { CommandInteraction, SlashCommandBuilder, bold, channelMention, inlineCode, userMention } from "discord.js";
 import configuration from "../../../configuration.js";
 import { a, b, down, left, right, select, start, up } from "../../../command/command.js";
-import { burst, hold } from "../../../command/commandInput.js";
+import { burst, hold, hold_b } from "../../../command/commandInput.js";
 
 export const helpCommand = new SlashCommandBuilder().setName("help").setDescription("View Pokébot help");
 
 export async function help(interaction: CommandInteraction) {
-  const modifiers = [`Hold: ${hold.join(", ")}`, `Burst: ${burst.join("\n")}`];
-  const modifiersString = modifiers.map((modifier) => {
-    return `* ${modifier}\n`;
-  });
+  const modifiers = [`Hold: ${hold.join(", ")}`, `Burst: ${burst.join("\n")}`, `Hold B: ${hold_b.join("\n")}`];
+  const modifiersString = modifiers
+    .map((modifier) => {
+      return `* ${modifier}`;
+    })
+    .join("\n");
   const commands = [
     `Up: ${up.join(", ")}`,
     `Down: ${down.join(", ")}`,
@@ -20,9 +22,11 @@ export async function help(interaction: CommandInteraction) {
     `Start: ${start.join(", ")}`,
     `Select: ${select.join(", ")}`,
   ];
-  const commandString = commands.map((command) => {
-    return `* ${command}\n`;
-  });
+  const commandString = commands
+    .map((command) => {
+      return `* ${command}`;
+    })
+    .join("\n");
   const lines = [
     `${bold("Pokébot Help")}`,
     `The Pokébot is available when ${userMention(

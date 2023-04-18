@@ -4,7 +4,6 @@ import { parseChord, type Chord } from "../command/chord.js";
 import client from "./client.js";
 import { execute } from "./chordExecutor.js";
 import { isValid } from "./chordValidator.js";
-import { KeyInput } from "../command/keybinds.js";
 import { CommandInput } from "../command/commandInput.js";
 
 export function handleMessages(fn: (commandInput: CommandInput) => Promise<void>) {
@@ -33,10 +32,10 @@ async function handleMessage(event: Message, fn: (commandInput: CommandInput) =>
     return;
   }
 
-  if (event.member?.voice.channelId !== configuration.voiceChannelId) {
-    await event.reply(`You have to be in ${channelMention(configuration.voiceChannelId)} to play`);
-    return;
-  }
+  // if (event.member?.voice.channelId !== configuration.voiceChannelId) {
+  //   await event.reply(`You have to be in ${channelMention(configuration.voiceChannelId)} to play`);
+  //   return;
+  // }
 
   const memberCount = (channel as VoiceChannel).members.filter((member) => {
     return !member.user.bot;

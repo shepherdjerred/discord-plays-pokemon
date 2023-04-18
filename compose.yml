@@ -20,8 +20,8 @@ services:
     volumes:
       - browser-downloads:/home/user/Downloads
     environment:
-      SIZEW: 1280
-      SIZEH: 720
+      SIZEW: 1920
+      SIZEH: 1080
       REFRESH: 60
       PASSWD: password
       BASIC_AUTH_PASSWORD: password

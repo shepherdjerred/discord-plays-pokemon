@@ -83,7 +83,7 @@ image:
   COPY supervisord.conf .
   RUN cat supervisord.conf | sudo tee -a /etc/supervisord.conf
   RUN rm supervisord.conf
-  RUN cp MediaEngineStore.json .
+  COPY MediaEngineStore.json .
   SAVE IMAGE browser
 
 up:
