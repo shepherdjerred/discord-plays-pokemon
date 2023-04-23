@@ -20,7 +20,7 @@
     "dotenv": "^16.0.3",
     "env-var": "^7.3.0",
     "lodash": "4.17.21",
-    "selenium-webdriver": "^4.8.2"
+    "selenium-webdriver": "^4.9.0"
   },
   "devDependencies": {
     "@tsconfig/recommended": "1.0.2",
