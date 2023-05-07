@@ -14,7 +14,7 @@
     "test:watch": "npx jest --watch"
   },
   "dependencies": {
-    "@aws-sdk/client-ec2": "^3.315.0",
+    "@aws-sdk/client-ec2": "^3.328.0",
     "date-fns": "^2.29.3",
     "discord.js": "^14.9.0",
     "dotenv": "^16.0.3",
