@@ -67,6 +67,28 @@ async function navigateToTextChannel(driver: WebDriver) {
   console.log("navigated to text channel");
 }
 
+async function goToSettings(driver: WebDriver) {
+  console.log("going to settings");
+  const settingsButtonSelector = 'button[aria-label="User Settings"]';
+  const settingsButton = await driver.wait(until.elementLocated(By.css(settingsButtonSelector)));
+  console.log("at settings");
+  await settingsButton.click();
+}
+
+async function goToVoiceTab(driver: WebDriver) {
+  console.log("going to voice settings");
+  const settingsButtonSelector = 'button[aria-controls="voice-&-video-tab"]';
+  const settingsButton = await driver.wait(until.elementLocated(By.css(settingsButtonSelector)));
+  console.log("at voice settings");
+  await settingsButton.click();
+}
+
+async function updateSettings(driver: WebDriver) {
+  // Move output volume
+  // Update input sensitivity
+  // Disable echo cancellation
+}
+
 async function joinVoiceChat(driver: WebDriver) {
   console.log("trying to join voice chat");
   const voiceChannelSelector = `a[data-list-item-id="channels___${configuration.voiceChannelId}"]`;
