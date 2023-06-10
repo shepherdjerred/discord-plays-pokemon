@@ -60,7 +60,9 @@ This is not very easy to use because there are a lot of components to get this w
 1. Copy the application ID and save it for later
 1. Generate a bot token and save the value for later
 1. Enable the `MESSAGE CONTENT` intent
-1. On the OAuth2 tab, use the URL Generator to create a link with the following:
+1. On the OAuth2 tab, use the URL Generator
+
+Set the following permissions:
 
 * `bot`
 * `add reactions`
@@ -84,7 +86,8 @@ This section can be skipped if you already have a spare Discord account to use a
 1. Open up Discord, go to `Settings > Advanced` and turn on `Developer Mode` -- this will make it easier for you to get some values
 1. Clone this project somewhere
 1. Copy `.example.env` to `.env`
-1. Edit `.env`
+
+Edit `.env`:
 
 * Set `HELPER_DISCORD_TOKEN` to your BOT TOKEN **Note:** This is _not_ related to your userbot
 * Set `STREAMER_ID` to the user ID of your userbot. You can right-click your username and click `Copy User ID` to get this
