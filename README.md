@@ -26,6 +26,24 @@ Note that the Docker image runs a full copy of Desktop Linux. In order for strea
 
 This image can run smoothly on AWS instances with GPUs. I've tested this thorougly on a `g4dn.2xlarge` instance, which is reasonably priced as long as you shut down the instance when the bot is not in use.
 
+The `ec2-bootstrap.sh` script can be used to setup an AWS EC2 instance. It will:
+
+* Install Docker
+* Install Earthly
+* Install all required Nvidia software
+
+**NOTE:** You must use an EC2 instance with x86_64 CPU, and a Nvidia GPU. It will not work on arm64 or AMD GPU instances. You can try running this on AWS _without_ a GPU, but it will be extremely slow.
+
+## Usage without Docker
+
+You can use this without Docker by:
+
+* Hosting the `static/` directory with the webserver of your choice
+* Updating the application to point to your webserver rather than the Dockerized webserver (note: this should be a configuration option in the future)
+* Building this application with `npm install`, `npm run build`, and `./run.sh`.
+
+Note: You will need to have Firefox installed, and possibly other software. You might also still want to have a GPU so that Discord streaming is hardware accelerated.
+
 ## Requirements
 
 * [Docker](https://www.docker.com/products/docker-desktop/)
@@ -128,3 +146,7 @@ start # press 'start'
 ```
 
 Multiple players can run commands at the same time.
+
+## Developing
+
+This is a pretty standard TypeScript application. Install dependencies with `npm i`. Build the application with `npm run build`. Run tests with `npm run test`.
