@@ -3,4 +3,6 @@ static/roms/*
 !static/roms/README.md
 node_modules
 .env
+*.env
+!example.env
 coverage

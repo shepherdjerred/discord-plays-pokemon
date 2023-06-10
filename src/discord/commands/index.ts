@@ -1,8 +1,7 @@
-import { Events, TextChannel, channelMention } from "discord.js";
+import { Events } from "discord.js";
 import "./rest.js";
 import client from "../client.js";
 import { makeScreenshot } from "./commands/screenshot.js";
-import { start } from "./commands/start.js";
 import { WebDriver } from "selenium-webdriver";
 import { help } from "./commands/help.js";
 import configuration from "../../configuration.js";
@@ -15,7 +14,6 @@ export function handleCommands(driver: WebDriver) {
     }
     switch (interaction.commandName) {
       case "start":
-        await start(interaction);
         break;
       case "screenshot":
         await makeScreenshot(driver)(interaction);

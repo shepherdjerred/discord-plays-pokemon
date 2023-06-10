@@ -1,5 +1,5 @@
 import { exit } from "process";
-import { loopExportSave, sendGameCommand } from "./browser/game.js";
+import { sendGameCommand } from "./browser/game.js";
 import { start } from "./browser/index.js";
 import { handleMessages } from "./discord/messageHandler.js";
 import { Browser, Builder } from "selenium-webdriver";
@@ -7,7 +7,6 @@ import { writeFile } from "fs/promises";
 import { Options } from "selenium-webdriver/firefox.js";
 import { handleCommands, sendStartupMessage } from "./discord/commands/index.js";
 import { CommandInput } from "./command/commandInput.js";
-import { stopIfInactive } from "./ec2/index.js";
 
 const driver = await new Builder()
   .forBrowser(Browser.FIREFOX)
