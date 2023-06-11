@@ -28,27 +28,27 @@ This image can run smoothly on AWS instances with GPUs. I've tested this thoroug
 
 The `ec2-bootstrap.sh` script can be used to setup an AWS EC2 instance. It will:
 
-* Install Docker
-* Install Earthly
-* Install all required Nvidia software
+- Install Docker
+- Install Earthly
+- Install all required Nvidia software
 
-**NOTE:** You must use an EC2 instance with x86_64 CPU, and a Nvidia GPU. It will not work on arm64 or AMD GPU instances. You can try running this on AWS _without_ a GPU, but it will be extremely slow.
+**NOTE:** You must use an EC2 instance with x86*64 CPU, and a Nvidia GPU. It will not work on arm64 or AMD GPU instances. You can try running this on AWS \_without* a GPU, but it will be extremely slow.
 
 ## Usage without Docker
 
 You can use this without Docker by:
 
-* Hosting the `static/` directory with the webserver of your choice
-* Updating the application to point to your webserver rather than the Dockerized webserver (note: this should be a configuration option in the future)
-* Building this application with `npm install`, `npm run build`, and `./run.sh`.
+- Hosting the `static/` directory with the webserver of your choice
+- Updating the application to point to your webserver rather than the Dockerized webserver (note: this should be a configuration option in the future)
+- Building this application with `npm install`, `npm run build`, and `./run.sh`.
 
 Note: You will need to have Firefox installed, and possibly other software. You might also still want to have a GPU so that Discord streaming is hardware accelerated.
 
 ## Requirements
 
-* [Docker](https://www.docker.com/products/docker-desktop/)
-* [Docker Compose](https://docs.docker.com/compose/install/)
-* [Earthly](https://earthly.dev/get-earthly)
+- [Docker](https://www.docker.com/products/docker-desktop/)
+- [Docker Compose](https://docs.docker.com/compose/install/)
+- [Earthly](https://earthly.dev/get-earthly)
 
 ## Setup
 
@@ -64,11 +64,11 @@ This is not very easy to use because there are a lot of components to get this w
 
 Set the following permissions:
 
-* `bot`
-* `add reactions`
-* `send messages`
-* `attach files`
-* `embed links`
+- `bot`
+- `add reactions`
+- `send messages`
+- `attach files`
+- `embed links`
 
 Copy the URL, open it in another tab, and add the bot to your server.
 
@@ -89,15 +89,15 @@ This section can be skipped if you already have a spare Discord account to use a
 
 Edit `.env`:
 
-* Set `HELPER_DISCORD_TOKEN` to your BOT TOKEN **Note:** This is _not_ related to your userbot
-* Set `STREAMER_ID` to the user ID of your userbot. You can right-click your username and click `Copy User ID` to get this
-* Set `STREAMER_USERNAME` to your userbot's username
-* Set `STREAMER_PASSWORD` to your userbot's password
-* Set `APPLICATION_ID` to the value you copied when setting up your bot
-* Set `SERVER_ID` to the ID of the server you want the bot to join. You can get this by right-clicking your server icon, and selecting `Copy Server ID`
-* Set `COMMAND_TEXT_CHANNEL_ID` to the ID of the text channel you want to use for bot commands. You probably want to make a separate channel just for this. You can get this by right-click your text channel name, and selecting `Copy Channel ID`
-* Set `NOTIFICATIONS_TEXT_CHANNEL_ID` to the ID of the channel you want to use for bot notifications, like when a screenshot is taken, or when the bot starts up.
-* Set `VOICE_CHANNEL_ID` to the ID of the voice channel you want the game stream to be in.
+- Set `HELPER_DISCORD_TOKEN` to your BOT TOKEN **Note:** This is _not_ related to your userbot
+- Set `STREAMER_ID` to the user ID of your userbot. You can right-click your username and click `Copy User ID` to get this
+- Set `STREAMER_USERNAME` to your userbot's username
+- Set `STREAMER_PASSWORD` to your userbot's password
+- Set `APPLICATION_ID` to the value you copied when setting up your bot
+- Set `SERVER_ID` to the ID of the server you want the bot to join. You can get this by right-clicking your server icon, and selecting `Copy Server ID`
+- Set `COMMAND_TEXT_CHANNEL_ID` to the ID of the text channel you want to use for bot commands. You probably want to make a separate channel just for this. You can get this by right-click your text channel name, and selecting `Copy Channel ID`
+- Set `NOTIFICATIONS_TEXT_CHANNEL_ID` to the ID of the channel you want to use for bot notifications, like when a screenshot is taken, or when the bot starts up.
+- Set `VOICE_CHANNEL_ID` to the ID of the voice channel you want the game stream to be in.
 
 The other values can be tweaked if desired, but the defaults are probably reasonable.
 
@@ -115,11 +115,11 @@ Be sure the Discord is logged into correctly. Sometimes you'll need to solve a c
 
 Once logged into Discord, the bot should automatically join the voice channel and stream the game. You should make a few changes to the Discord settings. Note, these settings are _not_ saved, so you'll have to do this every time the application is started. These settings should be changed:
 
-* Output volume should be set to 0%, or there will be an echo
-* Soundboard volume should be set to 0%, or there will be an echo
-* Automatically determine input sensitivty should be off, and the slider moved as far to the left as possible
-* Echo cancellation should be off
-* Automatic gain control should be off
+- Output volume should be set to 0%, or there will be an echo
+- Soundboard volume should be set to 0%, or there will be an echo
+- Automatically determine input sensitivty should be off, and the slider moved as far to the left as possible
+- Echo cancellation should be off
+- Automatic gain control should be off
 
 After changing these settings, go back to the game window.
 
@@ -133,8 +133,8 @@ Note that the directory the saves are exported to (`~/Downloads`) is mounted to 
 
 Okay! After setup is complete, you're ready to go. The bot has the following commands:
 
-* `/help`: Show available chat commands
-* `/screenshot`: Take a screenshot and post it to the notifications channel
+- `/help`: Show available chat commands
+- `/screenshot`: Take a screenshot and post it to the notifications channel
 
 Run the `/help` command for information about playing games with this bot, such as the controls. That command is generated by the application based on your configured settings and the command bindings, so it will always be up-to-date.
 
