@@ -1,4 +1,5 @@
 VERSION 0.7
+PROJECT sjerred/discord-plays-pokemon
 ARG --global EARTHLY_CI
 
 pipeline:
