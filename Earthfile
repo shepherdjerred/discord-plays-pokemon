@@ -3,7 +3,7 @@ PROJECT sjerred/discord-plays-pokemon
 ARG --global EARTHLY_CI
 
 pipeline:
-  PIPELINE
+  PIPELINE --push
   TRIGGER push main
   TRIGGER pr main
   BUILD +ci
