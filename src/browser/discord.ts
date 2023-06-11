@@ -67,6 +67,7 @@ async function navigateToTextChannel(driver: WebDriver) {
   console.log("navigated to text channel");
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function goToSettings(driver: WebDriver) {
   console.log("going to settings");
   const settingsButtonSelector = 'button[aria-label="User Settings"]';
@@ -75,6 +76,7 @@ async function goToSettings(driver: WebDriver) {
   await settingsButton.click();
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function goToVoiceTab(driver: WebDriver) {
   console.log("going to voice settings");
   const settingsButtonSelector = 'button[aria-controls="voice-&-video-tab"]';
@@ -83,6 +85,7 @@ async function goToVoiceTab(driver: WebDriver) {
   await settingsButton.click();
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function updateSettings(driver: WebDriver) {
   // Move output volume
   // Update input sensitivity

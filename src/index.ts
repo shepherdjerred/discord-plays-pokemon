@@ -5,7 +5,7 @@ import { handleMessages } from "./discord/messageHandler.js";
 import { Browser, Builder } from "selenium-webdriver";
 import { writeFile } from "fs/promises";
 import { Options } from "selenium-webdriver/firefox.js";
-import { handleCommands, sendStartupMessage } from "./discord/commands/index.js";
+import { handleCommands } from "./discord/commands/index.js";
 import { CommandInput } from "./command/commandInput.js";
 
 const driver = await new Builder()
@@ -37,6 +37,5 @@ handleMessages(async (commandInput: CommandInput): Promise<void> => {
 
 handleCommands(driver);
 
-await sendStartupMessage();
 // await stopIfInactive();
 // await loopExportSave(driver);
