@@ -90,12 +90,12 @@ image:
   COPY supervisord.conf .
   RUN cat supervisord.conf | sudo tee -a /etc/supervisord.conf
   RUN rm supervisord.conf
-  SAVE IMAGE browser
+  SAVE IMAGE --push ghcr.io/shepherdjerred/discord-plays-pokemon:latest
 
 up:
   LOCALLY
   RUN earthly +down
-  WITH DOCKER --compose compose.yml --load=+image
+  WITH DOCKER --compose compose.yml --load= browser=+image
     RUN docker-compose up -d
   END
 
