@@ -1,6 +1,12 @@
 VERSION 0.7
 ARG --global EARTHLY_CI
 
+pipeline:
+  PIPELINE
+  TRIGGER push main
+  TRIGGER pr main
+  BUILD +ci
+
 ci:
   BUILD +markdownlint
   BUILD ./docs+build
