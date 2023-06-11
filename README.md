@@ -1,6 +1,6 @@
 # Discord Plays Pokémon
 
-[![Netlify](https://img.shields.io/netlify/discord-plays-pokemon?style=for-the-badge)](https://app.netlify.com/sites/discord-plays-pokemon/deploys) ![GitHub branch checks state](https://img.shields.io/github/checks-status/shepherdjerred/discord-plays-pokemon/main?style=for-the-badge)
+[![Netlify](https://img.shields.io/netlify/74b8286f-3e2f-4b8e-87bf-d9043c307c33?style=for-the-badge)](https://app.netlify.com/sites/discord-plays-pokemon/deploys) ![GitHub branch checks state](https://img.shields.io/github/checks-status/shepherdjerred/discord-plays-pokemon/main?style=for-the-badge)
 
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://github.com/codespaces/new?hide_repo_select=true&ref=main&repo=625072124)
 
