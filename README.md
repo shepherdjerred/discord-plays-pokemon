@@ -8,4 +8,4 @@
 
 This application allows your Discord server to play a cooperative game of Pokémon (or any other Gameboy Advanced ROM) using Discord as the input method. The concept is similar to that of [Twitch Plays Pokémon](https://en.wikipedia.org/wiki/Twitch_Plays_Pok%C3%A9mon)
 
-See [the documentation](https://discord-plays-pokemon.netlify.app/) for more information.
+See [the documentation](https://discord-plays-pokemon.sjer.red/) for more information.
