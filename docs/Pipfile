@@ -5,6 +5,8 @@ name = "pypi"
 
 [packages]
 mkdocs-material = "*"
+pillow = "*"
+cairosvg = "*"
 
 [dev-packages]
 

@@ -103,7 +103,7 @@ The other values can be tweaked if desired, but the defaults are probably reason
 
 Put your desired ROM in `static/roms/`. Edit `static/index.html` with the name of the ROM you want to use -- the default is `liquid_crystal.gba`.
 
-!!!note
+!!! note
     This application only works out-of-the-box with Gameboy Advanced ROMs, although it wouldn't be too hard to extend this application for additional systems that EmulatorJS supports.
 
 Run `earthly +up`. This will build the application and start the Docker containers. On your machine, navigate to [http://localhost:8080](http://localhost:8080). Login with the credentials `user` and `password`. This will stream the virtual Linux desktop's screen to your browser, where you can see program execution and interact with the game and Discord application directly.
@@ -129,7 +129,7 @@ After changing these settings, go back to the game window.
 
 Game saves are stored to the browser storage, which is reset when the application is closed. **SAVING IN-GAME IS NOT ENOUGH!** You need to use the in-game save menu, and then click the "Export Save" in the top-right of the game window. Every time the game is restarted you'll need to click "Import Save" and upload your save file. Be careful to not rely on the in-game save menu by itself! You _must_ do both steps if you want to save your progress. There is _absolutely no way_ to recover your progress if you close the application/Docker container without first saving.
 
-!!!note
+!!! note
     The directory the saves are exported to (`~/Downloads`) is mounted to a Docker volume named `browser-downloads`, so those files will be persisted. It would be a good idea to make a backup of your save files; for example you could send them to your Discord channel after finishing up a session as a failsafe.
 
 ### Using the Bot

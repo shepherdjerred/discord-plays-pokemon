@@ -1,3 +1,59 @@
 site_name: Discord Plays Pokémon
+site_url: http://discord-plays-pokemon.sjer.red
+repo_url: https://github.com/shepherdjerred/discord-plays-pokemon
+edit_uri: edit/main/docs/docs/
 theme:
   name: material
+  logo: assets/images/pokeball.png
+  icon:
+    repo: fontawesome/brands/github
+  favicon: assets/images/pokeball.png
+  palette:
+    - media: "(prefers-color-scheme)"
+      primary: red
+      accent: deep purple
+      toggle:
+        icon: material/brightness-auto
+        name: Switch to light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: red
+      accent: deep purple
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: red
+      accent: deep purple
+      toggle:
+        icon: material/brightness-4
+        name: Switch to system preference
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.prune
+    - navigation.indexes
+    - toc.follow
+    - toc.integrate
+    - search.suggest
+    - search.highlight
+    - search.share
+    - content.action.edit
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.highlight:
+      anchor_linenums: true
+      auto_title: true
+  - toc:
+      permalink: true
+plugins:
+  # - privacy
+  - search
+  - social
+  # - optimize
+  # - offline
