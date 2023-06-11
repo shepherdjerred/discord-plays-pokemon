@@ -38,6 +38,6 @@
     "ts-jest-resolver": "^2.0.1",
     "ts-node": "^10.9.1",
     "tslib": "^2.5.3",
-    "typescript": "5.0.4"
+    "typescript": "5.1.3"
   }
 }
