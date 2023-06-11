@@ -1,6 +1,6 @@
 services:
   browser:
-    image: browser
+    image: ghcr.io/shepherdjerred/discord-plays-pokemon
     shm_size: "4gb"
     container_name: browser
     stdin_open: true
