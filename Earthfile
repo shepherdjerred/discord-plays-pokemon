@@ -66,7 +66,7 @@ test:
   SAVE ARTIFACT coverage AS LOCAL coverage
 
 image:
-  FROM ghcr.io/selkies-project/nvidia-glx-desktop:latest
+  FROM ghcr.io/selkies-project/nvidia-egl-desktop
   ARG DEBIAN_FRONTEND=noninteractive
   USER root
   RUN apt update

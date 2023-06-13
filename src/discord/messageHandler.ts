@@ -1,5 +1,5 @@
 import configuration from "../configuration.js";
-import { Events, Message, VoiceChannel, channelMention } from "discord.js";
+import { Events, Message } from "discord.js";
 import { parseChord, type Chord } from "../command/chord.js";
 import client from "./client.js";
 import { execute } from "./chordExecutor.js";
@@ -40,17 +40,17 @@ async function handleMessage(event: Message, fn: (commandInput: CommandInput) =>
   //   return;
   // }
 
-  const memberCount = (channel as VoiceChannel).members.filter((member) => {
-    return !member.user.bot;
-  }).size;
-  if (memberCount < configuration.minimumMembersInVoiceChannel) {
-    await event.reply(
-      `You can't play unless there are at least ${configuration.minimumMembersInVoiceChannel} in ${channelMention(
-        configuration.voiceChannelId
-      )} 😕`
-    );
-    return;
-  }
+  // const memberCount = (channel as VoiceChannel).members.filter((member) => {
+  //   return !member.user.bot;
+  // }).size;
+  // if (memberCount < configuration.minimumMembersInVoiceChannel) {
+  //   await event.reply(
+  //     `You can't play unless there are at least ${configuration.minimumMembersInVoiceChannel} ${
+  //       configuration.minimumMembersInVoiceChannel === 1 ? "person" : "people"
+  //     } in ${channelMention(configuration.voiceChannelId)} 😕`
+  //   );
+  //   return;
+  // }
 
   let chord: Chord | undefined;
   try {
