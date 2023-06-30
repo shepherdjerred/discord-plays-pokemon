@@ -14,5 +14,10 @@
     "ghcr.io/lukewiwa/features/shellcheck:0": {},
     "ghcr.io/devcontainers/features/github-cli:1": {},
     "ghcr.io/shepherdjerred/devcontainers-features/earthly:1": {}
+  },
+  "customizations": {
+    "devpod": {
+      "prebuildRepository": "ghcr.io/shepherdjerred/discord-plays-pokemon"
+    }
   }
 }
