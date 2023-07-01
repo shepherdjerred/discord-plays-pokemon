@@ -12,13 +12,11 @@ services:
             - driver: nvidia
               count: 1
               capabilities: [gpu]
-    depends_on:
-      - server
     privileged: true
     cap_add:
       - SYS_ADMIN
     volumes:
-      - browser-downloads:/home/user/Downloads
+      - saves:/home/user/Downloads
       - ./.env:/home/user/.env
     environment:
       SIZEW: 1920
@@ -29,4 +27,4 @@ services:
     ports:
       - 8080:8080
 volumes:
-  browser-downloads:
+  saves:
