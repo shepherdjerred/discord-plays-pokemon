@@ -7,6 +7,9 @@ import { writeFile } from "fs/promises";
 import { Options } from "selenium-webdriver/firefox.js";
 import { handleCommands } from "./discord/commands/index.js";
 import { CommandInput } from "./command/commandInput.js";
+import { listen } from "./server/index.js";
+
+listen();
 
 const driver = await new Builder()
   .forBrowser(Browser.FIREFOX)

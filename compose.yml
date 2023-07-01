@@ -28,14 +28,5 @@ services:
       BASIC_AUTH_PASSWORD: password
     ports:
       - 8080:8080
-  server:
-    image: caddy
-    container_name: server
-    volumes:
-      - ./static/:/usr/share/caddy/
-      - caddy-data:/data
-    ports:
-      - 8081:80
 volumes:
   browser-downloads:
-  caddy-data:
