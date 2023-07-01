@@ -1,8 +1,8 @@
 import { By, WebDriver, until } from "selenium-webdriver";
 import { CommandInput, isBurst, isHold, isHoldB } from "../command/commandInput.js";
-import configuration from "../configuration.js";
 import { toGameboyAdvanceKeyInput } from "../command/keybinds.js";
 import { delay } from "../util.js";
+import { config } from "../config/index.js";
 
 export async function setupGame(driver: WebDriver) {
   console.log("navigating to emulator page");
@@ -23,7 +23,13 @@ export async function sendGameCommand(driver: WebDriver, command: CommandInput) 
   const key = toGameboyAdvanceKeyInput(command.command);
   if (!command.modifier) {
     for (let i = 0; i < command.quantity; i++) {
-      await driver.actions().click(element).keyDown(key).pause(configuration.keyPressDuration).keyUp(key).perform();
+      await driver
+        .actions()
+        .click(element)
+        .keyDown(key)
+        .pause(config.commands.key_press_duration_in_milliseconds)
+        .keyUp(key)
+        .perform();
     }
     return;
   }
@@ -32,21 +38,33 @@ export async function sendGameCommand(driver: WebDriver, command: CommandInput) 
       .actions()
       .click(element)
       .sendKeys("X", key)
-      .pause(configuration.holdDuration * command.quantity)
+      .pause(config.commands.hold.duration_in_milliseconds * command.quantity)
       .keyUp(key)
       .keyUp("X")
       .perform();
     return;
   } else if (isHold(command.modifier)) {
-    await driver.actions().click(element).keyDown(key).pause(configuration.holdDuration).keyUp(key).perform();
+    await driver
+      .actions()
+      .click(element)
+      .keyDown(key)
+      .pause(config.commands.hold.duration_in_milliseconds)
+      .keyUp(key)
+      .perform();
     return;
   }
 
   if (isBurst(command.modifier)) {
-    for (let i = 0; i < configuration.burstPressQuantity * command.quantity; i++) {
-      await driver.actions().click(element).keyDown(key).pause(configuration.burstPressDuration).keyUp(key).perform();
-      if (configuration.burstPressDelay > 0) {
-        await delay(configuration.burstPressDelay);
+    for (let i = 0; i < config.commands.burst.quantity * command.quantity; i++) {
+      await driver
+        .actions()
+        .click(element)
+        .keyDown(key)
+        .pause(config.commands.burst.duration_in_milliseconds)
+        .keyUp(key)
+        .perform();
+      if (config.commands.burst.delay_in_milliseconds > 0) {
+        await delay(config.commands.burst.delay_in_milliseconds);
       }
     }
     return;
@@ -79,6 +97,7 @@ export async function loopExportSave(driver: WebDriver) {
   // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition, no-constant-condition
   while (true) {
     await exportSave(driver);
-    await delay(configuration.exportSaveSeconds);
+    // TODO: use config
+    await delay(10000);
   }
 }

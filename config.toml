@@ -1,0 +1,41 @@
+server_id =
+
+[bot]
+discord_token =
+application_id =
+
+[userbot]
+id =
+username =
+password =
+
+[notifications]
+channel_id =
+
+[commands]
+channel_id =
+max_actions_per_command = 20
+max_quantity_per_action = 10
+key_press_duration_in_milliseconds = 15
+delay_between_actions_in_milliseconds = 5
+
+[commands.burst]
+duration_in_milliseconds = 15
+delay_in_milliseconds = 5
+max_quantity = 2
+
+[commands.chord]
+duration_in_milliseconds = 15
+max_commands = 10
+max_total = 10
+
+[commands.hold]
+duration_in_milliseconds = 150
+
+[stream]
+channel_id =
+# there must be at least this many people watching
+# for commands to be processed
+minimum_watchers = 2
+# only those watching the stream can send commands
+require_watching = true

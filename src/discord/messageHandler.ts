@@ -1,10 +1,10 @@
-import configuration from "../configuration.js";
 import { Events, Message } from "discord.js";
 import { parseChord, type Chord } from "../command/chord.js";
 import client from "./client.js";
 import { execute } from "./chordExecutor.js";
 import { isValid } from "./chordValidator.js";
 import { CommandInput } from "../command/commandInput.js";
+import { config } from "../config/index.js";
 
 export let lastCommand = new Date();
 
@@ -24,11 +24,11 @@ async function handleMessage(event: Message, fn: (commandInput: CommandInput) =>
     return;
   }
 
-  if (event.channelId !== configuration.commandTextChannelId) {
+  if (event.channelId !== config.commands.channel_id) {
     return;
   }
 
-  const channel = client.channels.cache.get(configuration.voiceChannelId);
+  const channel = client.channels.cache.get(config.stream.channel_id);
   if (!channel) {
     await event.react("💀");
     return;

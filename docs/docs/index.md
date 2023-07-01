@@ -28,7 +28,7 @@ The `ec2-bootstrap.sh` script can be used to setup an AWS EC2 instance. It will:
 - Install all required Nvidia software
 
 !!! note
-    You must use an EC2 instance with x86\*64 CPU, and a Nvidia GPU. It will not work on arm64 or AMD GPU instances. You can try running this on AWS _without_ a GPU, but it will be extremely slow.
+    You must use an EC2 instance with x86\*64 CPU, and a Nvidia GPU. It will not work on arm64 instances. You can try running this on AWS _without_ a GPU, but it will be extremely slow. Other GPUs such as Intel and AMD may work, but this is not a tested configuration.
 
 ## Usage without Docker
 
