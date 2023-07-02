@@ -60,4 +60,8 @@ export const ConfigSchema = z.object({
     minimum_watchers: z.number().nonnegative(),
     require_watching: z.boolean(),
   }),
+  web: z.object({
+    api_enabled: z.boolean(),
+    port: z.number(),
+  }),
 });

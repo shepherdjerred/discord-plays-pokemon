@@ -8,8 +8,9 @@ import { Options } from "selenium-webdriver/firefox.js";
 import { handleCommands } from "./discord/commands/index.js";
 import { CommandInput } from "./command/commandInput.js";
 import { listen } from "./server/index.js";
+import { config } from "./config/index.js";
 
-listen();
+listen(config.web.port);
 
 const driver = await new Builder()
   .forBrowser(Browser.FIREFOX)

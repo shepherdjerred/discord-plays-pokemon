@@ -6,7 +6,7 @@ import { config } from "../config/index.js";
 
 export async function setupGame(driver: WebDriver) {
   console.log("navigating to emulator page");
-  await driver.get("http://localhost:8081");
+  await driver.get(`http://localhost:${config.web.port}/emulator.html`);
   await delay(10000);
   console.log("selecting frame");
   const frame = await driver.findElement(By.id("ejs-content-frame"));

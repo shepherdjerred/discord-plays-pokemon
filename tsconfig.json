@@ -6,5 +6,5 @@
     "target": "ESNext",
     "moduleResolution": "nodenext"
   },
-  "exclude": ["ui/"]
+  "exclude": ["./ui/"]
 }
