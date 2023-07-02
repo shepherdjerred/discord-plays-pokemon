@@ -7,4 +7,5 @@ node_modules
 !example.env
 coverage
 .cache
-config.toml
+config*.toml
+!config.example.toml
