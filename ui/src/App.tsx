@@ -1,53 +1,58 @@
 import "twin.macro";
-import { Login } from "./stories/Login";
-import { Notification } from "./stories/Notification";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { Notifications } from "./stories/Notifications";
-import { Controls } from "./stories/Controls";
-import { Button } from "./stories/Button";
-import { Card } from "./stories/Card";
+import { Notification } from "./model/Notification";
+import lodash from "lodash";
+import { useState } from "react";
+import { Container } from "./stories/Container";
+import { P, match } from "ts-pattern";
+import { GamePage } from "./pages/GamePage";
+import { LoginPage } from "./pages/LoginPage";
+import { useLocalStorage } from "react-use";
+import { wait } from "./util";
 
-const queryClient = new QueryClient();
+export function App() {
+  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [token, _] = useLocalStorage<string>("token");
+  const identity = useQuery({
+    queryKey: ["auth", token],
+    queryFn: async () => {
+      await wait(1000);
+      const username = "Jerred";
+      setNotifications([
+        ...notifications,
+        { level: "Success", id: "0", title: "Welcome Back", message: `Logged in as ${username}` },
+      ]);
+      return {
+        username,
+      };
+    },
+  });
 
-const username = "Jerred";
-const players = 3;
-const period = 60;
+  function handleNotificationClose(id: string) {
+    setNotifications(lodash.remove(notifications, (notification) => notification.id === id));
+  }
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <div tw="flex flex-col justify-center h-full gap-y-5">
-      <Login />
-      <Controls period={period} players={players} />
-      <Card title="Status">
-        <div>There are {players} others connected</div>
-        <div>You've used up 57% of your commands</div>
-        <div>Your ping is 53ms</div>
-      </Card>
-      <Button>Take Screenshot</Button>
-    </div>
-    <Notifications>
-      <Notification type="success" title="Authentication Successful" message={`Logged in as ${username}`} />
-      <Notification type="info" title="Welcome Back!" message={`Logged in as ${username}`} />
-      <Notification
-        type="info"
-        title="Connection Established"
-        message={`Connected to Pokébot with ${players} others`}
-      />
-      <Notification type="error" title="No Connection" message="Is Pokébot online?" dismissable={false} />
-      <Notification
-        type="warning"
-        title="Attempting to Reconnect"
-        message="Your connection was interrupted"
-        dismissable={false}
-      />
-      <Notification
-        type="warning"
-        title="You're being Throttled"
-        message="You've sent more than your share of commands! Your commands may be interrupted by other players."
-      />
-      <Notification type="error" title="Invalid Token" message="Try generating a new token" />
-    </Notifications>
-  </QueryClientProvider>
-);
+  const page = match(identity)
+    .with({ status: "success", data: { username: P.string } }, () => {
+      return <GamePage />;
+    })
+    .with({ status: "loading" }, () => {
+      return <LoginPage />;
+    })
+    .with({ status: "error" }, () => {
+      return <LoginPage />;
+    })
+    .exhaustive();
 
-export default App;
+  return (
+    <>
+      <div tw="bg-white dark:bg-slate-900 min-h-screen min-w-full">
+        <Container>
+          <div tw="flex flex-col justify-center h-full gap-y-5">{page}</div>
+        </Container>
+      </div>
+      <Notifications notifications={notifications} onClose={handleNotificationClose} />
+    </>
+  );
+}
