@@ -9,7 +9,9 @@ import { P, match } from "ts-pattern";
 import { GamePage } from "./pages/GamePage";
 import { LoginPage } from "./pages/LoginPage";
 import { useLocalStorage } from "react-use";
-import { wait } from "./util";
+import { randomId, wait } from "./util";
+import { io } from "socket.io-client";
+import { randomUUID } from "crypto";
 
 export function App() {
   const [notifications, setNotifications] = useState<Notification[]>([]);
@@ -19,18 +21,28 @@ export function App() {
     queryFn: async () => {
       await wait(1000);
       const username = "Jerred";
-      setNotifications([
-        ...notifications,
-        { level: "Success", id: "0", title: "Welcome Back", message: `Logged in as ${username}` },
-      ]);
+      addNotification({ level: "Success", id: randomId(), title: "Welcome Back", message: `Logged in as ${username}` });
       return {
         username,
       };
     },
   });
 
+  function addNotification(notification: Notification) {
+    setNotifications([...notifications, notification]);
+  }
+
+  const socket = io();
+  socket.on("connect", () => {
+    addNotification({ id: randomId(), level: "Info", title: "Connected", message: "Connection established" });
+  });
+
+  socket.on("disconnect", () => {
+    addNotification({ id: randomId(), level: "Error", title: "Disconnected", message: "Connection lost" });
+  });
+
   function handleNotificationClose(id: string) {
-    setNotifications(lodash.remove(notifications, (notification) => notification.id === id));
+    setNotifications(lodash.filter(notifications, (notification) => notification.id !== id));
   }
 
   const page = match(identity)
