@@ -10,36 +10,41 @@ import { CommandInput } from "./command/commandInput.js";
 import { listen } from "./server/index.js";
 import { config } from "./config/index.js";
 
-listen(config.web.port);
-
-const driver = await new Builder()
-  .forBrowser(Browser.FIREFOX)
-  .setFirefoxOptions(
-    new Options()
-      .setPreference("media.navigator.permission.disabled", true)
-      .setPreference("media.autoplay.block-webaudio", false)
-      .setPreference("privacy.webrtc.legacyGlobalIndicator", false)
-      .setPreference("privacy.webrtc.hideGlobalIndicator", true)
-  )
-  .build();
-
-try {
-  await start(driver);
-} catch (error) {
-  console.error(error);
-  const screenshot = await driver.takeScreenshot();
-  await writeFile("error.png", screenshot, "base64");
-  exit(1);
+if (config.web.api.enabled) {
+  listen(config.web.port);
 }
 
-console.log("fullscreening");
-await driver.manage().window().fullscreen();
+if (config.stream.enabled || config.game.enabled) {
+  const driver = await new Builder()
+    .forBrowser(Browser.FIREFOX)
+    .setFirefoxOptions(
+      new Options()
+        .setPreference("media.navigator.permission.disabled", true)
+        .setPreference("media.autoplay.block-webaudio", false)
+        .setPreference("privacy.webrtc.legacyGlobalIndicator", false)
+        .setPreference("privacy.webrtc.hideGlobalIndicator", true)
+    )
+    .build();
 
-handleMessages(async (commandInput: CommandInput): Promise<void> => {
-  await sendGameCommand(driver, commandInput);
-});
+  console.log("fullscreening");
+  await driver.manage().window().fullscreen();
 
-handleCommands(driver);
+  try {
+    await start(driver);
+  } catch (error) {
+    console.error(error);
+    const screenshot = await driver.takeScreenshot();
+    await writeFile("error.png", screenshot, "base64");
+    exit(1);
+  }
 
-// await stopIfInactive();
-// await loopExportSave(driver);
+  if (config.game.enabled && config.game.commands.enabled) {
+    handleMessages(async (commandInput: CommandInput): Promise<void> => {
+      await sendGameCommand(driver, commandInput);
+    });
+  }
+
+  if (config.bot.commands.enabled) {
+    handleCommands(driver);
+  }
+}

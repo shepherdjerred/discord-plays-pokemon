@@ -4,38 +4,15 @@ server_id = ""
 discord_token = ""
 application_id = ""
 
-[userbot]
-id = ""
-username = ""
-password = ""
-
-[notifications]
-channel_id = ""
+[bot.commands]
 enabled = true
 
-[commands]
+[bot.notifications]
+enabled = true
 channel_id = ""
-max_actions_per_command = 20
-max_quantity_per_action = 10
-key_press_duration_in_milliseconds = 15
-delay_between_actions_in_milliseconds = 5
-
-[commands.burst]
-duration_in_milliseconds = 15
-delay_in_milliseconds = 5
-quantity = 3
-max_quantity = 2
-
-[commands.chord]
-duration_in_milliseconds = 15
-max_commands = 10
-max_total = 10
-delay = 5
-
-[commands.hold]
-duration_in_milliseconds = 150
 
 [stream]
+enabled = true
 channel_id = ""
 # there must be at least this many people watching
 # for commands to be processed
@@ -43,6 +20,39 @@ minimum_watchers = 2
 # only those watching the stream can send commands
 require_watching = true
 
+[stream.userbot]
+id = ""
+username = ""
+password = ""
+
+[game]
+enabled = true
+
+[game.commands]
+enabled = true
+channel_id = ""
+max_actions_per_command = 20
+max_quantity_per_action = 10
+key_press_duration_in_milliseconds = 15
+delay_between_actions_in_milliseconds = 5
+
+[game.commands.burst]
+duration_in_milliseconds = 15
+delay_in_milliseconds = 5
+quantity = 3
+max_quantity = 2
+
+[game.commands.chord]
+duration_in_milliseconds = 15
+max_commands = 10
+max_total = 10
+delay = 5
+
+[game.commands.hold]
+duration_in_milliseconds = 150
+
 [web]
 port = 8081
-api_enabled = true
+
+[web.api]
+enabled = true

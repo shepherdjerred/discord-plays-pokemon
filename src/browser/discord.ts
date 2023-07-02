@@ -38,11 +38,11 @@ async function login(driver: WebDriver) {
 
   console.log("typing email");
   const emailInput = driver.wait(until.elementLocated(By.css("input[name=email]")));
-  await emailInput.sendKeys(config.userbot.username);
+  await emailInput.sendKeys(config.stream.userbot.username);
 
   console.log("typing password");
   const passwordInput = driver.wait(until.elementLocated(By.css("input[name=password]")));
-  await passwordInput.sendKeys(config.userbot.password);
+  await passwordInput.sendKeys(config.stream.userbot.password);
 
   console.log("click submit button");
   const submitButton = driver.wait(until.elementLocated(By.css("button[type=submit]")));
@@ -55,11 +55,11 @@ async function login(driver: WebDriver) {
 
 async function navigateToTextChannel(driver: WebDriver) {
   console.log("navigating to text channel");
-  const textChannelUrl = `https://discord.com/channels/${config.server_id}/${config.commands.channel_id}`;
+  const textChannelUrl = `https://discord.com/channels/${config.server_id}/${config.game.commands.channel_id}`;
   await driver.get(textChannelUrl);
   console.log("waiting for text channel to be listed");
   const textChat = await driver.wait(
-    until.elementLocated(By.css(`a[data-list-item-id="channels___${config.commands.channel_id}"]`))
+    until.elementLocated(By.css(`a[data-list-item-id="channels___${config.game.commands.channel_id}"]`))
   );
   // TODO remove this arbitrary delay and instead test for something else
   await delay(5000);

@@ -24,7 +24,7 @@ async function handleMessage(event: Message, fn: (commandInput: CommandInput) =>
     return;
   }
 
-  if (event.channelId !== config.commands.channel_id) {
+  if (event.channelId !== config.game.commands.channel_id) {
     return;
   }
 

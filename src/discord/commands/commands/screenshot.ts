@@ -28,11 +28,11 @@ export function makeScreenshot(driver: WebDriver) {
     });
     const embed = new EmbedBuilder().setTitle("Pokémon Screenshot").setImage("attachment://screenshot.png");
     await interaction.reply({
-      content: `Screenshot sent to ${channelMention(config.notifications.channel_id)}`,
+      content: `Screenshot sent to ${channelMention(config.bot.notifications.channel_id)}`,
       ephemeral: true,
     });
 
-    const channel = client.channels.cache.get(config.notifications.channel_id);
+    const channel = client.channels.cache.get(config.bot.notifications.channel_id);
     if (channel) {
       await (channel as TextChannel).send({
         content: `Screenshot taken by ${userMention(interaction.user.id)} at ${time(date)}`,

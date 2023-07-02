@@ -27,7 +27,7 @@ export async function sendGameCommand(driver: WebDriver, command: CommandInput) 
         .actions()
         .click(element)
         .keyDown(key)
-        .pause(config.commands.key_press_duration_in_milliseconds)
+        .pause(config.game.commands.key_press_duration_in_milliseconds)
         .keyUp(key)
         .perform();
     }
@@ -38,7 +38,7 @@ export async function sendGameCommand(driver: WebDriver, command: CommandInput) 
       .actions()
       .click(element)
       .sendKeys("X", key)
-      .pause(config.commands.hold.duration_in_milliseconds * command.quantity)
+      .pause(config.game.commands.hold.duration_in_milliseconds * command.quantity)
       .keyUp(key)
       .keyUp("X")
       .perform();
@@ -48,23 +48,23 @@ export async function sendGameCommand(driver: WebDriver, command: CommandInput) 
       .actions()
       .click(element)
       .keyDown(key)
-      .pause(config.commands.hold.duration_in_milliseconds)
+      .pause(config.game.commands.hold.duration_in_milliseconds)
       .keyUp(key)
       .perform();
     return;
   }
 
   if (isBurst(command.modifier)) {
-    for (let i = 0; i < config.commands.burst.quantity * command.quantity; i++) {
+    for (let i = 0; i < config.game.commands.burst.quantity * command.quantity; i++) {
       await driver
         .actions()
         .click(element)
         .keyDown(key)
-        .pause(config.commands.burst.duration_in_milliseconds)
+        .pause(config.game.commands.burst.duration_in_milliseconds)
         .keyUp(key)
         .perform();
-      if (config.commands.burst.delay_in_milliseconds > 0) {
-        await delay(config.commands.burst.delay_in_milliseconds);
+      if (config.game.commands.burst.delay_in_milliseconds > 0) {
+        await delay(config.game.commands.burst.delay_in_milliseconds);
       }
     }
     return;
