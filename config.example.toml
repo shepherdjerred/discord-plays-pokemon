@@ -53,6 +53,7 @@ duration_in_milliseconds = 150
 
 [web]
 port = 8081
+assets = "ui/dist/"
 
 [web.api]
 enabled = true

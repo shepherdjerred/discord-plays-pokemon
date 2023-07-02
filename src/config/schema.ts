@@ -70,6 +70,7 @@ export const ConfigSchema = z.object({
   }),
   web: z.object({
     port: z.number(),
+    assets: z.string(),
     api: z.object({
       enabled: z.boolean(),
     }),

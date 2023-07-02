@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Notifications } from "./stories/Notifications";
 import { Notification } from "./model/Notification";
 import lodash from "lodash";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Container } from "./stories/Container";
 import { P, match } from "ts-pattern";
 import { GamePage } from "./pages/GamePage";
@@ -11,7 +11,6 @@ import { LoginPage } from "./pages/LoginPage";
 import { useLocalStorage } from "react-use";
 import { randomId, wait } from "./util";
 import { io } from "socket.io-client";
-import { randomUUID } from "crypto";
 
 export function App() {
   const [notifications, setNotifications] = useState<Notification[]>([]);
@@ -28,18 +27,25 @@ export function App() {
     },
   });
 
+  const socket = useRef(io());
+  useEffect(() => {
+    socket.current.on("connect", () => {
+      addNotification({ id: randomId(), level: "Info", title: "Connected", message: "Connection established" });
+    });
+
+    socket.current.on("disconnect", () => {
+      addNotification({ id: randomId(), level: "Error", title: "Disconnected", message: "Connection lost" });
+    });
+  }, []);
+
+  function handleKeyPress(key: string) {
+    console.log(key);
+    socket.current.emit("key press", key);
+  }
+
   function addNotification(notification: Notification) {
     setNotifications([...notifications, notification]);
   }
-
-  const socket = io();
-  socket.on("connect", () => {
-    addNotification({ id: randomId(), level: "Info", title: "Connected", message: "Connection established" });
-  });
-
-  socket.on("disconnect", () => {
-    addNotification({ id: randomId(), level: "Error", title: "Disconnected", message: "Connection lost" });
-  });
 
   function handleNotificationClose(id: string) {
     setNotifications(lodash.filter(notifications, (notification) => notification.id !== id));
@@ -47,7 +53,7 @@ export function App() {
 
   const page = match(identity)
     .with({ status: "success", data: { username: P.string } }, () => {
-      return <GamePage />;
+      return <GamePage onKey={handleKeyPress} />;
     })
     .with({ status: "loading" }, () => {
       return <LoginPage />;

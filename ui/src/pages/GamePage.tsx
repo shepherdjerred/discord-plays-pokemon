@@ -1,11 +1,10 @@
-import { Avatar } from "../stories/Avatar";
 import { Button } from "../stories/Button";
 import { Card } from "../stories/Card";
 import { Controls } from "../stories/Controls";
 import { Keys } from "../stories/Keys";
 import { Profile } from "../stories/Profile";
 
-export function GamePage() {
+export function GamePage({ onKey }: { onKey: (key: string) => void }) {
   const period = 60;
   const players = 3;
   return (
@@ -16,7 +15,7 @@ export function GamePage() {
         <div>Your ping is 53ms</div>
       </Card>
       <Profile />
-      <Keys />
+      <Keys onKey={onKey} />
       <Controls period={period} players={players} />
       <Button>Take Screenshot</Button>
     </>
