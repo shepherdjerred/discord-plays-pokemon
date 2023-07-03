@@ -1,6 +1,6 @@
 dist
-static/roms/*
-!static/roms/README.md
+ui/public/roms/*
+!ui/public/roms/README.md
 node_modules
 .env
 *.env
@@ -9,3 +9,4 @@ coverage
 .cache
 config*.toml
 !config.example.toml
+*.png

@@ -27,7 +27,7 @@ export function App() {
     },
   });
 
-  const socket = useRef(io("http://localhost:8081"));
+  const socket = useRef(io());
   useEffect(() => {
     socket.current.on("connect", () => {
       addNotification({ id: randomId(), level: "Info", title: "Connected", message: "Connection established" });

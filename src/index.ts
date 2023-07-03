@@ -11,6 +11,16 @@ import { config } from "./config/index.js";
 import { start } from "./browser/index.js";
 
 let driver: WebDriver | undefined = undefined;
+
+if (config.web.api.enabled) {
+  console.log("api is enabled");
+  listen(config.web.port, async (commandInput: CommandInput): Promise<void> => {
+    if (driver !== undefined) {
+      await sendGameCommand(driver, commandInput);
+    }
+  });
+}
+
 if (config.stream.enabled || config.game.enabled) {
   console.log("browser is enabled");
   driver = await new Builder()
@@ -39,15 +49,6 @@ if (config.stream.enabled || config.game.enabled) {
   if (config.bot.commands.enabled) {
     handleCommands(driver);
   }
-}
-
-if (config.web.api.enabled) {
-  console.log("api is enabled");
-  listen(config.web.port, async (commandInput: CommandInput): Promise<void> => {
-    if (driver !== undefined) {
-      await sendGameCommand(driver, commandInput);
-    }
-  });
 }
 
 if (config.game.enabled && config.game.commands.enabled) {
