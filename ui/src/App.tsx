@@ -20,14 +20,14 @@ export function App() {
     queryFn: async () => {
       await wait(1000);
       const username = "Jerred";
-      addNotification({ level: "Success", id: randomId(), title: "Welcome Back", message: `Logged in as ${username}` });
+      // addNotification({ level: "Success", id: randomId(), title: "Welcome Back", message: `Logged in as ${username}` });
       return {
         username,
       };
     },
   });
 
-  const socket = useRef(io());
+  const socket = useRef(io("http://localhost:8081"));
   useEffect(() => {
     socket.current.on("connect", () => {
       addNotification({ id: randomId(), level: "Info", title: "Connected", message: "Connection established" });
