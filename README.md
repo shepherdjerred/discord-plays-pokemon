@@ -9,3 +9,7 @@ This application allows your Discord server to play a cooperative game of Pokém
 This project also includes a built-in web interface to allow direct control of the game without needing to type commands into Discord. Once the web page is loaded, key presses are sent directly to the emulator.
 
 See [the documentation](https://discord-plays-pokemon.sjer.red/) for more information.
+
+## Disclaimer
+
+I have no relationship to either Pokémon or Twitch Plays Pokémon. This is purely a fan project.

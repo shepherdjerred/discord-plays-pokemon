@@ -1,4 +1,4 @@
-import { parseCommandInput } from "../../src/command/commandInput.js";
+import { parseCommandInput } from "../src/command/commandInput.js";
 
 describe("commandInput", () => {
   describe("parseCommandInput", () => {

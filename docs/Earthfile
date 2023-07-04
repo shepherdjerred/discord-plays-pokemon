@@ -1,7 +1,8 @@
 VERSION 0.7
+PROJECT sjerred/discord-plays-pokemon
 
 pipenv:
-  FROM python:3.8 # Netlify uses Python 3.8
+  FROM python:3.11
   WORKDIR /workspace
   RUN pip install --upgrade pip
   RUN pip install pipenv

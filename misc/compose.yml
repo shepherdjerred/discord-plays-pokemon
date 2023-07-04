@@ -17,7 +17,7 @@ services:
       - SYS_ADMIN
     volumes:
       - saves:/home/user/Downloads
-      - ./.env:/home/user/.env
+      - ./config.toml:/home/user/config.toml
     environment:
       SIZEW: 1920
       SIZEH: 1080

@@ -21,9 +21,6 @@ ci:
   BUILD +lint
   BUILD +test
 
-
-
-
 markdownlint:
   FROM davidanson/markdownlint-cli2
   COPY . .

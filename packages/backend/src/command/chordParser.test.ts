@@ -1,4 +1,4 @@
-import { commandToGameboyAdvanceKeyInput, parseGameboyAdvanceKeyInput } from "../../src/command/keybinds.js";
+import { commandToGameboyAdvanceKeyInput, parseGameboyAdvanceKeyInput } from "../src/command/keybinds.js";
 
 describe("keybinds", () => {
   describe("parseGameboyAdvanceKeyInput", () => {

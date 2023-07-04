@@ -1,4 +1,4 @@
-import { parseChord } from "../../src/command/chord.js";
+import { parseChord } from "./chord.js";
 
 describe("chord", () => {
   describe("parseChord", () => {
