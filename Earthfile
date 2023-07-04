@@ -116,5 +116,5 @@ devcontainer:
   RUN --push --secret GITHUB_TOKEN=github_token echo $GITHUB_TOKEN | docker login ghcr.io -u shepherdjerred --password-stdin
   WITH DOCKER
     RUN devpod provider add docker && \
-      devpod build github.com/shepherdjerred/discord-plays-pokemon --repository ghcr.io/shepherdjerred/discord-plays-pokemon
+      devpod build github.com/shepherdjerred/discord-plays-pokemon --repository ghcr.io/shepherdjerred/discord-plays-pokemon --platform linux/amd64,linux/arm64
   END
