@@ -2,11 +2,17 @@ VERSION 0.7
 PROJECT sjerred/discord-plays-pokemon
 ARG --global EARTHLY_CI
 
-pipeline:
-  PIPELINE --push
-  TRIGGER push main
+pipeline.pr:
+  PIPELINE
   TRIGGER pr main
   BUILD +ci
+  BUILD +devcontainer
+
+pipeline.push:
+  PIPELINE --push
+  TRIGGER push main
+  BUILD +ci
+  BUILD +devcontainer
 
 ci:
   BUILD +markdownlint
@@ -14,6 +20,9 @@ ci:
   BUILD +image
   BUILD +lint
   BUILD +test
+
+
+
 
 markdownlint:
   FROM davidanson/markdownlint-cli2
