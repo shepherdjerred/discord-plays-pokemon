@@ -46,7 +46,7 @@ node:
   CACHE $(npm config get cache)
 
 image:
-  FROM --platform=linux/amd64 ghcr.io/selkies-project/nvidia-egl-desktop
+  FROM ghcr.io/selkies-project/nvidia-egl-desktop
   ARG DEBIAN_FRONTEND=noninteractive
   USER root
   RUN apt update
@@ -65,7 +65,7 @@ image:
   COPY ./packages/backend/+deps/node_modules node_modules
   COPY ./packages/frontend/+build/ ui/
   IF [ $EARTHLY_CI = "false" ]
-    COPY .env .env
+    COPY packages/backend/config.toml config.toml
   END
   COPY misc/run.sh .
   COPY misc/supervisord.conf .

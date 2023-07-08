@@ -1,5 +1,5 @@
 export type KeyboardKey = {
-    display: string,
-    key: string,
-    api: string,
-}
+  display: string;
+  key: string;
+  api: string;
+};
