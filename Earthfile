@@ -21,6 +21,14 @@ ci:
   BUILD +lint
   BUILD +test
 
+lint:
+  BUILD ./packages/backend+lint
+  BUILD ./packages/frontend+lint
+
+test:
+  BUILD ./packages/backend+test
+  BUILD ./packages/frontend+test
+
 markdownlint:
   FROM davidanson/markdownlint-cli2
   COPY . .
@@ -34,45 +42,11 @@ markdownlint:
 node:
   FROM node:lts
   WORKDIR /workspace
+  RUN npm i -g npm
   CACHE $(npm config get cache)
 
-deps:
-  FROM +node
-  COPY package*.json .
-  RUN npm ci
-  SAVE ARTIFACT *
-
-src:
-  FROM +deps
-  COPY tsconfig.json .
-  COPY src src
-
-lint:
-  FROM +src
-  COPY .eslint* .
-  COPY .prettier* .
-  COPY test test
-  IF [ $EARTHLY_CI = "true" ]
-    RUN npm run lint:check
-  ELSE
-    RUN npm run lint:fix
-    SAVE ARTIFACT ./* AS LOCAL .
-  END
-
-build:
-  FROM +src
-  RUN npm run build
-  SAVE ARTIFACT dist AS LOCAL dist
-
-test:
-  FROM +src
-  COPY jest* .
-  COPY test test
-  RUN npm run test
-  SAVE ARTIFACT coverage AS LOCAL coverage
-
 image:
-  FROM ghcr.io/selkies-project/nvidia-egl-desktop
+  FROM --platform=linux/amd64 ghcr.io/selkies-project/nvidia-egl-desktop
   ARG DEBIAN_FRONTEND=noninteractive
   USER root
   RUN apt update
@@ -86,14 +60,15 @@ image:
   USER user
   RUN kwriteconfig5 --file kscreenlockerrc --group Daemon --key Autolock false
   RUN kwriteconfig5 --file ~/.config/powermanagementprofilesrc --group AC --group DPMSControl --key idleTime 540
-  COPY package* .
-  COPY +build/ .
-  COPY +deps/node_modules node_modules
+  COPY ./packages/backend/package* .
+  COPY ./packages/backend/+build/ .
+  COPY ./packages/backend/+deps/node_modules node_modules
+  COPY ./packages/frontend/+build/ ui/
   IF [ $EARTHLY_CI = "false" ]
     COPY .env .env
   END
-  COPY run.sh .
-  COPY supervisord.conf .
+  COPY misc/run.sh .
+  COPY misc/supervisord.conf .
   RUN cat supervisord.conf | sudo tee -a /etc/supervisord.conf
   RUN rm supervisord.conf
   RUN mkdir Downloads
@@ -103,13 +78,13 @@ image:
 up:
   LOCALLY
   RUN earthly +down
-  WITH DOCKER --compose compose.yml --load=+image
-    RUN docker-compose up -d
+  WITH DOCKER --compose misc/compose.yml --load=+image
+    RUN docker-compose -f misc.compose.yml up -d
   END
 
 down:
   LOCALLY
-  RUN docker-compose down
+  RUN docker-compose -f misc/compose.yml down
 
 devcontainer:
   FROM earthly/dind:ubuntu

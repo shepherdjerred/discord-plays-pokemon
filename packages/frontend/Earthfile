@@ -1,2 +1,37 @@
 VERSION 0.7
-PROJECT sjerred/discord-plays/pokemon
+PROJECT sjerred/discord-plays-pokemon
+
+deps:
+  FROM ../../+node
+  COPY package*.json .
+  RUN npm i
+  SAVE ARTIFACT *
+
+src:
+  FROM +deps
+  COPY tsconfig*.json vite.config.ts tailwind.config.js postcss.config.js index.html .
+  COPY --dir src public types
+
+lint:
+  FROM +src
+  COPY .eslint* .
+  COPY .prettier* .
+  COPY test test
+  IF [ $EARTHLY_CI = "true" ]
+    RUN npm run lint:check
+  ELSE
+    RUN npm run lint:fix
+    SAVE ARTIFACT ./* AS LOCAL .
+  END
+
+build:
+  FROM +src
+  RUN npm run build
+  SAVE ARTIFACT dist AS LOCAL dist
+
+test:
+  FROM +src
+  COPY jest* .
+  COPY test test
+  RUN npm run test
+  SAVE ARTIFACT coverage AS LOCAL coverage
