@@ -13,6 +13,7 @@ pipeline.push:
   TRIGGER push main
   BUILD +ci
   BUILD +devcontainer
+  BUILD ./packages/frontend+deploy.storybooks --prod=true
 
 ci:
   BUILD +markdownlint
@@ -64,9 +65,6 @@ image:
   COPY ./packages/backend/+build/ .
   COPY ./packages/backend/+deps/node_modules node_modules
   COPY ./packages/frontend/+build/ ui/
-  IF [ $EARTHLY_CI = "false" ]
-    COPY packages/backend/config.toml config.toml
-  END
   COPY misc/run.sh .
   COPY misc/supervisord.conf .
   RUN cat supervisord.conf | sudo tee -a /etc/supervisord.conf
@@ -79,7 +77,7 @@ up:
   LOCALLY
   RUN earthly +down
   WITH DOCKER --compose misc/compose.yml --load=+image
-    RUN docker-compose -f misc.compose.yml up -d
+    RUN docker-compose -f misc/compose.yml up -d
   END
 
 down:

@@ -10,12 +10,12 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "tsc --noEmit && vite build",
+    "build:storybook": "storybook build",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0 && prettier --check .",
     "lint:fix": "eslint --fix --ext ts,tsx . && prettier --write .",
     "preview": "vite preview",
-    "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "storybook": "storybook dev -p 6006"
   },
   "dependencies": {
     "@tanstack/react-query": "^4.29.19",
@@ -26,7 +26,8 @@
     "react-use": "^17.4.0",
     "socket.io-client": "^4.7.1",
     "styled-components": "^6.0.3",
-    "ts-pattern": "^5.0.1"
+    "ts-pattern": "^5.0.1",
+    "zod": "^3.21.4"
   },
   "devDependencies": {
     "@iconify-json/carbon": "^1.1.18",
