@@ -29,6 +29,15 @@ export function listen(port: number, fn: (commandInput: CommandInput) => Promise
         quantity: 1,
       });
     });
+
+    socket.on("ping", (callback: () => void) => {
+      callback();
+    });
+
+    socket.on("login", (event) => {
+      console.log(event);
+      socket.emit("login", { player: { discordId: "test", discordUsername: "me" } });
+    });
   });
 
   app.use(cors());

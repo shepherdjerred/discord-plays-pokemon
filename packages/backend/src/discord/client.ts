@@ -5,6 +5,6 @@ const client = new Client({
   intents: [GatewayIntentBits.Guilds, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildMessages],
 });
 
-await client.login(config.bot.discord_token);
+// await client.login(config.bot.discord_token);
 
 export default client;

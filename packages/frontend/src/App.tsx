@@ -1,46 +1,87 @@
 import "twin.macro";
-import { useQuery } from "@tanstack/react-query";
 import { Notifications } from "./stories/Notifications";
 import { Notification } from "./model/Notification";
 import lodash from "lodash";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Container } from "./stories/Container";
 import { P, match } from "ts-pattern";
 import { GamePage } from "./pages/GamePage";
 import { LoginPage } from "./pages/LoginPage";
-import { useLocalStorage } from "react-use";
-import { randomId, wait } from "./util";
-import { io } from "socket.io-client";
+import { useInterval } from "react-use";
+import { randomId } from "./util";
+import { Status, StatusSchema } from "./model/Status";
+import { Connection } from "./model/Connection";
+import { LoginResponseSchema, LoginRequest } from "./model/Login";
+import { Player } from "./model/Player";
+import { socket } from "./socket";
 
 export function App() {
-  const [notifications, setNotifications] = useState<Notification[]>([]);
-  const [token, _] = useLocalStorage<string>("token");
-  const identity = useQuery({
-    queryKey: ["auth", token],
-    queryFn: async () => {
-      await wait(1000);
-      const username = "Jerred";
-      // addNotification({ level: "Success", id: randomId(), title: "Welcome Back", message: `Logged in as ${username}` });
-      return {
-        username,
-      };
-    },
+  const [player, setPlayer] = useState<Player>();
+  const [status, setStatus] = useState<Status>({
+    playerList: [],
   });
+  const [connection, setConnection] = useState<Connection>({
+    status: "connecting",
+    latency: undefined,
+  });
+  const [notifications, setNotifications] = useState<Notification[]>([]);
 
-  const socket = useRef(io());
   useEffect(() => {
-    socket.current.on("connect", () => {
+    socket.on("connect", () => {
       addNotification({ id: randomId(), level: "Info", title: "Connected", message: "Connection established" });
+      setConnection({
+        ...connection,
+        status: "connected",
+      });
     });
 
-    socket.current.on("disconnect", () => {
+    socket.on("disconnect", () => {
       addNotification({ id: randomId(), level: "Error", title: "Disconnected", message: "Connection lost" });
+      setConnection({
+        ...connection,
+        status: "disconnected",
+      });
+    });
+
+    socket.on("status", (payload) => {
+      const status = StatusSchema.parse(payload);
+      setStatus(status);
+    });
+
+    socket.on("status", (payload) => {
+      const status = StatusSchema.parse(payload);
+      setStatus(status);
+    });
+
+    socket.on("login", (payload) => {
+      const loginResponse = LoginResponseSchema.parse(payload);
+      console.log(loginResponse);
+      setPlayer(loginResponse.player);
     });
   }, []);
 
+  useInterval(() => {
+    const start = Date.now();
+
+    socket.emit("ping", () => {
+      const duration = Date.now() - start;
+      setConnection({
+        ...connection,
+        latency: duration,
+      });
+    });
+  }, 2000);
+
+  function handleLogin(token: string) {
+    console.log("logging in with:", token);
+
+    const loginRequest: LoginRequest = { token };
+    socket.emit("login", loginRequest);
+  }
+
   function handleKeyPress(key: string) {
     console.log(key);
-    socket.current.emit("key press", key);
+    socket.emit("key press", key);
   }
 
   function addNotification(notification: Notification) {
@@ -51,15 +92,25 @@ export function App() {
     setNotifications(lodash.filter(notifications, (notification) => notification.id !== id));
   }
 
-  const page = match(identity)
-    .with({ status: "success", data: { username: P.string } }, () => {
-      return <GamePage onKey={handleKeyPress} />;
+  function handleScreenshot() {
+    console.log("screenshot");
+    socket.emit("screenshot");
+  }
+
+  const page = match(player)
+    .with(P.not(P.nullish), (player) => {
+      return (
+        <GamePage
+          status={status}
+          connection={connection}
+          onKey={handleKeyPress}
+          onScreenshot={handleScreenshot}
+          player={player}
+        />
+      );
     })
-    .with({ status: "loading" }, () => {
-      return <LoginPage />;
-    })
-    .with({ status: "error" }, () => {
-      return <LoginPage />;
+    .with(P.nullish, () => {
+      return <LoginPage handleLogin={handleLogin} />;
     })
     .exhaustive();
 

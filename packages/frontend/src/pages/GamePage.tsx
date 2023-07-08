@@ -1,23 +1,35 @@
+import { Connection } from "../model/Connection";
+import { Player } from "../model/Player";
+import { Status } from "../model/Status";
 import { Button } from "../stories/Button";
 import { Card } from "../stories/Card";
 import { Controls } from "../stories/Controls";
 import { Keys } from "../stories/Keys";
 import { Profile } from "../stories/Profile";
 
-export function GamePage({ onKey }: { onKey: (key: string) => void }) {
-  const period = 60;
-  const players = 3;
+export function GamePage({
+  status,
+  connection,
+  onKey,
+  onScreenshot,
+  player,
+}: {
+  onKey: (key: string) => void;
+  onScreenshot: () => void;
+  status: Status;
+  connection: Connection;
+  player: Player;
+}) {
   return (
     <>
       <Card title="Status">
-        <div>There are {players} others connected</div>
-        <div>You've used up 57% of your commands</div>
-        <div>Your ping is 53ms</div>
+        <div>There are {status.playerList.length} others connected</div>
+        <div>Your latency is {connection.latency}ms</div>
       </Card>
-      <Profile />
-      <Keys onKey={onKey} />
-      <Controls period={period} players={players} />
-      <Button>Take Screenshot</Button>
+      <Profile player={player} />
+      <Keys onKeyDown={onKey} />
+      <Controls />
+      <Button onClick={onScreenshot}>Take Screenshot</Button>
     </>
   );
 }

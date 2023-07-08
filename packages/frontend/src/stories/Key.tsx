@@ -1,18 +1,23 @@
 import useKeyboardJs from "react-use/lib/useKeyboardJs";
 import tw from "twin.macro";
+import { KeyboardKey } from "../model/Keyboard.ts";
 
 export function Key({
-  keycode: { display, key },
-  onKey,
+  keyboardKey: { display, key, api },
+  onKeyDown,
 }: {
-  keycode: { display: string; key: string };
-  key: string;
-  onKey: () => void;
+  keyboardKey: KeyboardKey;
+  onKeyDown: () => void;
 }) {
-  const [isPressed] = useKeyboardJs(key);
+  const [isPressed, event] = useKeyboardJs(key);
+  event?.preventDefault();
   if (isPressed) {
-    onKey();
+    onKeyDown();
   }
   const pressedStyles = tw`bg-slate-400`;
-  return <kbd css={[tw`p-3 bg-slate-600 block text-center m-1`, isPressed && pressedStyles]}>{display}</kbd>;
+  return (
+    <kbd css={[tw`p-3 bg-slate-600 block text-center m-1`, isPressed && pressedStyles]}>
+      {display} ({api})
+    </kbd>
+  );
 }
