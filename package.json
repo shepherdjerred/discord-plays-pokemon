@@ -1,8 +1,7 @@
 {
   "name": "discord-plays-pokemon",
   "version": "1.0.0",
-  "scripts": {
-  },
+  "scripts": {},
   "workspaces": [
     "packages/backend",
     "packages/frontend"
