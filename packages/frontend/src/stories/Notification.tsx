@@ -18,7 +18,6 @@ export function Notification({
   message?: string;
   level?: Level;
   dismissable?: boolean;
-  key: string;
   onClose: () => void;
 }) {
   const icon = match(level)
