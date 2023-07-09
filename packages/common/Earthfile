@@ -15,12 +15,12 @@ src:
 lint:
   FROM +src
   COPY .eslint* .
-  COPY .prettier* .
-  COPY test test
   IF [ $EARTHLY_CI = "true" ]
     RUN npm run lint:check
   ELSE
     RUN npm run lint:fix
+    # we don't want to commit this with npm workspaces, so delete it
+    RUN rm package-lock.json
     SAVE ARTIFACT ./* AS LOCAL .
   END
 
@@ -28,6 +28,12 @@ build:
   FROM +src
   RUN npm run build
   SAVE ARTIFACT dist AS LOCAL dist
+
+pack:
+  FROM +build
+  COPY .npmignore .
+  RUN npm pack
+  SAVE ARTIFACT discord-plays-pokemon-common-1.0.0.tgz common.tgz AS LOCAL common.tgz
 
 test:
   FROM +src

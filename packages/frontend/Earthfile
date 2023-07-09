@@ -4,6 +4,8 @@ PROJECT sjerred/discord-plays-pokemon
 deps:
   FROM ../../+node
   COPY package*.json .
+  COPY ../common+pack/common.tgz .
+  RUN npm i common.tgz
   RUN npm i
   SAVE ARTIFACT *
 

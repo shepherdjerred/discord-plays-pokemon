@@ -22,12 +22,19 @@ ci:
   BUILD +lint
   BUILD +test
 
+build:
+  BUILD ./packages/backend+build
+  BUILD ./packages/common+build
+  BUILD ./packages/frontend+build
+
 lint:
   BUILD ./packages/backend+lint
+  BUILD ./packages/common+lint
   BUILD ./packages/frontend+lint
 
 test:
   BUILD ./packages/backend+test
+  BUILD ./packages/common+test
   BUILD ./packages/frontend+test
 
 markdownlint:
