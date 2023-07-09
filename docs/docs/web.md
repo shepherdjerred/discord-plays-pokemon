@@ -5,3 +5,5 @@ Playing through Discord works, but it's not exactly a great experience. Sending 
 Discord is still used to stream audio and video, and commands can still be sent through a Discord text channel. The server will host a publically reachable web page that users can navigate to. The user's commands will be sent directly to the emulator as long as that page is focused.
 
 Gamepad support (e.g. Xbox, PlayStation) controllers will be added in a coming update.
+
+Documentation for the UI components can be found on it's [storybook](https://storybook.discord-plays-pokemon.com/).
