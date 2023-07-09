@@ -12,8 +12,8 @@
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
     "build:storybook": "storybook build",
-    "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0 && prettier --check .",
-    "lint:fix": "eslint --fix --ext ts,tsx . && prettier --write .",
+    "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "lint:fix": "eslint --fix --ext ts,tsx .",
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
     "test": "true"

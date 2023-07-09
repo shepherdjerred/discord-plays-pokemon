@@ -2,6 +2,8 @@
 
 This is not very easy to use because there are a lot of components to get this working. It will also require a bit of manual work on each startup due to some processes I have not yet automated.
 
+This guide will try to help you set up the bot for your own server.
+
 ## Discord Bot Setup
 
 1. Create a Discord application in the [Discord Developer Portal](https://discord.com/developers/applications)
@@ -12,11 +14,11 @@ This is not very easy to use because there are a lot of components to get this w
 
 Set the following permissions:
 
-- `bot`
-- `add reactions`
-- `send messages`
-- `attach files`
-- `embed links`
+- [ ] `bot`
+- [ ] `add reactions`
+- [ ] `send messages`
+- [ ] `attach files`
+- [ ] `embed links`
 
 Copy the URL, open it in another tab, and add the bot to your server.
 
@@ -29,7 +31,7 @@ This section can be skipped if you already have a spare Discord account to use a
     Discord does not like user bots. Please be careful.
 
 1. Create a new Discord user just for this application
-2. Invite the userbot to your server
+1. Invite the userbot to your server
 
 ## Application Configuration
 

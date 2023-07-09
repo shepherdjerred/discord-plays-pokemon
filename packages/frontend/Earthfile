@@ -51,4 +51,3 @@ deploy.storybook:
 test:
   FROM +src
   RUN npm run test
-  SAVE ARTIFACT coverage AS LOCAL coverage

@@ -5,8 +5,6 @@ This application allows your Discord server to play a cooperative game of Pokém
 ## Requirements
 
 - [Docker](https://www.docker.com/products/docker-desktop/)
-- [Docker Compose](https://docs.docker.com/compose/install/)
-- [Earthly](https://earthly.dev/get-earthly)
 
 ## Usage without Docker
 

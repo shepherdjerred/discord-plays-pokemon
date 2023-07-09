@@ -6,8 +6,6 @@ The `misc/ec2-bootstrap.sh` script can be used to setup an AWS EC2 instance. It 
 
 - Install Docker
 - Install Earthly
-- Install all required Nvidia software
+- Install all required nvidia software
 
-!!! note
-
-    You must use an EC2 instance with x86\*64 CPU, and a Nvidia GPU. It will not work on arm64 instances. You can try running this on AWS _without_ a GPU, but it will be extremely slow. Other GPUs such as Intel and AMD may work, but this is not a tested configuration.
+You must use an EC2 instance with x86\*64 CPU, and a Nvidia GPU. It will not work on arm64 instances. You can try running this on AWS _without_ a GPU, but it will be extremely slow. Other GPUs such as Intel and AMD should work, but this is not a tested configuration.

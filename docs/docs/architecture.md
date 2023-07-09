@@ -9,7 +9,3 @@ The last component is a Discord bot to handle commands. The application will sta
 Two bots are required because Discord bots are unable to stream video, and normal user accounts are unable to register slash commands. There is no way around this limitation.
 
 The process described above allows everything to be done in-browser, which makes this application considerably more portable than alternatives. Additionally, a Docker image is bundled with the application that allows this entire process to happen without any dependencies aside from Docker on the host machine.
-
-!!! warning
-
-    The Docker image runs a full copy of Desktop Linux. In order for streaming to work smoothly, you'll need either a _very_ fast CPU, or a GPU. The [nvidia-docker](https://github.com/NVIDIA/nvidia-docker) project allows Docker containers to use host GPU resources, and it is _strongly_ recommended to be used with the Docker image.
