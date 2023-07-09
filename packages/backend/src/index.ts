@@ -30,7 +30,7 @@ if (config.stream.enabled || config.game.enabled) {
         .setPreference("media.navigator.permission.disabled", true)
         .setPreference("media.autoplay.block-webaudio", false)
         .setPreference("privacy.webrtc.legacyGlobalIndicator", false)
-        .setPreference("privacy.webrtc.hideGlobalIndicator", true),
+        .setPreference("privacy.webrtc.hideGlobalIndicator", true)
     )
     .build();
 

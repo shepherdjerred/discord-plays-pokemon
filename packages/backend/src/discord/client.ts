@@ -1,5 +1,5 @@
 import { Client, GatewayIntentBits } from "discord.js";
-import { config } from "../config/index.js";
+// import { config } from "../config/index.js";
 
 const client = new Client({
   intents: [GatewayIntentBits.Guilds, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildMessages],

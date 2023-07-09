@@ -59,7 +59,7 @@ async function navigateToTextChannel(driver: WebDriver) {
   await driver.get(textChannelUrl);
   console.log("waiting for text channel to be listed");
   const textChat = await driver.wait(
-    until.elementLocated(By.css(`a[data-list-item-id="channels___${config.game.commands.channel_id}"]`)),
+    until.elementLocated(By.css(`a[data-list-item-id="channels___${config.game.commands.channel_id}"]`))
   );
   // TODO remove this arbitrary delay and instead test for something else
   await delay(5000);

@@ -34,18 +34,18 @@ export async function help(interaction: CommandInteraction) {
   const lines = [
     `${bold("Pokébot Help")}`,
     `The Pokébot is available when ${userMention(
-      config.stream.userbot.id,
+      config.stream.userbot.id
     )} is online and streaming in the ${channelMention(config.stream.channel_id)} channel.`,
     `When the bot is online, you can send commands in the ${channelMention(config.game.commands.channel_id)} channel.`,
     `Notifications will be posted in ${channelMention(config.bot.notifications.channel_id)}.`,
     ``,
     `${bold("Commands")}`,
     `Commands are messages sent to the ${channelMention(
-      config.game.commands.channel_id,
+      config.game.commands.channel_id
     )}. The command format is ${inlineCode("[QUANTITY][MODIFIER][ACTION]")}. Quantity is a number from 0-${
       config.game.commands.max_quantity_per_action
     }. You can perform multiple commands in the same message by putting a space between each command; for example, sending the message ${inlineCode(
-      "a b",
+      "a b"
     )} will send both ${inlineCode("a")} and ${inlineCode("b")}. This is referred to as a chord.`,
     `Each chord can perform up to ${config.game.commands.chord.max_commands} commands.`,
     `You can perform a maximum of ${
@@ -63,7 +63,7 @@ export async function help(interaction: CommandInteraction) {
     ``,
     `${bold("Action List:")}`,
     `You can perform the listed action by providing any of the words listed. For example, to press Up you can send ${inlineCode(
-      "up",
+      "up"
     )} or ${inlineCode("u")}.`,
     `All words are case insensitive.`,
     commandString,
@@ -73,7 +73,7 @@ export async function help(interaction: CommandInteraction) {
     ``,
     `${bold("Extras:")}`,
     `The ${inlineCode("/screenshot")} command can be used to take a screenshot and upload it to the ${channelMention(
-      config.bot.notifications.channel_id,
+      config.bot.notifications.channel_id
     )} channel.`,
   ];
   await interaction.reply({

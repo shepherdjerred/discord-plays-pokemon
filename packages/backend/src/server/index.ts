@@ -4,6 +4,8 @@ import { Server } from "socket.io";
 import { config } from "../config/index.js";
 import { CommandInput } from "../command/commandInput.js";
 import cors from "cors";
+import { LoginRequestSchema, LoginResponse, Player, Status } from "@discord-plays-pokemon/common";
+import { z } from "zod";
 
 export function listen(port: number, fn: (commandInput: CommandInput) => Promise<void>) {
   const app = express();
@@ -17,26 +19,55 @@ export function listen(port: number, fn: (commandInput: CommandInput) => Promise
     },
   });
 
+  const players: Player[] = [];
+
   io.on("connection", (socket) => {
-    console.log("a user connected");
+    let player: Player | undefined;
+
     socket.on("disconnect", () => {
       console.log("user disconnected");
     });
-    socket.on("key press", async (event) => {
-      console.log(event);
+
+    socket.on("status", () => {
+      const status: Status = {
+        playerList: players,
+      };
+
+      socket.emit("status", status);
+    });
+
+    socket.on("key press", async (payload) => {
+      if (!player) {
+        return;
+      }
+
+      const key = z.string().parse(payload);
       await fn({
-        command: event as string,
+        command: key,
         quantity: 1,
       });
+    });
+
+    socket.on("screenshot", () => {
+      if (!player) {
+        return;
+      }
+
+      // TODO
     });
 
     socket.on("ping", (callback: () => void) => {
       callback();
     });
 
-    socket.on("login", (event) => {
-      console.log(event);
-      socket.emit("login", { player: { discordId: "test", discordUsername: "me" } });
+    socket.on("login", (payload) => {
+      LoginRequestSchema.parse(payload);
+      // perform auth here
+      player = { discordId: "id", discordUsername: "username" };
+      const response: LoginResponse = {
+        player,
+      };
+      socket.emit("login", response);
     });
   });
 
