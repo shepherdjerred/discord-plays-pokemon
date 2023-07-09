@@ -6,19 +6,18 @@ pipeline.pr:
   PIPELINE
   TRIGGER pr main
   BUILD +ci
-  BUILD +devcontainer
 
 pipeline.push:
   PIPELINE --push
   TRIGGER push main
   BUILD +ci
   BUILD +devcontainer
-  BUILD ./packages/frontend+deploy.storybooks --prod=true
+  BUILD ./packages/frontend+deploy.storybook --prod=true
+  BUILD ./docs+deploy --prod=true
 
 ci:
-  BUILD +markdownlint
-  BUILD ./docs+build
   BUILD +image
+  BUILD +build
   BUILD +lint
   BUILD +test
 
@@ -31,11 +30,23 @@ lint:
   BUILD ./packages/backend+lint
   BUILD ./packages/common+lint
   BUILD ./packages/frontend+lint
+  BUILD +markdownlint
+  BUILD +prettier
 
 test:
   BUILD ./packages/backend+test
   BUILD ./packages/common+test
   BUILD ./packages/frontend+test
+
+prettier:
+  FROM +deps
+  COPY . .
+  IF [ $EARTHLY_CI = "false" ]
+    RUN npm run prettier:fix
+    SAVE ARTIFACT ./* AS LOCAL .
+  ELSE
+    RUN npm run prettier
+  END
 
 markdownlint:
   FROM davidanson/markdownlint-cli2
@@ -52,6 +63,11 @@ node:
   WORKDIR /workspace
   RUN npm i -g npm
   CACHE $(npm config get cache)
+
+deps:
+  FROM +node
+  COPY package*.json .
+  RUN npm ci
 
 image:
   FROM ghcr.io/selkies-project/nvidia-egl-desktop
@@ -95,7 +111,7 @@ devcontainer:
   FROM earthly/dind:ubuntu
   WORKDIR /workspace
   ARG TARGETARCH
-  ARG version=0.1.11-beta.0
+  ARG version=0.2.1
   RUN curl --location --fail --silent --show-error -o /usr/local/bin/devpod https://github.com/loft-sh/devpod/releases/download/v$version/devpod-linux-$TARGETARCH
   RUN chmod +x /usr/local/bin/devpod
   COPY .devcontainer/devcontainer.json .

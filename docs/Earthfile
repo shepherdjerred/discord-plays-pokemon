@@ -23,7 +23,7 @@ lock:
   FROM +pipenv
   COPY Pipfile* .
   RUN pipenv lock
-  SAVE ARTIFACT Pipfile* AS LOCAL .
+  SAVE ARTIFACT Pipfile.lock AS LOCAL Pipfile.lock
 
 src:
   FROM +deps
@@ -54,4 +54,17 @@ dev:
         -v $(pwd)/mkdocs.yml:/workspace/docs/mkdocs.yml \
         discord-plays-pokemon:docs \
         pipenv run mkdocs serve -a 0.0.0.0:8080
+  END
+
+deploy:
+  ARG prod=false
+  FROM node:lts
+  ENV NETLIFY_SITE_ID=74b8286f-3e2f-4b8e-87bf-d9043c307c33
+  RUN npm i -g netlify-cli
+  COPY +build/ site
+  RUN --push --no-cache --secret NETLIFY_AUTH_TOKEN=netlify_token npx netlify-cli link
+  IF [ $prod = "true" ]
+    RUN --push --no-cache --secret NETLIFY_AUTH_TOKEN=netlify_token npx netlify-cli deploy --dir=site --prod
+  ELSE
+    RUN --push --no-cache --secret NETLIFY_AUTH_TOKEN=netlify_token npx netlify-cli deploy --dir=site
   END

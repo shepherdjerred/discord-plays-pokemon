@@ -2,7 +2,7 @@ VERSION 0.7
 PROJECT sjerred/discord-plays-pokemon
 
 deps:
-  FROM ../../+node
+  FROM ../../+deps
   COPY package*.json .
   COPY ../common+pack/common.tgz .
   RUN npm i common.tgz
@@ -17,8 +17,6 @@ src:
 lint:
   FROM +src
   COPY .eslint* .
-  COPY .prettier* .
-  COPY test test
   IF [ $EARTHLY_CI = "true" ]
     RUN npm run lint:check
   ELSE
@@ -52,7 +50,5 @@ deploy.storybook:
 
 test:
   FROM +src
-  COPY jest* .
-  COPY test test
   RUN npm run test
   SAVE ARTIFACT coverage AS LOCAL coverage

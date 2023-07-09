@@ -15,7 +15,8 @@
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0 && prettier --check .",
     "lint:fix": "eslint --fix --ext ts,tsx . && prettier --write .",
     "preview": "vite preview",
-    "storybook": "storybook dev -p 6006"
+    "storybook": "storybook dev -p 6006",
+    "test": "true"
   },
   "dependencies": {
     "@tanstack/react-query": "^4.29.19",

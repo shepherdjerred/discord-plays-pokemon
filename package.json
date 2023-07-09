@@ -2,8 +2,8 @@
   "name": "@discord-plays-pokemon/monorepo",
   "version": "1.0.0",
   "scripts": {
-    "prettier": "npm run prettier .",
-    "prettier:fix": "npm run prettier -w ."
+    "prettier": "prettier .",
+    "prettier:fix": "prettier -w ."
   },
   "workspaces": [
     "packages/common",
