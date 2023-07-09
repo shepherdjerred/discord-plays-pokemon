@@ -1,3 +1,4 @@
+import { KeyboardKey } from "@discord-plays-pokemon/common";
 import useKeyboardJs from "react-use/lib/useKeyboardJs";
 import tw from "twin.macro";
 

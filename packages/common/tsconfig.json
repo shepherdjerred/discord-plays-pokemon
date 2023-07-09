@@ -4,6 +4,9 @@
     "outDir": "dist",
     "module": "NodeNext",
     "target": "ESNext",
-    "moduleResolution": "nodenext"
+    "moduleResolution": "nodenext",
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true
   }
 }

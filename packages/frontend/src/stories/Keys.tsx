@@ -1,3 +1,4 @@
+import { KeyboardKey } from "@discord-plays-pokemon/common";
 import { Card } from "./Card";
 import { Key } from "./Key";
 import lodash from "lodash";

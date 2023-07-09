@@ -1,3 +1,4 @@
+import { Status, Player } from "@discord-plays-pokemon/common";
 import { Connection } from "../model/Connection";
 import { Button } from "../stories/Button";
 import { Card } from "../stories/Card";

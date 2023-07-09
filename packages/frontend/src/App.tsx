@@ -11,7 +11,7 @@ import { useInterval } from "react-use";
 import { randomId } from "./util";
 import { Connection } from "./model/Connection";
 import { socket } from "./socket";
-import { Player, Status } from "@discord-plays-pokemon/common";
+import { LoginRequest, LoginResponseSchema, Player, Status, StatusSchema } from "@discord-plays-pokemon/common";
 
 export function App() {
   const [player, setPlayer] = useState<Player>();

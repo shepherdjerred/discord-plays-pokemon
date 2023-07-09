@@ -38,6 +38,13 @@
     "typescript": "5.1.6"
   },
   "exports": {
-    "./*": "./dist/*"
+    ".": "./dist/src/index.js"
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "dist/src/*"
+      ]
+    }
   }
 }

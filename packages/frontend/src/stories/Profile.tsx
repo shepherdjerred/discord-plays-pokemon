@@ -1,3 +1,4 @@
+import { Player } from "@discord-plays-pokemon/common";
 import { Avatar } from "./Avatar";
 import { Button } from "./Button";
 import { Card } from "./Card";
