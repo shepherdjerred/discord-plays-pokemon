@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { PlayerSchema } from "./Player";
+import { PlayerSchema } from "./Player.js";
 
 export type Status = z.infer<typeof StatusSchema>;
 export const StatusSchema = z.object({

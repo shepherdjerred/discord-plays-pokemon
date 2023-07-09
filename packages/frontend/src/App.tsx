@@ -9,11 +9,9 @@ import { GamePage } from "./pages/GamePage";
 import { LoginPage } from "./pages/LoginPage";
 import { useInterval } from "react-use";
 import { randomId } from "./util";
-import { Status, StatusSchema } from "./model/Status";
 import { Connection } from "./model/Connection";
-import { LoginResponseSchema, LoginRequest } from "./model/Login";
-import { Player } from "./model/Player";
 import { socket } from "./socket";
+import { Player, Status } from "@discord-plays-pokemon/common";
 
 export function App() {
   const [player, setPlayer] = useState<Player>();

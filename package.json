@@ -1,8 +1,9 @@
 {
-  "name": "discord-plays-pokemon",
+  "name": "@discord-plays-pokemon/monorepo",
   "version": "1.0.0",
   "scripts": {},
   "workspaces": [
+    "packages/common",
     "packages/backend",
     "packages/frontend"
   ]

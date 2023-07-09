@@ -1,6 +1,4 @@
 import { Connection } from "../model/Connection";
-import { Player } from "../model/Player";
-import { Status } from "../model/Status";
 import { Button } from "../stories/Button";
 import { Card } from "../stories/Card";
 import { Controls } from "../stories/Controls";

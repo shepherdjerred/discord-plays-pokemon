@@ -1,5 +1,5 @@
 {
-  "name": "frontend",
+  "name": "@discord-plays-pokemon/frontend",
   "private": true,
   "version": "1.0.0",
   "type": "module",
@@ -27,7 +27,8 @@
     "socket.io-client": "^4.7.1",
     "styled-components": "^6.0.3",
     "ts-pattern": "^5.0.1",
-    "zod": "^3.21.4"
+    "zod": "^3.21.4",
+    "@discord-plays-pokemon/common": "1.0.0"
   },
   "devDependencies": {
     "@iconify-json/carbon": "^1.1.18",

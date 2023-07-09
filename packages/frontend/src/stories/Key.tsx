@@ -1,6 +1,5 @@
 import useKeyboardJs from "react-use/lib/useKeyboardJs";
 import tw from "twin.macro";
-import { KeyboardKey } from "../model/Keyboard.ts";
 
 export function Key({
   keyboardKey: { display, key, api },

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { PlayerSchema } from "./Player";
+import { PlayerSchema } from "./Player.js";
 
 export type LoginRequest = z.infer<typeof LoginRequestSchema>;
 export const LoginRequestSchema = z.object({
