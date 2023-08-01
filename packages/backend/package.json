@@ -38,7 +38,7 @@
     "@types/selenium-webdriver": "^4.1.15",
     "@typescript-eslint/eslint-plugin": "^5.61.0",
     "@typescript-eslint/parser": "^5.61.0",
-    "eslint": "^8.44.0",
+    "eslint": "^8.46.0",
     "eslint-config-prettier": "^8.8.0",
     "prisma": "^4.16.2",
     "ts-jest": "^29.1.1",
