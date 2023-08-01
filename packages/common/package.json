@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "lodash": "4.17.21",
-    "ts-pattern": "^5.0.1",
+    "ts-pattern": "^5.0.4",
     "zod": "^3.21.4"
   },
   "devDependencies": {
