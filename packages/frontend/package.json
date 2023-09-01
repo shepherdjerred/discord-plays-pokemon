@@ -27,7 +27,7 @@
     "react-use": "^17.4.0",
     "socket.io-client": "^4.7.1",
     "styled-components": "^6.0.3",
-    "ts-pattern": "^5.0.1",
+    "ts-pattern": "^5.0.5",
     "zod": "^3.21.4",
     "@discord-plays-pokemon/common": "1.0.0"
   },
