@@ -23,6 +23,9 @@
   EJS_core = "gba";
 </script>
 <script>
+  /**
+   * This script is a terrible hack to support auto-loading of game saves with Selenium
+   */
   const inputElement = document.getElementById("upload");
   inputElement.addEventListener("change", handleFiles, false);
   function handleFiles() {
@@ -45,6 +48,7 @@
           }, `/data/saves/gba/league_of_legends.srm`)
           add.onsuccess = () => {
             console.log("ADDED")
+            inputElement.style.display = "none"
           }
           add.onerror = (e) => {
             console.error(e)

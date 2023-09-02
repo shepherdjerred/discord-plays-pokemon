@@ -57,6 +57,7 @@ export const ConfigSchema = z.strictObject({
       }),
       auto_import: z.strictObject({
         enabled: z.boolean(),
+        path: z.string(),
       }),
     }),
     commands: z.strictObject({

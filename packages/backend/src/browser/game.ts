@@ -3,6 +3,7 @@ import { CommandInput, isBurst, isHold, isHoldB } from "../command/commandInput.
 import { toGameboyAdvanceKeyInput } from "../command/keybinds.js";
 import { delay } from "../util.js";
 import { config } from "../config/index.js";
+import { getLatestSave } from "../saves/index.js";
 
 export async function setupGame(driver: WebDriver) {
   console.log("navigating to emulator page");
@@ -96,16 +97,20 @@ export async function exportSave(driver: WebDriver) {
 }
 
 export async function importSave(driver: WebDriver) {
-  const frame = await driver.findElement(By.id("game-frame"));
-  await driver.switchTo().frame(frame);
-  console.log("waiting for import save button");
-  const importSaveButton = await driver.wait(until.elementLocated(By.xpath("/html/body/div[2]/div[3]/div[3]")));
-  console.log("clicking import save button");
-  await importSaveButton.click();
-  console.log("clicked import button");
+  const latestSave = await getLatestSave();
 
-  // return to the content frame
-  await driver.switchTo().defaultContent();
-  const contentFrame = await driver.findElement(By.id("ejs-content-frame"));
-  await driver.switchTo().frame(contentFrame);
+  if (latestSave) {
+    console.log("latest save is ", latestSave);
+    await driver.switchTo().defaultContent();
+
+    console.log("finding upload button");
+    await driver.findElement(By.css("#upload")).sendKeys(latestSave);
+    console.log("uploaded save");
+    await delay(1000);
+
+    const contentFrame = await driver.findElement(By.id("ejs-content-frame"));
+    await driver.switchTo().frame(contentFrame);
+  } else {
+    console.log("no save to load");
+  }
 }

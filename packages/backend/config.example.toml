@@ -61,6 +61,7 @@ emulator_url = "built_in"
 
 [game.saves.auto_export]
 # should game saves be exported periodically
+# saves are exported to ~/Downloads
 enabled = true
 # by default, export the save file once every minute
 interval_in_milliseconds = 60000
@@ -68,6 +69,9 @@ interval_in_milliseconds = 60000
 [game.saves.auto_import]
 # should the latest game save be loaded on startup
 enabled = true
+# the path to saved files
+# the game will load the file that was last modified
+path = "~/Downloads"
 
 [game.commands]
 # should chat commands be enabled
