@@ -107,7 +107,7 @@ cors = true
 # the port to run the webserver on
 port = 8081
 # the path to the UI assets, such as the emulator page and web UI
-assets = "frontend/dist/"
+assets = "../frontend/dist/"
 
 [web.api]
 # should the web API be enabled

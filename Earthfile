@@ -87,7 +87,7 @@ image:
   COPY ./packages/backend/package* .
   COPY ./packages/backend/+build/ .
   COPY ./packages/backend/+deps/node_modules node_modules
-  COPY ./packages/frontend/+build/ ui/
+  COPY ./packages/frontend/+build/ frontend/
   COPY misc/run.sh .
   COPY misc/supervisord.conf .
   RUN cat supervisord.conf | sudo tee -a /etc/supervisord.conf

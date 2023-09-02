@@ -14,8 +14,7 @@ export async function setupGame(driver: WebDriver) {
   }
   await delay(5000);
   console.log("selecting frame");
-  const frame = await driver.findElement(By.id("ejs-content-frame"));
-  await driver.switchTo().frame(frame);
+  await focusContentFrame(driver);
   console.log("waiting for play now button");
   const playNowButton = await driver.wait(until.elementLocated(By.xpath('//a[text()="Play Now"]')));
   console.log("clicking play now button");
@@ -24,6 +23,7 @@ export async function setupGame(driver: WebDriver) {
 }
 
 export async function sendGameCommand(driver: WebDriver, command: CommandInput) {
+  await focusContentFrame(driver);
   const element = await driver.findElement(By.css("body"));
   const key = toGameboyAdvanceKeyInput(command.command);
   if (!command.modifier) {
@@ -80,20 +80,12 @@ export async function sendGameCommand(driver: WebDriver, command: CommandInput) 
 }
 
 export async function exportSave(driver: WebDriver) {
-  const frame = await driver.findElement(By.id("game-frame"));
-  await driver.switchTo().frame(frame);
+  await focusGameFrame(driver);
   console.log("waiting for export save button");
   const exportSaveButton = await driver.wait(until.elementLocated(By.xpath("/html/body/div[2]/div[3]/div[4]")));
   console.log("clicking export save button");
-  try {
-    await exportSaveButton.click();
-    console.log("clicked export button");
-  } finally {
-    // return to the content frame
-    await driver.switchTo().defaultContent();
-    const contentFrame = await driver.findElement(By.id("ejs-content-frame"));
-    await driver.switchTo().frame(contentFrame);
-  }
+  await exportSaveButton.click();
+  console.log("clicked export button");
 }
 
 export async function importSave(driver: WebDriver) {
@@ -101,16 +93,35 @@ export async function importSave(driver: WebDriver) {
 
   if (latestSave) {
     console.log("latest save is ", latestSave);
-    await driver.switchTo().defaultContent();
+    await focusMainFrame(driver);
 
     console.log("finding upload button");
     await driver.findElement(By.css("#upload")).sendKeys(latestSave);
     console.log("uploaded save");
     await delay(1000);
-
-    const contentFrame = await driver.findElement(By.id("ejs-content-frame"));
-    await driver.switchTo().frame(contentFrame);
   } else {
     console.log("no save to load");
   }
+}
+
+async function focusMainFrame(driver: WebDriver) {
+  await driver.switchTo().defaultContent();
+  const element = await driver.findElement(By.css("body"));
+  await element.click();
+}
+
+async function focusContentFrame(driver: WebDriver) {
+  await driver.switchTo().defaultContent();
+  const frame = await driver.findElement(By.id("ejs-content-frame"));
+  await driver.switchTo().frame(frame);
+  const element = await driver.findElement(By.css("body"));
+  await element.click();
+}
+
+async function focusGameFrame(driver: WebDriver) {
+  await focusContentFrame(driver);
+  const frame = await driver.findElement(By.id("game-frame"));
+  await driver.switchTo().frame(frame);
+  const element = await driver.findElement(By.css("body"));
+  await element.click();
 }

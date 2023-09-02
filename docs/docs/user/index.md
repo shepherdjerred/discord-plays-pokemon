@@ -1,6 +1,6 @@
 # Setup Guide
 
-This is **not** very easy to use because there are a lot of components to get this working. It will also require a bit of manual work on each startup due to some processes I have not yet automated.
+This is **not** very easy to use because there are a lot of components to get this working.
 
 This guide will try to help you set up the bot for your own server.
 

@@ -4,6 +4,7 @@ coverage
 .cache
 config*.toml
 !config.example.toml
+!config.dev.toml
 *.png
 .tmp-earthly-out
 *.gba

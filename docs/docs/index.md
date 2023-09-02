@@ -14,28 +14,28 @@ Follow the [tutorial](./user/index.md) to set up the bot.
 
 <div class="grid cards" markdown>
 
-- :material-account-group:{ .lg .middle } __Play with your friends__
+- :material-account-group:{ .lg .middle } **Play with your friends**
 
-    ---
+  ***
 
-    Out-of-the-box streaming and input multiplexing. Play any Game Boy Advance ROM.
+  Out-of-the-box streaming and input multiplexing. Play any Game Boy Advance ROM.
 
-- :material-controller:{ .lg .middle } __Multiple input methods__
+- :material-controller:{ .lg .middle } **Multiple input methods**
 
-    ---
+  ***
 
-    Play games through Discord text chat, or reduce input lag with by using the web interface.
+  Play games through Discord text chat, or reduce input lag with by using the web interface.
 
-- :material-slash-forward:{ .lg .middle } __Native Discord commands__
+- :material-slash-forward:{ .lg .middle } **Native Discord commands**
 
-    ---
+  ***
 
-    Control the bot with native Discord commands.
+  Control the bot with native Discord commands.
 
-- :material-truck:{ .lg .middle } __Extremely portable__
+- :material-truck:{ .lg .middle } **Extremely portable**
 
-    ---
+  ***
 
-    The entire application runs in a web browser. The application can be run fully in Docker for further isolation.
+  The entire application runs in a web browser. The application can be run fully in Docker for further isolation.
 
 </div>
