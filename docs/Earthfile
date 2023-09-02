@@ -36,6 +36,13 @@ lock:
   RUN pipenv lock
   SAVE ARTIFACT Pipfile.lock AS LOCAL Pipfile.lock
 
+update:
+  FROM +pipenv
+  COPY Pipfile* .
+  COPY +insiders/insiders.zip .
+  RUN pipenv update
+  SAVE ARTIFACT Pipfile.lock AS LOCAL Pipfile.lock
+
 src:
   FROM +deps
   COPY docs docs
