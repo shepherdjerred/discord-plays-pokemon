@@ -1,21 +1,25 @@
 import { z } from "zod";
 
 export type Config = z.infer<typeof ConfigSchema>;
-export const ConfigSchema = z.object({
+export const ConfigSchema = z.strictObject({
   server_id: z
     .string()
     .regex(/[0-9]*/, "IDs must only have numeric characters")
     .min(1),
-  bot: z.object({
+  bot: z.strictObject({
     discord_token: z.string().min(1),
     application_id: z
       .string()
       .regex(/[0-9]*/, "IDs must only have numeric characters")
       .min(1),
-    commands: z.object({
+    commands: z.strictObject({
       enabled: z.boolean(),
+      update: z.boolean(),
+      screenshot: z.strictObject({
+        enabled: z.boolean(),
+      }),
     }),
-    notifications: z.object({
+    notifications: z.strictObject({
       channel_id: z
         .string()
         .regex(/[0-9]*/, "IDs must only have numeric characters")
@@ -23,7 +27,7 @@ export const ConfigSchema = z.object({
       enabled: z.boolean(),
     }),
   }),
-  stream: z.object({
+  stream: z.strictObject({
     enabled: z.boolean(),
     channel_id: z
       .string()
@@ -31,7 +35,7 @@ export const ConfigSchema = z.object({
       .min(1),
     minimum_watchers: z.number().nonnegative(),
     require_watching: z.boolean(),
-    userbot: z.object({
+    userbot: z.strictObject({
       id: z
         .string()
         .regex(/[0-9]*/, "IDs must only have numeric characters")
@@ -40,9 +44,22 @@ export const ConfigSchema = z.object({
       password: z.string().min(1),
     }),
   }),
-  game: z.object({
+  game: z.strictObject({
     enabled: z.boolean(),
-    commands: z.object({
+    emulator_url: z.union([z.literal("built_in"), z.string().url("Must be a valid URL")]),
+    browser: z.strictObject({
+      preferences: z.record(z.string(), z.union([z.boolean(), z.number()])),
+    }),
+    saves: z.strictObject({
+      auto_export: z.strictObject({
+        enabled: z.boolean(),
+        interval_in_milliseconds: z.number().nonnegative(),
+      }),
+      auto_import: z.strictObject({
+        enabled: z.boolean(),
+      }),
+    }),
+    commands: z.strictObject({
       enabled: z.boolean(),
       channel_id: z
         .string()
@@ -52,26 +69,32 @@ export const ConfigSchema = z.object({
       max_quantity_per_action: z.number().nonnegative(),
       key_press_duration_in_milliseconds: z.number().nonnegative(),
       delay_between_actions_in_milliseconds: z.number().nonnegative(),
-      burst: z.object({
+      burst: z.strictObject({
         duration_in_milliseconds: z.number().nonnegative(),
         delay_in_milliseconds: z.number().nonnegative(),
         quantity: z.number().nonnegative(),
       }),
-      chord: z.object({
+      chord: z.strictObject({
         duration_in_milliseconds: z.number().nonnegative(),
         max_commands: z.number().nonnegative(),
         max_total: z.number().nonnegative(),
         delay: z.number().nonnegative(),
       }),
-      hold: z.object({
+      hold: z.strictObject({
         duration_in_milliseconds: z.number().nonnegative(),
       }),
     }),
   }),
-  web: z.object({
-    port: z.number(),
+  web: z.strictObject({
+    enabled: z.boolean(),
+    cors: z.boolean(),
+    port: z
+      .number()
+      .nonnegative()
+      .min(1024, "Ports below 1024 are reserved")
+      .max(49151, "Ports above 49151 are reserved"),
     assets: z.string(),
-    api: z.object({
+    api: z.strictObject({
       enabled: z.boolean(),
     }),
   }),

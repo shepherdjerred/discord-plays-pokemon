@@ -8,10 +8,12 @@
   "workspaces": [
     "packages/common",
     "packages/backend",
-    "packages/frontend"
+    "packages/frontend",
+    "packages/test"
   ],
   "devDependencies": {
     "prettier": "^3.0.0",
     "prettier-plugin-tailwindcss": "^0.3.0"
-  }
+  },
+  "engineStrict": true
 }

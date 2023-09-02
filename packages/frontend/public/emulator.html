@@ -1,23 +1,61 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <style>
-      body {
-        margin: 0;
-        cursor: none;
-      }
-    </style>
-  </head>
 
-  <body>
-    <div style="width: 100vw; height: 100vh" id="game_wrapper">
-      <div id="game"></div>
-    </div>
-  </body>
-  <script type="text/javascript">
-    EJS_player = "#game";
-    EJS_gameUrl = "/roms/liquid_crystal.gba";
-    EJS_core = "gba";
-  </script>
-  <script src="https://www.emulatorjs.com/loader.js"></script>
+<head>
+  <style>
+    body {
+      margin: 0;
+      cursor: none;
+    }
+  </style>
+</head>
+
+<body>
+  <input type="file" id="upload" />
+  <div style="width: 100vw; height: 100vh" id="game_wrapper">
+    <div id="game"></div>
+  </div>
+</body>
+<script type="text/javascript">
+  ROM = "league_of_legends"
+  EJS_player = "#game";
+  EJS_gameUrl = `roms/${ROM}.gba`;
+  EJS_core = "gba";
+</script>
+<script>
+  const inputElement = document.getElementById("upload");
+  inputElement.addEventListener("change", handleFiles, false);
+  function handleFiles() {
+    const files = this.files;
+    if (files.length > 0) {
+      const fileReader = new FileReader();
+      fileReader.file_name = files[0].name;
+      fileReader.onload = function () {
+        console.log("loaded")
+        const data = new Uint8Array(fileReader.result);
+        const request = window.indexedDB.open("/data/saves", 21);
+        request.onsuccess = (event) => {
+          const db = request.result
+          const tx = db.transaction(['FILE_DATA'], 'readwrite');
+          const store = tx.objectStore('FILE_DATA');
+          const add = store.add({
+            timestamp: Date.now(),
+            contents: data,
+            mode: 33206
+          }, `/data/saves/gba/league_of_legends.srm`)
+          add.onsuccess = () => {
+            console.log("ADDED")
+          }
+          add.onerror = (e) => {
+            console.error(e)
+          }
+        }
+      };
+      fileReader.readAsArrayBuffer(files[0]);
+    }
+  }
+
+</script>
+<script src="https://www.emulatorjs.com/loader.js"></script>
+
 </html>

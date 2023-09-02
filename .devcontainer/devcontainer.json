@@ -17,9 +17,6 @@
   "customizations": {
     "devpod": {
       "prebuildRepository": "ghcr.io/shepherdjerred/discord-plays-pokemon"
-    },
-    "vscode": {
-      "extensions": ["bradlc.vscode-tailwindcss", "lightyen.tailwindcss-intellisense-twin"]
     }
   }
 }

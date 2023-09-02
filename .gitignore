@@ -1,6 +1,4 @@
 dist
-ui/public/roms/*
-!ui/public/roms/README.md
 node_modules
 coverage
 .cache
@@ -8,3 +6,4 @@ config*.toml
 !config.example.toml
 *.png
 .tmp-earthly-out
+*.gba

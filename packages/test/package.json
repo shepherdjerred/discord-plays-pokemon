@@ -1,0 +1,31 @@
+{
+  "name": "@discord-plays-pokemon/test",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "test": "npx jest"
+  },
+  "dependencies": {
+    "lodash": "^4.17.21",
+    "selenium-webdriver": "^4.12.0",
+    "ts-pattern": "^5.0.5",
+    "testcontainers": "^10.2.1",
+    "ts-jest": "^29.1.1",
+    "ts-jest-resolver": "^2.0.1"
+  },
+  "devDependencies": {
+    "@tsconfig/recommended": "1.0.2",
+    "@types/jest": "^29.5.2",
+    "@types/lodash": "^4.14.195",
+    "@types/node": "^20.4.1",
+    "@types/selenium-webdriver": "^4.1.15",
+    "@typescript-eslint/eslint-plugin": "^5.61.0",
+    "@typescript-eslint/parser": "^5.61.0",
+    "eslint": "^8.44.0",
+    "eslint-config-prettier": "^8.8.0",
+    "ts-node": "^10.9.1",
+    "tslib": "^2.6.0",
+    "typescript": "5.1.6"
+  }
+}

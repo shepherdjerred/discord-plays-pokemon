@@ -26,6 +26,8 @@ You can build the source code by running `earthly +build`. This will build the f
 
     Earthly automatically tracks dependencies and performs necessary ordering, caching, parallelization, etc. You don't ever need to run one target before another.
 
+`earthly +up` and `earthly +down` can be used to build and start the project.
+
 The root Earthfile has more targets, which can be listed by running `earthly +ls`.
 
 ## Without Earthly

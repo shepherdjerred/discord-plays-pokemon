@@ -72,9 +72,13 @@ export async function help(interaction: CommandInteraction) {
     modifiersString,
     ``,
     `${bold("Extras:")}`,
-    `The ${inlineCode("/screenshot")} command can be used to take a screenshot and upload it to the ${channelMention(
-      config.bot.notifications.channel_id,
-    )} channel.`,
+    config.bot.commands.screenshot.enabled
+      ? `The ${inlineCode(
+          "/screenshot",
+        )} command can be used to take a screenshot and upload it to the ${channelMention(
+          config.bot.notifications.channel_id,
+        )} channel.`
+      : "",
   ];
   await interaction.reply({
     content: lines.join("\n"),

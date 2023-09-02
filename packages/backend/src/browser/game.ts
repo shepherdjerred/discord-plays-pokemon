@@ -6,8 +6,12 @@ import { config } from "../config/index.js";
 
 export async function setupGame(driver: WebDriver) {
   console.log("navigating to emulator page");
-  await driver.get(`http://localhost:${config.web.port}/emulator.html`);
-  await delay(10000);
+  if (config.game.emulator_url === "built_in") {
+    await driver.get(`http://localhost:${config.web.port}/emulator.html`);
+  } else {
+    await driver.get(config.game.emulator_url);
+  }
+  await delay(5000);
   console.log("selecting frame");
   const frame = await driver.findElement(By.id("ejs-content-frame"));
   await driver.switchTo().frame(frame);
@@ -75,29 +79,33 @@ export async function sendGameCommand(driver: WebDriver, command: CommandInput) 
 }
 
 export async function exportSave(driver: WebDriver) {
+  const frame = await driver.findElement(By.id("game-frame"));
+  await driver.switchTo().frame(frame);
   console.log("waiting for export save button");
-  const exportSaveButton = await driver.wait(until.elementLocated(By.css('div[title="Export save file"]')));
+  const exportSaveButton = await driver.wait(until.elementLocated(By.xpath("/html/body/div[2]/div[3]/div[4]")));
   console.log("clicking export save button");
-  await exportSaveButton.click();
-  console.log("clicked button");
-  // TODO: diff
-  // TODO: upload to chat
+  try {
+    await exportSaveButton.click();
+    console.log("clicked export button");
+  } finally {
+    // return to the content frame
+    await driver.switchTo().defaultContent();
+    const contentFrame = await driver.findElement(By.id("ejs-content-frame"));
+    await driver.switchTo().frame(contentFrame);
+  }
 }
 
 export async function importSave(driver: WebDriver) {
+  const frame = await driver.findElement(By.id("game-frame"));
+  await driver.switchTo().frame(frame);
   console.log("waiting for import save button");
-  const importSaveButton = await driver.wait(until.elementLocated(By.css('div[title="Import save file"]')));
+  const importSaveButton = await driver.wait(until.elementLocated(By.xpath("/html/body/div[2]/div[3]/div[3]")));
   console.log("clicking import save button");
   await importSaveButton.click();
-  console.log("clicked button");
-  // TODO select file
-}
+  console.log("clicked import button");
 
-export async function loopExportSave(driver: WebDriver) {
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition, no-constant-condition
-  while (true) {
-    await exportSave(driver);
-    // TODO: use config
-    await delay(10000);
-  }
+  // return to the content frame
+  await driver.switchTo().defaultContent();
+  const contentFrame = await driver.findElement(By.id("ejs-content-frame"));
+  await driver.switchTo().frame(contentFrame);
 }
