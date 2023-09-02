@@ -1,8 +1,24 @@
-# Tutorial
+# Setup Guide
 
-This is not very easy to use because there are a lot of components to get this working. It will also require a bit of manual work on each startup due to some processes I have not yet automated.
+This is **not** very easy to use because there are a lot of components to get this working. It will also require a bit of manual work on each startup due to some processes I have not yet automated.
 
 This guide will try to help you set up the bot for your own server.
+
+!!! note
+
+    If you run into any problems following this guide, please [open an issue](https://github.com/shepherdjerred/discord-plays-pokemon/issues). I'll gladly help you out!
+
+## Requirements
+
+- [Docker](https://www.docker.com/products/docker-desktop/)
+
+## Usage without Docker
+
+You can use this without Docker by building this application with `npm install`, `npm run build`, and `./run.sh`.
+
+!!! note
+
+    You will need to have Firefox installed, and possibly other software. You might also still want to have a GPU so that Discord streaming is hardware accelerated.
 
 ## Discord Bot Setup
 
@@ -14,11 +30,11 @@ This guide will try to help you set up the bot for your own server.
 
 Set the following permissions:
 
-- [ ] `bot`
-- [ ] `add reactions`
-- [ ] `send messages`
-- [ ] `attach files`
-- [ ] `embed links`
+- `bot`
+- `add reactions`
+- `send messages`
+- `attach files`
+- `embed links`
 
 Copy the URL, open it in another tab, and add the bot to your server.
 

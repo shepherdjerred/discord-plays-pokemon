@@ -1,6 +1,15 @@
 VERSION 0.7
 PROJECT sjerred/discord-plays-pokemon
 
+insiders:
+  FROM ubuntu:jammy
+  WORKDIR /workspace
+  RUN apt update
+  RUN apt install -y zip
+  GIT CLONE --branch 9.2.7-insiders-4.40.3 https://github.com/squidfunk/mkdocs-material-insiders .
+  RUN zip -r insiders.zip .
+  SAVE ARTIFACT insiders.zip
+
 pipenv:
   FROM python:3.11
   WORKDIR /workspace
@@ -17,17 +26,20 @@ deps:
   RUN apt install -y pngquant libcairo2-dev libfreetype6-dev libffi-dev libjpeg-dev libpng-dev libz-dev
   WORKDIR docs
   COPY Pipfile* .
+  COPY +insiders/insiders.zip .
   RUN pipenv install --deploy --system
 
 lock:
   FROM +pipenv
   COPY Pipfile* .
+  COPY +insiders/insiders.zip .
   RUN pipenv lock
   SAVE ARTIFACT Pipfile.lock AS LOCAL Pipfile.lock
 
 src:
   FROM +deps
   COPY docs docs
+  COPY overrides overrides
   COPY mkdocs.yml .
 
 build:

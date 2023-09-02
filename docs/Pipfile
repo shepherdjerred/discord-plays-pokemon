@@ -4,7 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-mkdocs-material = "*"
+mkdocs-material = {file = "file:./insiders.zip"}
 pillow = "*"
 cairosvg = "*"
 
