@@ -4,9 +4,10 @@ import client from "../client.js";
 import { makeScreenshot } from "./commands/screenshot.js";
 import { WebDriver } from "selenium-webdriver";
 import { help } from "./commands/help.js";
+import { logger } from "../../logger.js";
 
 export function handleCommands(driver: WebDriver) {
-  console.log("handling slash commands");
+  logger.info("handling slash commands");
   client.on(Events.InteractionCreate, async (interaction) => {
     try {
       if (!interaction.isChatInputCommand()) {
@@ -22,7 +23,7 @@ export function handleCommands(driver: WebDriver) {
           await help(interaction);
       }
     } catch (e) {
-      console.error(e);
+      logger.error(e);
     }
   });
 }

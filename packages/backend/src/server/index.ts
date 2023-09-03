@@ -10,13 +10,14 @@ import { resolve } from "path";
 import { existsSync } from "fs";
 import { exit } from "process";
 import { addErrorLinks } from "../util.js";
+import { logger } from "../logger.js";
 
 export function listen(port: number, fn: (commandInput: CommandInput) => Promise<void>) {
   const app = express();
   const server = http.createServer(app);
 
   if (config.web.api.enabled) {
-    console.log("api is enabled");
+    logger.info("api is enabled");
     setupSocket(server, fn);
   }
 
@@ -27,14 +28,14 @@ export function listen(port: number, fn: (commandInput: CommandInput) => Promise
   const path = resolve(config.web.assets);
 
   if (!existsSync(path)) {
-    console.error(addErrorLinks(`The web assets do not exist at expected path, which is ${path}`));
+    logger.error(addErrorLinks(`The web assets do not exist at expected path, which is ${path}`));
     exit(1);
   }
 
   app.use(express.static(path));
 
   server.listen(port, () => {
-    console.log(`Listening on port ${port}`);
+    logger.info(`Listening on port ${port}`);
   });
 }
 
@@ -54,7 +55,7 @@ function setupSocket(server: http.Server, fn: (commandInput: CommandInput) => Pr
     let player: Player | undefined;
 
     socket.on("disconnect", () => {
-      console.log("user disconnected");
+      logger.info("user disconnected");
     });
 
     socket.on("status", () => {

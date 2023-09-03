@@ -11,29 +11,30 @@ import { config } from "./config/index.js";
 import { start } from "./browser/index.js";
 import lodash from "lodash";
 import { registerCommands } from "./discord/commands/rest.js";
+import { logger } from "./logger.js";
 
 let driver: WebDriver | undefined = undefined;
 
 if (config.bot.commands.update) {
-  console.log("registering commands");
+  logger.info("registering commands");
   await registerCommands();
 }
 
 if (config.web.enabled) {
-  console.log("web is enabled");
+  logger.info("web is enabled");
   listen(config.web.port, async (commandInput: CommandInput): Promise<void> => {
     if (driver !== undefined) {
       try {
         await sendGameCommand(driver, commandInput);
       } catch (e) {
-        console.error(e);
+        logger.error(e);
       }
     }
   });
 }
 
 if (config.stream.enabled || config.game.enabled) {
-  console.log("browser is enabled");
+  logger.info("browser is enabled");
 
   const options = new Options();
 
@@ -43,15 +44,19 @@ if (config.stream.enabled || config.game.enabled) {
 
   driver = await new Builder().forBrowser(Browser.FIREFOX).setFirefoxOptions(options).build();
 
-  console.log("fullscreening");
+  logger.info("fullscreening");
   await driver.manage().window().fullscreen();
 
   try {
     await start(driver);
   } catch (error) {
-    console.error(error);
-    const screenshot = await driver.takeScreenshot();
-    await writeFile("error.png", screenshot, "base64");
+    logger.error(error);
+    try {
+      const screenshot = await driver.takeScreenshot();
+      await writeFile("error.png", screenshot, "base64");
+    } catch (e) {
+      logger.error("unable to take screenshot while handling another error");
+    }
     exit(1);
   }
 
@@ -61,24 +66,30 @@ if (config.stream.enabled || config.game.enabled) {
 }
 
 if (config.game.enabled && config.game.commands.enabled) {
-  console.log("game and discord commands are enabled");
+  logger.info("game and discord commands are enabled");
   handleMessages(async (commandInput: CommandInput): Promise<void> => {
     if (driver !== undefined) {
       try {
         await sendGameCommand(driver, commandInput);
       } catch (e) {
-        console.error(e);
+        logger.error(e);
       }
     }
   });
 }
 
 if (config.game.saves.auto_export.enabled) {
-  console.log("auto export saves is enabled");
-  setInterval(() => {
-    console.log("exporting save");
+  logger.info("auto export saves is enabled");
+  // eslint-disable-next-line @typescript-eslint/no-misused-promises
+  setInterval(async () => {
+    logger.info("exporting save");
     if (driver) {
-      void exportSave(driver);
+      try {
+        await exportSave(driver);
+        logger.info("save exported successfully");
+      } catch (e) {
+        logger.error(e);
+      }
     }
   }, config.game.saves.auto_export.interval_in_milliseconds);
 }

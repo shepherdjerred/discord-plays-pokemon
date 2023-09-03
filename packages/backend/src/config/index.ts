@@ -5,11 +5,12 @@ import { resolve } from "path";
 import { exit } from "process";
 import { addErrorLinks } from "../util.js";
 import { ZodError } from "zod";
+import { logger } from "../logger.js";
 
 const path = resolve("config.toml");
 
 if (!existsSync(path)) {
-  console.error(
+  logger.error(
     addErrorLinks(
       `The config file does not exist at expected path, which is ${path}\nTo resolve this error, copy config.example.toml to ${path}\nDon't forget to edit config.toml after copying it!`,
     ),
@@ -22,14 +23,14 @@ try {
 } catch (e) {
   if (e instanceof Error) {
     if (e.name === "SyntaxError") {
-      console.error(
+      logger.error(
         `Your configuration at ${path} _is not_ valid TOML.\nCorrect your config.toml to continue\nA TOML validator may be useful, such as an IDE plugin, or https://www.toml-lint.com/\n`,
       );
       exit(1);
     }
     if (e.name === "ZodError") {
       const errors = JSON.parse(e.message) as ZodError[];
-      console.error(
+      logger.error(
         `Your configuration at ${path} _is_ valid TOML, but it is not a valid configuration for this application.\nThe following problems were found:\n\n`,
         errors,
         addErrorLinks(""),

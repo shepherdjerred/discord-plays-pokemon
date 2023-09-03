@@ -5,16 +5,17 @@ import { execute } from "./chordExecutor.js";
 import { isValid } from "./chordValidator.js";
 import { CommandInput } from "../command/commandInput.js";
 import { config } from "../config/index.js";
+import { logger } from "../logger.js";
 
 export let lastCommand = new Date();
 
 export function handleMessages(fn: (commandInput: CommandInput) => Promise<void>) {
-  console.log("ready to handle commands");
+  logger.info("ready to handle commands");
   client.on(Events.MessageCreate, async (event) => {
     try {
       return handleMessage(event, fn);
     } catch (error) {
-      console.log(error);
+      logger.info(error);
     }
   });
 }
@@ -61,7 +62,7 @@ async function handleMessage(event: Message, fn: (commandInput: CommandInput) =>
   }
 
   if (!chord) {
-    console.error(chord);
+    logger.error(chord);
     await event.react("❓");
     return;
   }

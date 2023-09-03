@@ -5,6 +5,7 @@ coverage
 config*.toml
 !config.example.toml
 !config.dev.toml
-*.png
+error.png
 .tmp-earthly-out
 *.gba
+logs

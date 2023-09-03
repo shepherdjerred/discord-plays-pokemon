@@ -27,6 +27,7 @@
     "socket.io": "^4.7.2",
     "ts-pattern": "^5.0.5",
     "tsx": "^3.12.8",
+    "winston": "^3.10.0",
     "zod": "^3.22.2"
   },
   "devDependencies": {

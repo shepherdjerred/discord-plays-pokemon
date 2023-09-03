@@ -6,6 +6,7 @@ import { join, resolve, sep } from "path";
 import { existsSync } from "fs";
 import lodash from "lodash";
 import { homedir } from "os";
+import { logger } from "../logger.js";
 
 export async function getLatestSave(): Promise<string | undefined> {
   let saveDirectory = config.game.saves.auto_import.path;
@@ -20,7 +21,7 @@ export async function getLatestSave(): Promise<string | undefined> {
   saveDirectory = resolve(saveDirectory);
 
   if (!existsSync(saveDirectory)) {
-    console.error(addErrorLinks(`The save file path does not exist, which is ${saveDirectory}`));
+    logger.error(addErrorLinks(`The save file path does not exist, which is ${saveDirectory}`));
     exit(1);
   }
 
@@ -37,7 +38,7 @@ export async function getLatestSave(): Promise<string | undefined> {
   );
   const saveFilesSortedByCreation = lodash.sortBy(saveFilesWithMetadata, (file) => file.meta.ctime);
   const withJustPath = lodash.map(saveFilesSortedByCreation, (file) => file.file);
-  console.log("The following save files exist, in order:", withJustPath);
+  logger.info("The following save files exist, in order:", withJustPath);
 
   if (withJustPath.length > 0) {
     return resolve(withJustPath[0]);

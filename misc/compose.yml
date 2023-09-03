@@ -18,6 +18,7 @@ services:
     volumes:
       - saves:/home/user/Downloads
       - ./config.toml:/home/user/config.toml
+      - ./logs:/home/user/logs
     environment:
       SIZEW: 1920
       SIZEH: 1080

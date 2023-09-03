@@ -2,6 +2,7 @@ import { REST, Routes } from "discord.js";
 import { screenshotCommand } from "./commands/screenshot.js";
 import { helpCommand } from "./commands/help.js";
 import { config } from "../../config/index.js";
+import { logger } from "../../logger.js";
 
 const rest = new REST({ version: "10" }).setToken(config.bot.discord_token);
 
@@ -13,10 +14,10 @@ export async function registerCommands() {
       commands = [...commands, screenshotCommand.toJSON()];
     }
 
-    console.log(commands);
+    logger.info(commands);
     const data = await rest.put(Routes.applicationCommands(config.bot.application_id), { body: commands });
-    console.log(data);
+    logger.info(data);
   } catch (error) {
-    console.error(error);
+    logger.error(error);
   }
 }
