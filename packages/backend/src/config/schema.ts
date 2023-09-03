@@ -33,6 +33,7 @@ export const ConfigSchema = z.strictObject({
       .string()
       .regex(/[0-9]*/, "IDs must only have numeric characters")
       .min(1),
+    dynamic_streaming: z.boolean(),
     minimum_watchers: z.number().nonnegative(),
     require_watching: z.boolean(),
     userbot: z.strictObject({

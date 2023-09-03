@@ -62,7 +62,7 @@ async function navigateToTextChannel(driver: WebDriver) {
   const textChat = await driver.wait(
     until.elementLocated(By.css(`a[data-list-item-id="channels___${config.game.commands.channel_id}"]`)),
   );
-  // TODO remove this arbitrary delay and instead test for something else
+  // TODO: remove this arbitrary delay and instead test for something else
   await delay(5000);
   await textChat.click();
   logger.info("navigated to text channel");
@@ -101,10 +101,18 @@ async function joinVoiceChat(driver: WebDriver) {
   await voiceChatButton.click();
 }
 
-async function shareScreen(driver: WebDriver) {
+export async function shareScreen(driver: WebDriver) {
   logger.info("trying to share screen");
   const videoShareSelector = 'button[aria-label="Share Your Screen"]';
   const videoShareButton = await driver.wait(until.elementLocated(By.css(videoShareSelector)));
-  logger.info("joined sharing screen");
+  logger.info("clicking sharing screen button");
+  await videoShareButton.click();
+}
+
+export async function stopShareScreen(driver: WebDriver) {
+  logger.info("trying to stop screen sharing");
+  const videoShareSelector = 'button[aria-label="Share Your Screen"]';
+  const videoShareButton = await driver.wait(until.elementLocated(By.css(videoShareSelector)));
+  logger.info("clicking sharing screen button");
   await videoShareButton.click();
 }

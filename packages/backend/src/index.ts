@@ -12,6 +12,8 @@ import { start } from "./browser/index.js";
 import lodash from "lodash";
 import { registerCommands } from "./discord/commands/rest.js";
 import { logger } from "./logger.js";
+import { shareScreen, stopShareScreen } from "./browser/discord.js";
+import { handleChannelUpdate } from "./discord/channelHandler.js";
 
 let driver: WebDriver | undefined = undefined;
 
@@ -92,4 +94,25 @@ if (config.game.saves.auto_export.enabled) {
       }
     }
   }, config.game.saves.auto_export.interval_in_milliseconds);
+}
+
+if (config.stream.dynamic_streaming) {
+  let isSharing = true;
+  handleChannelUpdate(async (participants) => {
+    if (driver) {
+      if (participants > 0 && !isSharing) {
+        // TODO send channel message?
+        logger.info("sharing screen since there are now participants");
+        await shareScreen(driver);
+        isSharing = true;
+      } else if (isSharing) {
+        // TODO send channel message?
+        logger.info("sharing screen since there are no longer participants");
+        await stopShareScreen(driver);
+        isSharing = false;
+      }
+    } else {
+      logger.error("driver is not defined");
+    }
+  });
 }

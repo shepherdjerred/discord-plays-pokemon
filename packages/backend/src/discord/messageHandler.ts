@@ -1,4 +1,4 @@
-import { Events, Message } from "discord.js";
+import { Events, Message, VoiceChannel, channelMention } from "discord.js";
 import { parseChord, type Chord } from "../command/chord.js";
 import client from "./client.js";
 import { execute } from "./chordExecutor.js";
@@ -35,23 +35,22 @@ async function handleMessage(event: Message, fn: (commandInput: CommandInput) =>
     return;
   }
 
-  // TODO: check that the sender is in the voice channel
-  // if (event.member?.voice.channelId !== configuration.voiceChannelId) {
-  //   await event.reply(`You have to be in ${channelMention(configuration.voiceChannelId)} to play`);
-  //   return;
-  // }
+  if (event.member?.voice.channelId !== config.stream.channel_id) {
+    await event.reply(`You have to be in ${channelMention(config.stream.channel_id)} to play`);
+    return;
+  }
 
-  // const memberCount = (channel as VoiceChannel).members.filter((member) => {
-  //   return !member.user.bot;
-  // }).size;
-  // if (memberCount < configuration.minimumMembersInVoiceChannel) {
-  //   await event.reply(
-  //     `You can't play unless there are at least ${configuration.minimumMembersInVoiceChannel} ${
-  //       configuration.minimumMembersInVoiceChannel === 1 ? "person" : "people"
-  //     } in ${channelMention(configuration.voiceChannelId)} 😕`
-  //   );
-  //   return;
-  // }
+  const memberCount = (channel as VoiceChannel).members.filter((member) => {
+    return !member.user.bot;
+  }).size;
+  if (memberCount < config.stream.minimum_watchers) {
+    await event.reply(
+      `You can't play unless there are at least ${config.stream.minimum_watchers} ${
+        config.stream.minimum_watchers === 1 ? "person" : "people"
+      } in ${channelMention(config.stream.channel_id)} 😕`,
+    );
+    return;
+  }
 
   let chord: Chord | undefined;
   try {

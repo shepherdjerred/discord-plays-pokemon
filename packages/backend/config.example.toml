@@ -30,6 +30,8 @@ channel_id = ""
 enabled = true
 # the Discord video channel ID to stream to
 channel_id = ""
+# only stream if there is someone in the channel
+dynamic_streaming = true
 # there must be at least this many people watching
 # for commands to be processed
 minimum_watchers = 2
