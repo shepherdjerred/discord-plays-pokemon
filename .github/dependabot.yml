@@ -25,6 +25,11 @@ updates:
     schedule:
       interval: "monthly"
       day: "sunday"
+  - package-ecosystem: "npm"
+    directory: "/packages/test"
+    schedule:
+      interval: "monthly"
+      day: "sunday"
   - package-ecosystem: "pip"
     directory: "/docs"
     schedule:
