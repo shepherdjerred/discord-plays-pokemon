@@ -1,5 +1,5 @@
 import { By, WebDriver, until } from "selenium-webdriver";
-import { delay } from "../util.js";
+import { wait } from "../util.js";
 import { config } from "../config/index.js";
 import { logger } from "../logger.js";
 
@@ -10,6 +10,7 @@ export async function setupDiscord(driver: WebDriver) {
     logger.info("logged in");
     await login(driver);
   }
+  await updateSettings(driver);
   await navigateToTextChannel(driver);
   await joinVoiceChat(driver);
   await shareScreen(driver);
@@ -62,35 +63,39 @@ async function navigateToTextChannel(driver: WebDriver) {
   const textChat = await driver.wait(
     until.elementLocated(By.css(`a[data-list-item-id="channels___${config.game.commands.channel_id}"]`)),
   );
-  // TODO: remove this arbitrary delay and instead test for something else
-  await delay(5000);
+  const delay = 2000;
+  logger.info(`waiting ${delay}ms for text channel to become clickable`);
+  await wait(delay);
   await textChat.click();
   logger.info("navigated to text channel");
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-async function goToSettings(driver: WebDriver) {
-  logger.info("going to settings");
-  const settingsButtonSelector = 'button[aria-label="User Settings"]';
-  const settingsButton = await driver.wait(until.elementLocated(By.css(settingsButtonSelector)));
-  logger.info("at settings");
-  await settingsButton.click();
-}
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-async function goToVoiceTab(driver: WebDriver) {
-  logger.info("going to voice settings");
-  const settingsButtonSelector = 'button[aria-controls="voice-&-video-tab"]';
-  const settingsButton = await driver.wait(until.elementLocated(By.css(settingsButtonSelector)));
-  logger.info("at voice settings");
-  await settingsButton.click();
-}
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function updateSettings(driver: WebDriver) {
-  // Move output volume
-  // Update input sensitivity
-  // Disable echo cancellation
+  logger.info("executing script to update local storage");
+  // https://stackoverflow.com/questions/52509440/discord-window-localstorage-is-undefined-how-to-get-access-to-the-localstorage
+  await driver.executeScript(`
+    (() => {
+      const iframe = document.createElement('iframe');
+      document.head.append(iframe);
+      const localStorage = Object.getOwnPropertyDescriptor(iframe.contentWindow, 'localStorage');
+
+      con
+
+      const currentSettings = JSON.parse(localStorage.getItem("MediaEngineStore"));
+      currentSettings.default.outputVolume = 0;
+      currentSettings.stream.outputVolume = 0;
+      currentSettings.default.modeOptions.threshold = -100;
+      currentSettings.stream.modeOptions.threshold = -100;
+      currentSettings.default.echoCancellation = false;
+      currentSettings.stream.echoCancellation = false;
+      currentSettings.default.automaticGainControl = false;
+      currentSettings.stream.automaticGainControl = false;
+      localStorage.setItem("MediaEngineStore", JSON.stringify(currentSettings));
+      iframe.remove();
+    })()
+  `);
+  logger.info("refreshing page to update settings");
+  await driver.navigate().refresh();
 }
 
 async function joinVoiceChat(driver: WebDriver) {

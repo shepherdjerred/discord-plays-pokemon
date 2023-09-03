@@ -6,7 +6,7 @@ import { WebDriver } from "selenium-webdriver";
 import { help } from "./commands/help.js";
 import { logger } from "../../logger.js";
 
-export function handleCommands(driver: WebDriver) {
+export function handleSlashCommands(driver: WebDriver) {
   logger.info("handling slash commands");
   client.on(Events.InteractionCreate, async (interaction) => {
     try {

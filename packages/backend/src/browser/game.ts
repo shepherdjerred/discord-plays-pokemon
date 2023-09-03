@@ -1,7 +1,7 @@
 import { By, WebDriver, until } from "selenium-webdriver";
 import { CommandInput, isBurst, isHold, isHoldB } from "../command/commandInput.js";
 import { toGameboyAdvanceKeyInput } from "../command/keybinds.js";
-import { delay } from "../util.js";
+import { wait } from "../util.js";
 import { config } from "../config/index.js";
 import { getLatestSave } from "../saves/index.js";
 import { logger } from "../logger.js";
@@ -13,7 +13,7 @@ export async function setupGame(driver: WebDriver) {
   } else {
     await driver.get(config.game.emulator_url);
   }
-  await delay(5000);
+  await wait(5000);
   logger.info("selecting frame");
   await focusContentFrame(driver);
   logger.info("waiting for play now button");
@@ -70,7 +70,7 @@ export async function sendGameCommand(driver: WebDriver, command: CommandInput) 
         .keyUp(key)
         .perform();
       if (config.game.commands.burst.delay_in_milliseconds > 0) {
-        await delay(config.game.commands.burst.delay_in_milliseconds);
+        await wait(config.game.commands.burst.delay_in_milliseconds);
       }
     }
     return;
@@ -99,7 +99,7 @@ export async function importSave(driver: WebDriver) {
     logger.info("finding upload button");
     await driver.findElement(By.css("#upload")).sendKeys(latestSave);
     logger.info("uploaded save");
-    await delay(1000);
+    await wait(1000);
   } else {
     logger.info("no save to load");
   }
@@ -124,7 +124,7 @@ export async function focusGameFrame(driver: WebDriver) {
 }
 
 export async function fullscreenGame(driver: WebDriver) {
-  await delay(500);
+  await wait(500);
 
   await focusGameFrame(driver);
   logger.info("waiting for fullscreen button");

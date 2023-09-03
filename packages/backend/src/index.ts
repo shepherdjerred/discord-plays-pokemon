@@ -4,13 +4,13 @@ import { handleMessages } from "./discord/messageHandler.js";
 import { Browser, Builder, WebDriver } from "selenium-webdriver";
 import { writeFile } from "fs/promises";
 import { Options } from "selenium-webdriver/firefox.js";
-import { handleCommands } from "./discord/commands/index.js";
+import { handleSlashCommands } from "./discord/slashCommands/index.js";
 import { CommandInput } from "./command/commandInput.js";
-import { listen } from "./server/index.js";
+import { createWebServer } from "./webserver/index.js";
 import { config } from "./config/index.js";
 import { start } from "./browser/index.js";
 import lodash from "lodash";
-import { registerCommands } from "./discord/commands/rest.js";
+import { registerSlashCommands } from "./discord/slashCommands/rest.js";
 import { logger } from "./logger.js";
 import { shareScreen, stopShareScreen } from "./browser/discord.js";
 import { handleChannelUpdate } from "./discord/channelHandler.js";
@@ -18,20 +18,15 @@ import { handleChannelUpdate } from "./discord/channelHandler.js";
 let driver: WebDriver | undefined = undefined;
 
 if (config.bot.commands.update) {
-  logger.info("registering commands");
-  await registerCommands();
+  await registerSlashCommands();
 }
 
 if (config.web.enabled) {
-  logger.info("web is enabled");
-  listen(config.web.port, async (commandInput: CommandInput): Promise<void> => {
-    if (driver !== undefined) {
-      try {
-        await sendGameCommand(driver, commandInput);
-      } catch (e) {
-        logger.error(e);
-      }
-    }
+  createWebServer({
+    port: config.web.port,
+    webAssetsPath: config.web.assets,
+    isApiEnabled: config.web.api.enabled,
+    isCorsEnabled: config.web.cors,
   });
 }
 
@@ -63,7 +58,7 @@ if (config.stream.enabled || config.game.enabled) {
   }
 
   if (config.bot.commands.enabled) {
-    handleCommands(driver);
+    handleSlashCommands(driver);
   }
 }
 
