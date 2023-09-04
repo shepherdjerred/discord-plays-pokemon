@@ -1,8 +1,8 @@
 services:
-  browser:
+  discord-plays-pokemon:
     image: ghcr.io/shepherdjerred/discord-plays-pokemon
     shm_size: "4gb"
-    container_name: browser
+    container_name: discord-plays-pokemon
     stdin_open: true
     tty: true
     # deploy:
