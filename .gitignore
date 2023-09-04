@@ -9,3 +9,5 @@ error.png
 .tmp-earthly-out
 *.gba
 logs
+saves
+.DS_Store

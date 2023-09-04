@@ -5,18 +5,18 @@ services:
     container_name: discord-plays-pokemon
     stdin_open: true
     tty: true
-    # deploy:
-    #   resources:
-    #     reservations:
-    #       devices:
-    #         - driver: nvidia
-    #           count: 1
-    #           capabilities: [gpu]
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
     privileged: true
     cap_add:
       - SYS_ADMIN
     volumes:
-      - saves:/home/user/Downloads
+      - ./saves:/home/user/Downloads
       - ./config.toml:/home/user/config.toml
       - ./logs:/home/user/logs
     environment:
