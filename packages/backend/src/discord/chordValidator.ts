@@ -1,4 +1,4 @@
-import { type Chord } from "../command/chord.js";
+import { type Chord } from "../game/command/chord.js";
 import { config } from "../config/index.js";
 
 export function isValid(chord: Chord): boolean {

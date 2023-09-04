@@ -1,9 +1,9 @@
 import { Events, Message, VoiceChannel, channelMention } from "discord.js";
-import { parseChord, type Chord } from "../command/chord.js";
+import { parseChord, type Chord } from "../game/command/chord.js";
 import client from "./client.js";
 import { execute } from "./chordExecutor.js";
 import { isValid } from "./chordValidator.js";
-import { CommandInput } from "../command/commandInput.js";
+import { CommandInput } from "../game/command/commandInput.js";
 import { config } from "../config/index.js";
 import { logger } from "../logger.js";
 
@@ -35,7 +35,7 @@ async function handleMessage(event: Message, fn: (commandInput: CommandInput) =>
     return;
   }
 
-  if (event.member?.voice.channelId !== config.stream.channel_id) {
+  if (!event.member || event.member.voice.channelId !== config.stream.channel_id) {
     await event.reply(`You have to be in ${channelMention(config.stream.channel_id)} to play`);
     return;
   }
@@ -43,10 +43,10 @@ async function handleMessage(event: Message, fn: (commandInput: CommandInput) =>
   const memberCount = (channel as VoiceChannel).members.filter((member) => {
     return !member.user.bot;
   }).size;
-  if (memberCount < config.stream.minimum_watchers) {
+  if (memberCount < config.stream.minimum_in_channel) {
     await event.reply(
-      `You can't play unless there are at least ${config.stream.minimum_watchers} ${
-        config.stream.minimum_watchers === 1 ? "person" : "people"
+      `You can't play unless there are at least ${config.stream.minimum_in_channel} ${
+        config.stream.minimum_in_channel === 1 ? "person" : "people"
       } in ${channelMention(config.stream.channel_id)} 😕`,
     );
     return;

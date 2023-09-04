@@ -5,6 +5,8 @@
 server_id = ""
 
 [bot]
+# should the Discord bot component be enabled
+enabled = true
 # your Discord bot's token
 discord_token = ""
 # your Discord bot's application ID
@@ -34,7 +36,7 @@ channel_id = ""
 dynamic_streaming = true
 # there must be at least this many people watching
 # for commands to be processed
-minimum_watchers = 2
+minimum_in_channel = 2
 # only those watching the stream can send commands
 require_watching = true
 

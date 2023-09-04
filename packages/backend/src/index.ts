@@ -5,7 +5,7 @@ import { Browser, Builder, WebDriver } from "selenium-webdriver";
 import { writeFile } from "fs/promises";
 import { Options } from "selenium-webdriver/firefox.js";
 import { handleSlashCommands } from "./discord/slashCommands/index.js";
-import { CommandInput } from "./command/commandInput.js";
+import { CommandInput } from "./game/command/commandInput.js";
 import { createWebServer } from "./webserver/index.js";
 import { config } from "./config/index.js";
 import { start } from "./browser/index.js";

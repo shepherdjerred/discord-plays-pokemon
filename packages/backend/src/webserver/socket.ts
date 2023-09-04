@@ -3,6 +3,7 @@ import { logger } from "../logger.js";
 import http from "http";
 import { Observable, fromEvent } from "rxjs";
 import { Request, RequestSchema } from "@discord-plays-pokemon/common";
+import lodash from "lodash";
 
 export function createSocket({
   server,
@@ -33,7 +34,7 @@ export function createSocket({
 
   return new Observable((subscriber) => {
     connection.subscribe((socket) => {
-      const identifier = crypto.randomUUID();
+      const identifier = lodash.uniqueId();
       logger.info("a new socket has connected", identifier);
 
       (socket as Socket).on("ping", (callback: () => void) => {

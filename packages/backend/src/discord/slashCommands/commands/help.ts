@@ -1,6 +1,6 @@
 import { CommandInteraction, SlashCommandBuilder, bold, channelMention, inlineCode, userMention } from "discord.js";
-import { a, b, down, left, right, select, start, up } from "../../../command/command.js";
-import { burst, hold, hold_b } from "../../../command/commandInput.js";
+import { a, b, down, left, right, select, start, up } from "../../../game/command/command.js";
+import { burst, hold, hold_b } from "../../../game/command/commandInput.js";
 import { config } from "../../../config/index.js";
 
 export const helpCommand = new SlashCommandBuilder().setName("help").setDescription("View Pokébot help");

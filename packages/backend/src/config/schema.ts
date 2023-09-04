@@ -7,6 +7,7 @@ export const ConfigSchema = z.strictObject({
     .regex(/[0-9]*/, "IDs must only have numeric characters")
     .min(1),
   bot: z.strictObject({
+    enabled: z.boolean(),
     discord_token: z.string().min(1),
     application_id: z
       .string()
@@ -34,7 +35,7 @@ export const ConfigSchema = z.strictObject({
       .regex(/[0-9]*/, "IDs must only have numeric characters")
       .min(1),
     dynamic_streaming: z.boolean(),
-    minimum_watchers: z.number().nonnegative(),
+    minimum_in_channel: z.number().nonnegative(),
     require_watching: z.boolean(),
     userbot: z.strictObject({
       id: z
