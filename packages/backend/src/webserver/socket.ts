@@ -1,8 +1,7 @@
-import { Server } from "socket.io";
+import { Server, Socket } from "socket.io";
 import { logger } from "../logger.js";
 import http from "http";
 import { Observable, fromEvent } from "rxjs";
-import { Socket } from "dgram";
 import { Request, RequestSchema } from "@discord-plays-pokemon/common";
 
 export function createSocket({

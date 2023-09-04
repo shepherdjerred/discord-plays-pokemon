@@ -100,12 +100,12 @@ up:
   LOCALLY
   RUN earthly +down
   WITH DOCKER --compose misc/compose.yml --load=+image
-    RUN docker-compose -f misc/compose.yml up -d
+    RUN cd packages/backend/ && docker compose -f ../../misc/compose.yml up -d
   END
 
 down:
   LOCALLY
-  RUN docker-compose -f misc/compose.yml down
+  RUN cd packages/backend/ && docker compose -f ../../misc/compose.yml down
 
 devcontainer:
   FROM earthly/dind:ubuntu

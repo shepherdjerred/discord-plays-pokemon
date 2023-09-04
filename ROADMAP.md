@@ -26,14 +26,11 @@ This document tracks the planned work for this repository.
   - GUI could help the user install dependencies/configure the application
 - Quick-start with EC2
   - Might be impossible since GPU instances are required, and they need a limit increase
-- Interchange format with Smithy
 - Database with Prisma
-- Make development/production closer
 
 ## In Progress
 
 - Notifications to use web UI for easier input
-- Fix Discord text commands
 - Fullscreen mode
 - Require players to be in channel to send commands
 - Minimum watcher count
@@ -41,3 +38,5 @@ This document tracks the planned work for this repository.
 ## Complete
 
 - Stop streaming on inactivity
+- Fix Discord text commands
+- Make development/production closer

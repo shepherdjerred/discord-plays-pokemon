@@ -11,7 +11,14 @@ import { useInterval } from "react-use";
 import { randomId } from "./util";
 import { Connection } from "./model/Connection";
 import { socket } from "./socket";
-import { LoginRequest, LoginResponseSchema, Player, Status, StatusSchema } from "@discord-plays-pokemon/common";
+import {
+  CommandRequest,
+  LoginRequest,
+  Player,
+  ResponseSchema,
+  ScreenshotRequest,
+  Status,
+} from "@discord-plays-pokemon/common";
 
 export function App() {
   const [player, setPlayer] = useState<Player>();
@@ -41,15 +48,18 @@ export function App() {
       });
     });
 
-    socket.on("status", (payload) => {
-      const status = StatusSchema.parse(payload);
-      setStatus(status);
-    });
-
-    socket.on("login", (payload) => {
-      const loginResponse = LoginResponseSchema.parse(payload);
-      console.log(loginResponse);
-      setPlayer(loginResponse.player);
+    socket.on("response", (payload) => {
+      const response = ResponseSchema.safeParse(payload);
+      if (response.success) {
+        match(response.data)
+          .with({ kind: "login" }, (response) => {
+            setPlayer(response.value);
+          })
+          .with({ kind: "status" }, (response) => {
+            setStatus(response.value);
+          })
+          .exhaustive();
+      }
     });
   }, []);
 
@@ -68,13 +78,17 @@ export function App() {
   function handleLogin(token: string) {
     console.log("logging in with:", token);
 
-    const loginRequest: LoginRequest = { token };
-    socket.emit("login", loginRequest);
+    const loginRequest: LoginRequest = { kind: "login", value: { token } };
+    socket.emit("request", loginRequest);
   }
 
   function handleKeyPress(key: string) {
     console.log(key);
-    socket.emit("key press", key);
+    const request: CommandRequest = {
+      kind: "command",
+      value: key,
+    };
+    socket.emit("request", request);
   }
 
   function addNotification(notification: Notification) {
@@ -87,7 +101,10 @@ export function App() {
 
   function handleScreenshot() {
     console.log("screenshot");
-    socket.emit("screenshot");
+    const request: ScreenshotRequest = {
+      kind: "screenshot",
+    };
+    socket.emit("request", request);
   }
 
   const page = match(player)
