@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export type Connection = z.infer<typeof ConnectionSchema>;
-export const ConnectionSchema = z.object({
+export const ConnectionSchema = z.strictObject({
   status: z.union([
     z.literal("initial"),
     z.literal("connecting"),

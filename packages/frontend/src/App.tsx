@@ -46,11 +46,6 @@ export function App() {
       setStatus(status);
     });
 
-    socket.on("status", (payload) => {
-      const status = StatusSchema.parse(payload);
-      setStatus(status);
-    });
-
     socket.on("login", (payload) => {
       const loginResponse = LoginResponseSchema.parse(payload);
       console.log(loginResponse);

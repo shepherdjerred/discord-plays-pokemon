@@ -1,11 +1,17 @@
 import { Server } from "socket.io";
 import { logger } from "../logger.js";
 import http from "http";
-import { fromEvent } from "rxjs";
+import { Observable, fromEvent } from "rxjs";
 import { Socket } from "dgram";
-import lodash from "lodash";
+import { Request, RequestSchema } from "@discord-plays-pokemon/common";
 
-export function createSocket({ server, isCorsEnabled }: { server: http.Server; isCorsEnabled: boolean }) {
+export function createSocket({
+  server,
+  isCorsEnabled,
+}: {
+  server: http.Server;
+  isCorsEnabled: boolean;
+}): Observable<{ request: Request; socket: Socket }> {
   logger.info("starting web socket listener");
 
   let cors;
@@ -26,11 +32,29 @@ export function createSocket({ server, isCorsEnabled }: { server: http.Server; i
 
   const connection = fromEvent(io, "connection");
 
-  connection.subscribe((socket) => {
-    logger.info("a new socket has connected");
-    const events = ["disconnect", "status", "key press", "screenshot", "ping", "login"];
-    return lodash.map(events, (event) => fromEvent(socket as Socket, event));
-  });
+  return new Observable((subscriber) => {
+    connection.subscribe((socket) => {
+      const identifier = crypto.randomUUID();
+      logger.info("a new socket has connected", identifier);
 
-  return connection;
+      (socket as Socket).on("ping", (callback: () => void) => {
+        callback();
+      });
+
+      fromEvent(socket as Socket, "disconnect").subscribe((_event) => {
+        logger.info("a socket has disconnected", identifier);
+      });
+
+      fromEvent(socket as Socket, "request").subscribe((event) => {
+        logger.info("request received", identifier);
+        const result = RequestSchema.safeParse(event);
+        if (result.success) {
+          logger.info("request parsed", identifier, result.data);
+          subscriber.next({ request: result.data, socket: socket as Socket });
+        } else {
+          logger.error("unable to parse request", identifier, event);
+        }
+      });
+    });
+  });
 }

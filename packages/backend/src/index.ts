@@ -14,6 +14,8 @@ import { registerSlashCommands } from "./discord/slashCommands/rest.js";
 import { logger } from "./logger.js";
 import { shareScreen, stopShareScreen } from "./browser/discord.js";
 import { handleChannelUpdate } from "./discord/channelHandler.js";
+import { match } from "ts-pattern";
+import { LoginResponse, StatusResponse } from "@discord-plays-pokemon/common";
 
 let driver: WebDriver | undefined = undefined;
 
@@ -22,12 +24,52 @@ if (config.bot.commands.update) {
 }
 
 if (config.web.enabled) {
-  createWebServer({
+  const { socket } = createWebServer({
     port: config.web.port,
     webAssetsPath: config.web.assets,
     isApiEnabled: config.web.api.enabled,
     isCorsEnabled: config.web.cors,
   });
+
+  if (socket) {
+    socket.subscribe((event) => {
+      match(event)
+        .with({ request: { kind: "command" } }, (event) => {
+          logger.info("handling command request", event.request);
+          if (driver !== undefined) {
+            try {
+              void sendGameCommand(driver, { command: event.request.value, quantity: 1 });
+            } catch (e) {
+              logger.error(e);
+            }
+          }
+        })
+        .with({ request: { kind: "login" } }, (event) => {
+          logger.info("handling login request", event.request);
+          // TODO: perform auth here
+          const player = { discordId: "id", discordUsername: "username" };
+          const response: LoginResponse = {
+            kind: "login",
+            value: player,
+          };
+          event.socket.emit("login", response);
+        })
+        .with({ request: { kind: "screenshot" } }, (event) => {
+          logger.info("handling screenshot request", event.request);
+        })
+        .with({ request: { kind: "status" } }, (event) => {
+          logger.info("handling status request", event.request);
+          const response: StatusResponse = {
+            kind: "status",
+            value: {
+              playerList: [],
+            },
+          };
+          event.socket.emit("response", response);
+        })
+        .exhaustive();
+    });
+  }
 }
 
 if (config.stream.enabled || config.game.enabled) {
