@@ -71,17 +71,21 @@ async function navigateToTextChannel(driver: WebDriver) {
 }
 
 async function updateSettings(driver: WebDriver) {
-  logger.info("executing script to update local storage");
+  logger.info("executing script to update discord settings");
   // https://stackoverflow.com/questions/52509440/discord-window-localstorage-is-undefined-how-to-get-access-to-the-localstorage
   await driver.executeScript(`
     (() => {
-      const iframe = document.createElement('iframe');
-      document.head.append(iframe);
-      const localStorage = Object.getOwnPropertyDescriptor(iframe.contentWindow, 'localStorage');
+      function getLocalStoragePropertyDescriptor() {
+        const iframe = document.createElement('iframe');
+        document.head.append(iframe);
+        const pd = Object.getOwnPropertyDescriptor(iframe.contentWindow, 'localStorage');
+        iframe.remove();
+        return pd;
+      }
 
-      con
+      Object.defineProperty(window, 'localStorage', getLocalStoragePropertyDescriptor())
 
-      const currentSettings = JSON.parse(localStorage.getItem("MediaEngineStore"));
+      const currentSettings = JSON.parse(window.localStorage.getItem("MediaEngineStore"));
       currentSettings.default.outputVolume = 0;
       currentSettings.stream.outputVolume = 0;
       currentSettings.default.modeOptions.threshold = -100;
@@ -90,9 +94,8 @@ async function updateSettings(driver: WebDriver) {
       currentSettings.stream.echoCancellation = false;
       currentSettings.default.automaticGainControl = false;
       currentSettings.stream.automaticGainControl = false;
-      localStorage.setItem("MediaEngineStore", JSON.stringify(currentSettings));
-      iframe.remove();
-    })()
+      window.localStorage.setItem("MediaEngineStore", JSON.stringify(currentSettings));
+    })();
   `);
   logger.info("refreshing page to update settings");
   await driver.navigate().refresh();

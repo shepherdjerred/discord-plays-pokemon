@@ -3,20 +3,13 @@ import { ConfigSchema } from "./schema.js";
 import { existsSync } from "fs";
 import { resolve } from "path";
 import { exit } from "process";
-import { addErrorLinks } from "../util.js";
+import { addErrorLinks, assertPathExists } from "../util.js";
 import { ZodError } from "zod";
 import { logger } from "../logger.js";
 
 const path = resolve("config.toml");
 
-if (!existsSync(path)) {
-  logger.error(
-    addErrorLinks(
-      `The config file does not exist at expected path, which is ${path}\nTo resolve this error, copy config.example.toml to ${path}\nDon't forget to edit config.toml after copying it!`,
-    ),
-  );
-  exit(1);
-}
+assertPathExists("config.toml", "config file");
 
 try {
   await ztoml(ConfigSchema, path);
