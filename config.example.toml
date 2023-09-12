@@ -57,11 +57,12 @@ enabled = true
 emulator_url = "built_in"
 
 # These are required for the application to work properly
-[[game.browser.preferences]]
+[game.browser.preferences]
 "media.navigator.permission.disabled" = true
 "media.autoplay.block-webaudio" = false
 "privacy.webrtc.legacyGlobalIndicator" = false
 "privacy.webrtc.hideGlobalIndicator" = true
+"browser.download.folderlist" = 1
 "browser.download.alwaysOpenPanel" = false
 
 [game.saves.auto_export]
