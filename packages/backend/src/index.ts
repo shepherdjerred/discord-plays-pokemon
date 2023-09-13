@@ -20,7 +20,8 @@ import { interpret } from "xstate";
 const stream = interpret(streamMachine);
 
 if (getConfig().stream.enabled) {
-  stream.send({ type: "initialize" });
+  logger.info("initializing stream");
+  stream.start();
 }
 
 let gameDriver: WebDriver | undefined;

@@ -10,21 +10,14 @@ export const streamMachine = createMachine({
   /** @xstate-layout N4IgpgJg5mDOIC5QAoC2BDAxgCwJYDswBKAOgNwBdd0AbAYnKttwC8wBtABgF1FQAHAPaxKuQfj4gAHogCMAZgCsJWZ1mKAbAHYNAJkWcAHABZOxgDQgAnnNlaSu3RsUvHxrbMOKtAXx+W0LDxCUlgKdAAnKnwoOghxMDJ8ADdBAGtEwJwCYhIwyOioBAJUzHQqcS5uKskhEQqJJGlEY3ldBwNOTgBOTicTNUsbBF15ThItJ01DQ3ktd0V3PwCMbJC88KiCWLAIiMEIkn4acoAzA9QSLODc-K2Y4pTBMoaqmqa60XFJGQRW9v0XR6fQ0A1kQ0QhlkJE6XX03Tmxm6um6yxA1xypFwsAA+hEwOgIFY6HcKDiwvj0Kh3gJhF9GqBflpOBoSPJDLpDJxFE5ZOpOFoISNFN0SMZFPI+V5dD05miMetSdtyRRKag4gkkqkMldVjdQptCiq1Y9SuUxPg3jxanSGj85JwxhNPFp2Rp3d1erohTz2t0JVLujNZsj5XrMRsCsqKQT1bt9odjmcLrqghGlTFjbHTc9zZUeDSQJ87U1fqonR5DK7DO6NJ6+kLHPIJlNnDNPdpXWG0+swPgINHVbGNYQtelMuHe-3ByaSrnXgXrR9bRb7X82h0gV7QaZwdZEG1jCotN064sUd1ZLpjN21rk+wPMzGqXR4wcjicKOcIpcFffp0+Q5UjmLwWlavDLvUq6li0G6Al025gkK7LjJMzguHWTgyr4-jopOtxAag2yvv2WZUoWxbQYyDoVi6boel6PrMmKAZ2PI7IGBo8i3vqGxqsRpJkdSS60lB3wwQgfLzA4zh6Gojqep4QruKyApQqodgeLISxovgggQHAkh-kQNpiQyzQIAAtBoQrWTxEaMNQNCmfSa7GN6+6SXYLbOO4fT6HWCL2YqhrbC5JbUcKhgqFWBjsfIxgut0QrdEejjOMyQY1olkrBbk2I4m+EThVRFlSaKWhQqMdbMglLKNsYR7ipK7KOIoHIsooeVYrilJEiV4mRSK0JtI6V5aMyoIio2IokP6kqtONrWorhxmRvcUBCQN5m-DW0LeOpVbqFyiWNvIrLNQo7kmF43QeN1JAPjOsbbWu+jNi6cXsYlVYzMhjhsmY7qaDK6jug9z5ETEr0SVKygzNosj+t4iXaD6kowpVV4aKYhgIv6fh+EAA */
   predictableActionArguments: true,
   schema: {
-    events: {} as { type: "initialize" } | { type: "start_stream" } | { type: "end_stream" },
+    events: {} as { type: "start_stream" } | { type: "end_stream" },
     context: {} as { driver: WebDriver | undefined },
   },
   context: {
     driver: undefined,
   },
-  initial: "initial",
+  initial: "starting",
   states: {
-    initial: {
-      on: {
-        initialize: {
-          target: "starting",
-        },
-      },
-    },
     starting: {
       invoke: {
         src: async (_context, _event) => {
