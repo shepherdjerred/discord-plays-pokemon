@@ -4,6 +4,7 @@
   "scripts": {
     "start": "npx tsx packages/backend/src/index.ts",
     "build": "npm run build --workspaces",
+    "test": "npm run test --workspaces",
     "prettier": "prettier .",
     "prettier:fix": "prettier -w ."
   },

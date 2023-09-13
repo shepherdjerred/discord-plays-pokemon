@@ -18,6 +18,6 @@ export function assertPathExists(s: string, pathName: string) {
 
   if (!existsSync(path)) {
     logger.error(addErrorLinks(`The ${pathName} do not exist at expected path, which is ${path}`));
-    exit(1);
+    throw Error(`${path} does not exist`);
   }
 }

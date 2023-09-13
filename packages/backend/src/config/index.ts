@@ -1,15 +1,15 @@
 import { ztomlSync } from "@d6v/zconf";
 import { ConfigSchema } from "./schema.js";
 import { resolve } from "path";
-import { exit } from "process";
 import { addErrorLinks, assertPathExists } from "../util.js";
 import { ZodError } from "zod";
 import { logger } from "../logger.js";
 
-export function getConfig() {
-  const path = resolve("config.toml");
+export function getConfig(file?: string) {
+  file = file || "config.toml";
+  const path = resolve(file);
 
-  assertPathExists("config.toml", "config file");
+  assertPathExists(path, "config file");
 
   try {
     ztomlSync(ConfigSchema, path);
@@ -17,9 +17,9 @@ export function getConfig() {
     if (e instanceof Error) {
       if (e.name === "SyntaxError") {
         logger.error(
-          `Your configuration at ${path} _is not_ valid TOML.\nCorrect your config.toml to continue\nA TOML validator may be useful, such as an IDE plugin, or https://www.toml-lint.com/\n`,
+          `Your configuration at ${path} _is not_ valid TOML.\nCorrect your config to continue\nA TOML validator may be useful, such as an IDE plugin, or https://www.toml-lint.com/\n`,
         );
-        exit(1);
+        throw Error();
       }
       if (e.name === "ZodError") {
         const errors = JSON.parse(e.message) as ZodError[];
@@ -28,7 +28,7 @@ export function getConfig() {
           errors,
           addErrorLinks(""),
         );
-        exit(1);
+        throw Error();
       }
     } else {
       throw new Error(`Your configuration is invalid.`, { cause: e });

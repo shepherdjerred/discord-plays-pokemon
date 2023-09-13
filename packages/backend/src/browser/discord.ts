@@ -65,7 +65,7 @@ async function navigateToTextChannel(driver: WebDriver) {
   const textChat = await driver.wait(
     until.elementLocated(By.css(`a[data-list-item-id="channels___${getConfig().game.commands.channel_id}"]`)),
   );
-  const delay = 2000;
+  const delay = 5000;
   logger.info(`waiting ${delay}ms for text channel to become clickable`);
   await wait(delay);
   await textChat.click();
@@ -97,13 +97,15 @@ async function updateSettings(driver: WebDriver) {
       currentSettings.default.automaticGainControl = false;
       currentSettings.stream.automaticGainControl = false;
       window.localStorage.setItem("MediaEngineStore", JSON.stringify(currentSettings));
+
+      window.localStorage.setItem("hotspots", '{"_state":{"hiddenHotspots":["VOICE_PANEL_INTRODUCTION","VOICE_CALL_FEEDBACK"],"hotspotOverrides":{}},"_version":1}');
     })();
   `);
   logger.info("refreshing page to update settings");
   await driver.navigate().refresh();
 }
 
-async function joinVoiceChat(driver: WebDriver) {
+export async function joinVoiceChat(driver: WebDriver) {
   logger.info("trying to join voice chat");
   const voiceChannelSelector = `a[data-list-item-id="channels___${getConfig().stream.channel_id}"]`;
   const voiceChatButton = await driver.wait(until.elementLocated(By.css(voiceChannelSelector)));
@@ -121,8 +123,17 @@ export async function shareScreen(driver: WebDriver) {
 
 export async function stopShareScreen(driver: WebDriver) {
   logger.info("trying to stop screen sharing");
-  const videoShareSelector = 'button[aria-label="Share Your Screen"]';
+  const videoShareSelector = 'button[aria-label="Stop Streaming"]';
   const videoShareButton = await driver.wait(until.elementLocated(By.css(videoShareSelector)));
-  logger.info("clicking sharing screen button");
+  logger.info("clicking stop sharing screen button");
   await videoShareButton.click();
+}
+
+export async function disconnect(driver: WebDriver) {
+  logger.info("trying to disconnect");
+  await driver.switchTo().window((await driver.getAllWindowHandles())[0]);
+  const disconnectSelector = 'button[aria-label="Disconnect"]';
+  const disconnectButton = await driver.wait(until.elementLocated(By.css(disconnectSelector)));
+  logger.info("clicking disconnect button");
+  await disconnectButton.click();
 }

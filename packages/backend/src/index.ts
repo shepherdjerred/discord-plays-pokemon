@@ -11,7 +11,7 @@ import { start } from "./browser/index.js";
 import lodash from "lodash";
 import { registerSlashCommands } from "./discord/slashCommands/rest.js";
 import { logger } from "./logger.js";
-import { shareScreen, stopShareScreen } from "./browser/discord.js";
+import { disconnect, joinVoiceChat, shareScreen, stopShareScreen } from "./browser/discord.js";
 import { handleChannelUpdate } from "./discord/channelHandler.js";
 import { match } from "ts-pattern";
 import { LoginResponse, StatusResponse } from "@discord-plays-pokemon/common";
@@ -95,8 +95,8 @@ if (getConfig().stream.enabled || getConfig().game.enabled) {
       await writeFile("error.png", screenshot, "base64");
     } catch (e) {
       logger.error("unable to take screenshot while handling another error");
+      throw e;
     }
-    exit(1);
   }
 
   if (getConfig().bot.commands.enabled) {
@@ -134,19 +134,29 @@ if (getConfig().game.saves.auto_export.enabled) {
 }
 
 if (getConfig().stream.dynamic_streaming) {
-  let isSharing = true;
+  logger.info("dynamic streaming is enabled");
   handleChannelUpdate(async (participants) => {
+    logger.info("handling channel update.");
+    logger.info(participants);
     if (driver) {
-      if (participants > 0 && !isSharing) {
-        // TODO send channel message?
+      if (participants > 0) {
         logger.info("sharing screen since there are now participants");
-        await shareScreen(driver);
-        isSharing = true;
-      } else if (isSharing) {
-        // TODO send channel message?
-        logger.info("sharing screen since there are no longer participants");
-        await stopShareScreen(driver);
-        isSharing = false;
+        try {
+          await joinVoiceChat(driver);
+          await shareScreen(driver);
+          await driver.switchTo().window((await driver.getAllWindowHandles())[1]);
+        } catch (e) {
+          logger.error(e);
+        }
+      } else {
+        logger.info("stop sharing screen since there are no longer participants");
+        try {
+          logger.info("saving game before disconnecting");
+          await exportSave(driver);
+          await disconnect(driver);
+        } catch (e) {
+          logger.error(e);
+        }
       }
     } else {
       logger.error("driver is not defined");
