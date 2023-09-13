@@ -12,8 +12,7 @@ export async function setupDiscord(driver: WebDriver) {
   }
   await updateSettings(driver);
   await navigateToTextChannel(driver);
-  await joinVoiceChat(driver);
-  await shareScreen(driver);
+
 }
 
 async function isLoggedIn(driver: WebDriver): Promise<boolean> {

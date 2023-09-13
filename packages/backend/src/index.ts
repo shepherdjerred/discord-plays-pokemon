@@ -10,14 +10,20 @@ import { start } from "./browser/index.js";
 import lodash from "lodash";
 import { registerSlashCommands } from "./discord/slashCommands/rest.js";
 import { logger } from "./logger.js";
-import { disconnect, joinVoiceChat, shareScreen } from "./browser/discord.js";
 import { handleChannelUpdate } from "./discord/channelHandler.js";
 import { match } from "ts-pattern";
 import { LoginResponse, StatusResponse } from "@discord-plays-pokemon/common";
 import { getConfig } from "./config/index.js";
+import { streamMachine } from "./streamer/states.js";
+import { interpret } from "xstate";
+
+const stream = interpret(streamMachine);
+
+if (getConfig().stream.enabled) {
+  stream.send({ type: "initialize" });
+}
 
 let gameDriver: WebDriver | undefined;
-let streamDriver: WebDriver | undefined;
 
 if (getConfig().bot.commands.update) {
   await registerSlashCommands();
@@ -72,7 +78,7 @@ if (getConfig().web.enabled) {
   }
 }
 
-if (getConfig().stream.enabled || getConfig().game.enabled) {
+if (getConfig().game.enabled) {
   logger.info("browser is enabled");
 
   const options = new Options();
@@ -82,13 +88,12 @@ if (getConfig().stream.enabled || getConfig().game.enabled) {
   });
 
   gameDriver = await new Builder().forBrowser(Browser.FIREFOX).setFirefoxOptions(options).build();
-  streamDriver = await new Builder().forBrowser(Browser.FIREFOX).setFirefoxOptions(options).build();
 
   logger.info("fullscreening");
   await gameDriver.manage().window().fullscreen();
 
   try {
-    await start(gameDriver, streamDriver);
+    await start(gameDriver);
   } catch (error) {
     logger.error(error);
     try {
@@ -136,31 +141,22 @@ if (getConfig().game.saves.auto_export.enabled) {
 
 if (getConfig().stream.dynamic_streaming) {
   logger.info("dynamic streaming is enabled");
-  handleChannelUpdate(async (participants) => {
+  handleChannelUpdate((participants) => {
     logger.info("handling channel update.");
     logger.info(participants);
-    if (streamDriver) {
+    if (stream) {
       if (participants > 0) {
         logger.info("sharing screen since there are now participants");
-        try {
-          await joinVoiceChat(streamDriver);
-          await shareScreen(streamDriver);
-          await streamDriver.switchTo().window((await streamDriver.getAllWindowHandles())[1]);
-        } catch (e) {
-          logger.error(e);
-        }
+        stream.send({ type: "start_stream" });
       } else {
         logger.info("stop sharing screen since there are no longer participants");
         try {
           logger.info("saving game before disconnecting");
-          await exportSave(streamDriver);
-          await disconnect(streamDriver);
+          stream.send({ type: "end_stream" });
         } catch (e) {
           logger.error(e);
         }
       }
-    } else {
-      logger.error("driver is not defined");
     }
   });
 }

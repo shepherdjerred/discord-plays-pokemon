@@ -1,9 +1,9 @@
-import { Events, GuildMember } from "discord.js";
+import { Events } from "discord.js";
 import client from "./client.js";
 import { getConfig } from "../config/index.js";
 import { logger } from "../logger.js";
 
-export function handleChannelUpdate(updateFn: (participants: number) => Promise<void>) {
+export function handleChannelUpdate(updateFn: (participants: number) => void) {
   client.on(Events.VoiceStateUpdate, async (oldState, newState) => {
     logger.info("voice state update");
     const newChannel = newState.channelId;
@@ -16,7 +16,7 @@ export function handleChannelUpdate(updateFn: (participants: number) => Promise<
         logger.info("calling updateFn");
         logger.info(JSON.stringify(channel.members));
         // it seems that the library has an incorrect type here
-        await updateFn(channel.members.filter((member) => member.id !== getConfig().stream.userbot.id).size);
+        updateFn(channel.members.filter((member) => member.id !== getConfig().stream.userbot.id).size);
       } else {
         logger.error("channel is not voice based");
       }
