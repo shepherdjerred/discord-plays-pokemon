@@ -1,15 +1,15 @@
 import { readdir, stat } from "fs/promises";
 import { exit } from "process";
-import { config } from "../../config/index.js";
 import { addErrorLinks } from "../../util.js";
 import { join, resolve, sep } from "path";
 import { existsSync } from "fs";
 import lodash from "lodash";
 import { homedir } from "os";
 import { logger } from "../../logger.js";
+import { getConfig } from "../../config/index.js";
 
 export async function getLatestSave(): Promise<string | undefined> {
-  let saveDirectory = config.game.saves.auto_import.path;
+  let saveDirectory = getConfig().game.saves.auto_import.path;
 
   const parts = saveDirectory.split(sep);
 

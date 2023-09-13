@@ -4,8 +4,8 @@ import client from "./client.js";
 import { execute } from "./chordExecutor.js";
 import { isValid } from "./chordValidator.js";
 import { CommandInput } from "../game/command/commandInput.js";
-import { config } from "../config/index.js";
 import { logger } from "../logger.js";
+import { getConfig } from "../config/index.js";
 
 export let lastCommand = new Date();
 
@@ -25,29 +25,29 @@ async function handleMessage(event: Message, fn: (commandInput: CommandInput) =>
     return;
   }
 
-  if (event.channelId !== config.game.commands.channel_id) {
+  if (event.channelId !== getConfig().game.commands.channel_id) {
     return;
   }
 
-  const channel = client.channels.cache.get(config.stream.channel_id);
+  const channel = client.channels.cache.get(getConfig().stream.channel_id);
   if (!channel) {
     await event.react("💀");
     return;
   }
 
-  if (!event.member || event.member.voice.channelId !== config.stream.channel_id) {
-    await event.reply(`You have to be in ${channelMention(config.stream.channel_id)} to play`);
+  if (!event.member || event.member.voice.channelId !== getConfig().stream.channel_id) {
+    await event.reply(`You have to be in ${channelMention(getConfig().stream.channel_id)} to play`);
     return;
   }
 
   const memberCount = (channel as VoiceChannel).members.filter((member) => {
     return !member.user.bot;
   }).size;
-  if (memberCount < config.stream.minimum_in_channel) {
+  if (memberCount < getConfig().stream.minimum_in_channel) {
     await event.reply(
-      `You can't play unless there are at least ${config.stream.minimum_in_channel} ${
-        config.stream.minimum_in_channel === 1 ? "person" : "people"
-      } in ${channelMention(config.stream.channel_id)} 😕`,
+      `You can't play unless there are at least ${getConfig().stream.minimum_in_channel} ${
+        getConfig().stream.minimum_in_channel === 1 ? "person" : "people"
+      } in ${channelMention(getConfig().stream.channel_id)} 😕`,
     );
     return;
   }

@@ -1,7 +1,7 @@
 import { By, WebDriver, until } from "selenium-webdriver";
 import { wait } from "../util.js";
-import { config } from "../config/index.js";
 import { logger } from "../logger.js";
+import { getConfig } from "../config/index.js";
 
 export async function setupDiscord(driver: WebDriver) {
   if (await isLoggedIn(driver)) {
@@ -40,11 +40,11 @@ async function login(driver: WebDriver) {
 
   logger.info("typing email");
   const emailInput = driver.wait(until.elementLocated(By.css("input[name=email]")));
-  await emailInput.sendKeys(config.stream.userbot.username);
+  await emailInput.sendKeys(getConfig().stream.userbot.username);
 
   logger.info("typing password");
   const passwordInput = driver.wait(until.elementLocated(By.css("input[name=password]")));
-  await passwordInput.sendKeys(config.stream.userbot.password);
+  await passwordInput.sendKeys(getConfig().stream.userbot.password);
 
   logger.info("click submit button");
   const submitButton = driver.wait(until.elementLocated(By.css("button[type=submit]")));
@@ -57,11 +57,13 @@ async function login(driver: WebDriver) {
 
 async function navigateToTextChannel(driver: WebDriver) {
   logger.info("navigating to text channel");
-  const textChannelUrl = `https://discord.com/channels/${config.server_id}/${config.game.commands.channel_id}`;
+  const textChannelUrl = `https://discord.com/channels/${getConfig().server_id}/${
+    getConfig().game.commands.channel_id
+  }`;
   await driver.get(textChannelUrl);
   logger.info("waiting for text channel to be listed");
   const textChat = await driver.wait(
-    until.elementLocated(By.css(`a[data-list-item-id="channels___${config.game.commands.channel_id}"]`)),
+    until.elementLocated(By.css(`a[data-list-item-id="channels___${getConfig().game.commands.channel_id}"]`)),
   );
   const delay = 2000;
   logger.info(`waiting ${delay}ms for text channel to become clickable`);
@@ -103,7 +105,7 @@ async function updateSettings(driver: WebDriver) {
 
 async function joinVoiceChat(driver: WebDriver) {
   logger.info("trying to join voice chat");
-  const voiceChannelSelector = `a[data-list-item-id="channels___${config.stream.channel_id}"]`;
+  const voiceChannelSelector = `a[data-list-item-id="channels___${getConfig().stream.channel_id}"]`;
   const voiceChatButton = await driver.wait(until.elementLocated(By.css(voiceChannelSelector)));
   logger.info("joined voice chat");
   await voiceChatButton.click();

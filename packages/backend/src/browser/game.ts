@@ -2,16 +2,16 @@ import { By, WebDriver, until } from "selenium-webdriver";
 import { CommandInput, isBurst, isHold, isHoldB } from "../game/command/commandInput.js";
 import { toGameboyAdvanceKeyInput } from "../game/command/keybinds.js";
 import { wait } from "../util.js";
-import { config } from "../config/index.js";
 import { getLatestSave } from "../game/saves/index.js";
 import { logger } from "../logger.js";
+import { getConfig } from "../config/index.js";
 
 export async function setupGame(driver: WebDriver) {
   logger.info("navigating to emulator page");
-  if (config.game.emulator_url === "built_in") {
-    await driver.get(`http://localhost:${config.web.port}/emulator.html`);
+  if (getConfig().game.emulator_url === "built_in") {
+    await driver.get(`http://localhost:${getConfig().web.port}/emulator.html`);
   } else {
-    await driver.get(config.game.emulator_url);
+    await driver.get(getConfig().game.emulator_url);
   }
   await wait(5000);
   logger.info("selecting frame");
@@ -33,7 +33,7 @@ export async function sendGameCommand(driver: WebDriver, command: CommandInput) 
         .actions()
         .click(element)
         .keyDown(key)
-        .pause(config.game.commands.key_press_duration_in_milliseconds)
+        .pause(getConfig().game.commands.key_press_duration_in_milliseconds)
         .keyUp(key)
         .perform();
     }
@@ -44,7 +44,7 @@ export async function sendGameCommand(driver: WebDriver, command: CommandInput) 
       .actions()
       .click(element)
       .sendKeys("X", key)
-      .pause(config.game.commands.hold.duration_in_milliseconds * command.quantity)
+      .pause(getConfig().game.commands.hold.duration_in_milliseconds * command.quantity)
       .keyUp(key)
       .keyUp("X")
       .perform();
@@ -54,23 +54,23 @@ export async function sendGameCommand(driver: WebDriver, command: CommandInput) 
       .actions()
       .click(element)
       .keyDown(key)
-      .pause(config.game.commands.hold.duration_in_milliseconds)
+      .pause(getConfig().game.commands.hold.duration_in_milliseconds)
       .keyUp(key)
       .perform();
     return;
   }
 
   if (isBurst(command.modifier)) {
-    for (let i = 0; i < config.game.commands.burst.quantity * command.quantity; i++) {
+    for (let i = 0; i < getConfig().game.commands.burst.quantity * command.quantity; i++) {
       await driver
         .actions()
         .click(element)
         .keyDown(key)
-        .pause(config.game.commands.burst.duration_in_milliseconds)
+        .pause(getConfig().game.commands.burst.duration_in_milliseconds)
         .keyUp(key)
         .perform();
-      if (config.game.commands.burst.delay_in_milliseconds > 0) {
-        await wait(config.game.commands.burst.delay_in_milliseconds);
+      if (getConfig().game.commands.burst.delay_in_milliseconds > 0) {
+        await wait(getConfig().game.commands.burst.delay_in_milliseconds);
       }
     }
     return;

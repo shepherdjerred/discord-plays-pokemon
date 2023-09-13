@@ -7,7 +7,6 @@ import { Options } from "selenium-webdriver/firefox.js";
 import { handleSlashCommands } from "./discord/slashCommands/index.js";
 import { CommandInput } from "./game/command/commandInput.js";
 import { createWebServer } from "./webserver/index.js";
-import { config } from "./config/index.js";
 import { start } from "./browser/index.js";
 import lodash from "lodash";
 import { registerSlashCommands } from "./discord/slashCommands/rest.js";
@@ -16,19 +15,20 @@ import { shareScreen, stopShareScreen } from "./browser/discord.js";
 import { handleChannelUpdate } from "./discord/channelHandler.js";
 import { match } from "ts-pattern";
 import { LoginResponse, StatusResponse } from "@discord-plays-pokemon/common";
+import { getConfig } from "./config/index.js";
 
 let driver: WebDriver | undefined = undefined;
 
-if (config.bot.commands.update) {
+if (getConfig().bot.commands.update) {
   await registerSlashCommands();
 }
 
-if (config.web.enabled) {
+if (getConfig().web.enabled) {
   const { socket } = createWebServer({
-    port: config.web.port,
-    webAssetsPath: config.web.assets,
-    isApiEnabled: config.web.api.enabled,
-    isCorsEnabled: config.web.cors,
+    port: getConfig().web.port,
+    webAssetsPath: getConfig().web.assets,
+    isApiEnabled: getConfig().web.api.enabled,
+    isCorsEnabled: getConfig().web.cors,
   });
 
   if (socket) {
@@ -72,12 +72,12 @@ if (config.web.enabled) {
   }
 }
 
-if (config.stream.enabled || config.game.enabled) {
+if (getConfig().stream.enabled || getConfig().game.enabled) {
   logger.info("browser is enabled");
 
   const options = new Options();
 
-  lodash.forOwn(config.game.browser.preferences, (value, key) => {
+  lodash.forOwn(getConfig().game.browser.preferences, (value, key) => {
     options.setPreference(key, value);
   });
 
@@ -99,12 +99,12 @@ if (config.stream.enabled || config.game.enabled) {
     exit(1);
   }
 
-  if (config.bot.commands.enabled) {
+  if (getConfig().bot.commands.enabled) {
     handleSlashCommands(driver);
   }
 }
 
-if (config.game.enabled && config.game.commands.enabled) {
+if (getConfig().game.enabled && getConfig().game.commands.enabled) {
   logger.info("game and discord commands are enabled");
   handleMessages(async (commandInput: CommandInput): Promise<void> => {
     if (driver !== undefined) {
@@ -117,7 +117,7 @@ if (config.game.enabled && config.game.commands.enabled) {
   });
 }
 
-if (config.game.saves.auto_export.enabled) {
+if (getConfig().game.saves.auto_export.enabled) {
   logger.info("auto export saves is enabled");
   // eslint-disable-next-line @typescript-eslint/no-misused-promises
   setInterval(async () => {
@@ -130,10 +130,10 @@ if (config.game.saves.auto_export.enabled) {
         logger.error(e);
       }
     }
-  }, config.game.saves.auto_export.interval_in_milliseconds);
+  }, getConfig().game.saves.auto_export.interval_in_milliseconds);
 }
 
-if (config.stream.dynamic_streaming) {
+if (getConfig().stream.dynamic_streaming) {
   let isSharing = true;
   handleChannelUpdate(async (participants) => {
     if (driver) {
