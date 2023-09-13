@@ -27,16 +27,16 @@ This document tracks the planned work for this repository.
 - Quick-start with EC2
   - Might be impossible since GPU instances are required, and they need a limit increase
 - Database with Prisma
+- Notifications to use web UI for easier input
 
 ## In Progress
 
-- Notifications to use web UI for easier input
 - Fullscreen mode
 - Require players to be in channel to send commands
-- Minimum watcher count
 
 ## Complete
 
 - Stop streaming on inactivity
 - Fix Discord text commands
 - Make development/production closer
+- Minimum watcher count

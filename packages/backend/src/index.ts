@@ -52,7 +52,7 @@ if (getConfig().web.enabled) {
             kind: "login",
             value: player,
           };
-          event.socket.emit("login", response);
+          event.socket.emit("response", response);
         })
         .with({ request: { kind: "screenshot" } }, (event) => {
           logger.info("handling screenshot request", event.request);
