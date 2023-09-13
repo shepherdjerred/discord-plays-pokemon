@@ -7,7 +7,7 @@ import { getConfig } from "../config/index.js";
 import { logger } from "../logger.js";
 
 export const streamMachine = createMachine({
-  /** @xstate-layout N4IgpgJg5mDOIC5QAoC2BDAxgCwJYDswBKAOgNwBdd0AbAYnKttwC8wBtABgF1FQAHAPaxKuQfj4gAHogCMAZgCsJWZ1mKAbAHYNAJkWcAHABZOxgDQgAnnNlaSu3RsUvHxrbMOKtAXx+W0LDxCUlgKdAAnKnwoOghxMDJ8ADdBAGtEwJwCYhIwyOioBAJUzHQqcS5uKskhEQqJJGlEY3ldBwNOTgBOTicTNUsbBF15ThItJ01DQ3ktd0V3PwCMbJC88KiCWLAIiMEIkn4acoAzA9QSLODc-K2Y4pTBMoaqmqa60XFJGQRW9v0XR6fQ0A1kQ0QhlkJE6XX03Tmxm6um6yxA1xypFwsAA+hEwOgIFY6HcKDiwvj0Kh3gJhF9GqBflpOBoSPJDLpDJxFE5ZOpOFoISNFN0SMZFPI+V5dD05miMetSdtyRRKag4gkkqkMldVjdQptCiq1Y9SuUxPg3jxanSGj85JwxhNPFp2Rp3d1erohTz2t0JVLujNZsj5XrMRsCsqKQT1bt9odjmcLrqghGlTFjbHTc9zZUeDSQJ87U1fqonR5DK7DO6NJ6+kLHPIJlNnDNPdpXWG0+swPgINHVbGNYQtelMuHe-3ByaSrnXgXrR9bRb7X82h0gV7QaZwdZEG1jCotN064sUd1ZLpjN21rk+wPMzGqXR4wcjicKOcIpcFffp0+Q5UjmLwWlavDLvUq6li0G6Al025gkK7LjJMzguHWTgyr4-jopOtxAag2yvv2WZUoWxbQYyDoVi6boel6PrMmKAZ2PI7IGBo8i3vqGxqsRpJkdSS60lB3wwQgfLzA4zh6Gojqep4QruKyApQqodgeLISxovgggQHAkh-kQNpiQyzQIAAtBoQrWTxEaMNQNCmfSa7GN6+6SXYLbOO4fT6HWCL2YqhrbC5JbUcKhgqFWBjsfIxgut0QrdEejjOMyQY1olkrBbk2I4m+EThVRFlSaKWhQqMdbMglLKNsYR7ipK7KOIoHIsooeVYrilJEiV4mRSK0JtI6V5aMyoIio2IokP6kqtONrWorhxmRvcUBCQN5m-DW0LeOpVbqFyiWNvIrLNQo7kmF43QeN1JAPjOsbbWu+jNi6cXsYlVYzMhjhsmY7qaDK6jug9z5ETEr0SVKygzNosj+t4iXaD6kowpVV4aKYhgIv6fh+EAA */
+  /** @xstate-layout N4IgpgJg5mDOIC5QAoC2BDAxgCwJYDswBKAOlgBd0AncgqAYggHtCSCA3JgazBLSzyFSFarXxQEHJpnS0WAbQAMAXSXLEoAA5NYuOfg0gAHogBMigKwkAnAA4AbAEYA7I-vWAzI4As1xwBoQAE8zD0USZ1NHD19Fb28PD2cPAF8UwP4cAmIySho6ejAqKiYqEk0AG1kAM1LUPgwsoVzROkl8Thl9NTVDbV19QxMEcys7J1d3L18A4MRbRxJfb2cLb1sLa2cHNbSMxsEc3FgAfSowdAgg+hEaE4pz9FRepBB+vVwWIcR18MdHWzWawWZzuJyKayBEIjTZLFbWRSmaxOBFbPYgTKHYR5MRQe7kR6oRgsXhSHgNATZbGtcT4wntTqyT74HoqPo6D5fV7DWxxJZrIGmUy2bwWeyWKGICxCmzwjwWRyKRTbVLpDEHKktfK0h4XIlFEplSo1OoUpo5W64ul6hnSJkKFQvLQcwbc+Z80W+axCkViiVzEamDwRKJeWzCuymez2VX7SnNMD4CB0a1PYmsMm8TGaxPJnUEm1SLrM1nqV7vV2gYajGwOFxuTw+PyShAeUzeEgueKrBHxFwWdHZhNJlO6tMG0rlKrkWpUepDnK50cFp624sO1Rs8su5nfEaWWsTBvTZsBjy8kM+ZXRCxi5zOQca5pj1AFXOp55b50DXduhC8jtPUFYVRXFCwWxBcJu2sbwIQBCxbGSR94wtFdX3EG4cQ-J03h3Lkq0QGDbBIJUAUQxQ2x8f4WxWewSOSCitnsbxHFMVw0jVfAmAgOBDAXIh2R-fDjEQABaKJ6JjKNHD8BDbHlFtRLopVpSFHw2NWOJkPNaltSgQTOQMP8oxsIN7GSXkRX+czbBbGCSDUrwfVccNPG0rE2FOCcqAMysRIQYFgwVZxuwsJVgTYlt20A+ElXk5wgTWex3M1Y4zguK5fN-AjW3sKxLGY28ogsDwbKi2EYIS8x3ASNSUufHFl0JLLhOGGMrGmRJPG8PLPFMKLSrhbYFnsYVEVcUx6sXEd82a7chKMnKTO9UqLMUKy3HAs8ZSRSqEn+RJ7BFKbsUJOgWsW-zgWsEhRrCJUEtKsqAxKxYQSRPsQuY0qOJSIA */
   predictableActionArguments: true,
   schema: {
     events: {} as { type: "start_stream" } | { type: "end_stream" },
@@ -16,9 +16,9 @@ export const streamMachine = createMachine({
   context: {
     driver: undefined,
   },
-  initial: "starting",
+  initial: "is_starting",
   states: {
-    starting: {
+    is_starting: {
       invoke: {
         src: async (_context, _event) => {
           const options = new Options();

@@ -1,20 +1,16 @@
 import { exportSave, sendGameCommand } from "./game/browser/game.js";
 import { handleMessages } from "./game/discord/messageHandler.js";
-import { Browser, Builder, WebDriver } from "selenium-webdriver";
-import { writeFile } from "fs/promises";
-import { Options } from "selenium-webdriver/firefox.js";
+import { WebDriver } from "selenium-webdriver";
 import { handleSlashCommands } from "./game/discord/slashCommands/index.js";
 import { CommandInput } from "./game/command/commandInput.js";
 import { createWebServer } from "./webserver/index.js";
-import { start } from "./game/browser/index.js";
-import lodash from "lodash";
 import { registerSlashCommands } from "./game/discord/slashCommands/rest.js";
 import { logger } from "./logger.js";
 import { handleChannelUpdate } from "./game/discord/channelHandler.js";
 import { match } from "ts-pattern";
 import { LoginResponse, StatusResponse } from "@discord-plays-pokemon/common";
 import { getConfig } from "./config/index.js";
-import { streamMachine } from "./stream/index.js";
+import { streamMachine } from "./stream/machine.js";
 import { interpret } from "xstate";
 
 const stream = interpret(streamMachine);
@@ -81,30 +77,6 @@ if (getConfig().web.enabled) {
 
 if (getConfig().game.enabled) {
   logger.info("browser is enabled");
-
-  const options = new Options();
-
-  lodash.forOwn(getConfig().game.browser.preferences, (value, key) => {
-    options.setPreference(key, value);
-  });
-
-  gameDriver = await new Builder().forBrowser(Browser.FIREFOX).setFirefoxOptions(options).build();
-
-  logger.info("fullscreening");
-  await gameDriver.manage().window().fullscreen();
-
-  try {
-    await start(gameDriver);
-  } catch (error) {
-    logger.error(error);
-    try {
-      const screenshot = await gameDriver.takeScreenshot();
-      await writeFile("error.png", screenshot, "base64");
-    } catch (e) {
-      logger.error("unable to take screenshot while handling another error");
-      throw e;
-    }
-  }
 
   if (getConfig().bot.commands.enabled) {
     handleSlashCommands(gameDriver);

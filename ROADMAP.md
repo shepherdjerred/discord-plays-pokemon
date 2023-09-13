@@ -31,7 +31,6 @@ This document tracks the planned work for this repository.
 
 ## In Progress
 
-- State machine
 - Fullscreen mode
 
 ## Complete
@@ -41,3 +40,4 @@ This document tracks the planned work for this repository.
 - Make development/production closer
 - Minimum watcher count
 - Require players to be in channel to send commands
+- State machine
