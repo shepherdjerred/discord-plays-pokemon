@@ -1,5 +1,5 @@
 import { interpret } from "xstate";
-import { streamMachine } from "./states.js";
+import { streamMachine } from "./index.js";
 
 describe("states", () => {
   test("can reach streaming state", (done) => {

@@ -1,7 +1,7 @@
-import { wait } from "../util.js";
-import { Chord } from "../game/command/chord.js";
-import { CommandInput } from "../game/command/commandInput.js";
-import { getConfig } from "../config/index.js";
+import { wait } from "../../util.js";
+import { Chord } from "../command/chord.js";
+import { CommandInput } from "../command/commandInput.js";
+import { getConfig } from "../../config/index.js";
 
 export async function execute(chord: Chord, fn: (commandInput: CommandInput) => Promise<void>) {
   for (const commandInput of chord) {

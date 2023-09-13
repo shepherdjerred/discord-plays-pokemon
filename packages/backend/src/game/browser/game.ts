@@ -1,10 +1,10 @@
 import { By, WebDriver, until } from "selenium-webdriver";
-import { CommandInput, isBurst, isHold, isHoldB } from "../game/command/commandInput.js";
-import { toGameboyAdvanceKeyInput } from "../game/command/keybinds.js";
-import { wait } from "../util.js";
-import { getLatestSave } from "../game/saves/index.js";
-import { logger } from "../logger.js";
-import { getConfig } from "../config/index.js";
+import { CommandInput, isBurst, isHold, isHoldB } from "../command/commandInput.js";
+import { toGameboyAdvanceKeyInput } from "../command/keybinds.js";
+import { wait } from "../../util.js";
+import { getLatestSave } from "../saves/index.js";
+import { logger } from "../../logger.js";
+import { getConfig } from "../../config/index.js";
 
 export async function setupGame(driver: WebDriver) {
   logger.info("navigating to emulator page");

@@ -4,7 +4,7 @@ import client from "../client.js";
 import { makeScreenshot } from "./commands/screenshot.js";
 import { WebDriver } from "selenium-webdriver";
 import { help } from "./commands/help.js";
-import { logger } from "../../logger.js";
+import { logger } from "../../../logger.js";
 
 export function handleSlashCommands(driver: WebDriver) {
   logger.info("handling slash commands");

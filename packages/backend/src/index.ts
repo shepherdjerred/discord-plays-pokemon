@@ -1,20 +1,20 @@
-import { exportSave, sendGameCommand } from "./browser/game.js";
-import { handleMessages } from "./discord/messageHandler.js";
+import { exportSave, sendGameCommand } from "./game/browser/game.js";
+import { handleMessages } from "./game/discord/messageHandler.js";
 import { Browser, Builder, WebDriver } from "selenium-webdriver";
 import { writeFile } from "fs/promises";
 import { Options } from "selenium-webdriver/firefox.js";
-import { handleSlashCommands } from "./discord/slashCommands/index.js";
+import { handleSlashCommands } from "./game/discord/slashCommands/index.js";
 import { CommandInput } from "./game/command/commandInput.js";
 import { createWebServer } from "./webserver/index.js";
-import { start } from "./browser/index.js";
+import { start } from "./game/browser/index.js";
 import lodash from "lodash";
-import { registerSlashCommands } from "./discord/slashCommands/rest.js";
+import { registerSlashCommands } from "./game/discord/slashCommands/rest.js";
 import { logger } from "./logger.js";
-import { handleChannelUpdate } from "./discord/channelHandler.js";
+import { handleChannelUpdate } from "./game/discord/channelHandler.js";
 import { match } from "ts-pattern";
 import { LoginResponse, StatusResponse } from "@discord-plays-pokemon/common";
 import { getConfig } from "./config/index.js";
-import { streamMachine } from "./streamer/states.js";
+import { streamMachine } from "./stream/index.js";
 import { interpret } from "xstate";
 
 const stream = interpret(streamMachine);
@@ -141,7 +141,7 @@ if (getConfig().game.saves.auto_export.enabled) {
 
 if (getConfig().stream.dynamic_streaming) {
   logger.info("dynamic streaming is enabled");
-  handleChannelUpdate((participants) => {
+  handleChannelUpdate(async (participants) => {
     logger.info("handling channel update.");
     logger.info(participants);
     if (stream) {
@@ -152,6 +152,9 @@ if (getConfig().stream.dynamic_streaming) {
         logger.info("stop sharing screen since there are no longer participants");
         try {
           logger.info("saving game before disconnecting");
+          if (gameDriver) {
+            await exportSave(gameDriver);
+          }
           stream.send({ type: "end_stream" });
         } catch (e) {
           logger.error(e);

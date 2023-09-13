@@ -1,11 +1,11 @@
 import { Events, Message, VoiceChannel, channelMention } from "discord.js";
-import { parseChord, type Chord } from "../game/command/chord.js";
+import { parseChord, type Chord } from "../command/chord.js";
 import client from "./client.js";
 import { execute } from "./chordExecutor.js";
 import { isValid } from "./chordValidator.js";
-import { CommandInput } from "../game/command/commandInput.js";
-import { logger } from "../logger.js";
-import { getConfig } from "../config/index.js";
+import { CommandInput } from "../command/commandInput.js";
+import { logger } from "../../logger.js";
+import { getConfig } from "../../config/index.js";
 
 export let lastCommand = new Date();
 
