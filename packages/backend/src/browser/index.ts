@@ -3,19 +3,16 @@ import { focusContentFrame, importSave, setupGame } from "./game.js";
 import { setupDiscord } from "./discord.js";
 import { getConfig } from "../config/index.js";
 
-export async function start(driver: WebDriver) {
+export async function start(gameDriver: WebDriver, streamDriver: WebDriver) {
   if (getConfig().stream.enabled) {
-    await setupDiscord(driver);
-  }
-  if (getConfig().stream.enabled && getConfig().game.enabled) {
-    await driver.switchTo().newWindow("tab");
+    await setupDiscord(streamDriver);
   }
   if (getConfig().game.enabled) {
-    await setupGame(driver);
+    await setupGame(gameDriver);
     if (getConfig().game.saves.auto_import.enabled) {
-      await importSave(driver);
+      await importSave(gameDriver);
     }
     // await fullscreenGame(driver);
-    await focusContentFrame(driver);
+    await focusContentFrame(gameDriver);
   }
 }

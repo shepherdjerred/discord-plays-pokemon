@@ -69,8 +69,8 @@ emulator_url = "built_in"
 # should game saves be exported periodically
 # saves are exported to ~/Downloads
 enabled = true
-# by default, export the save file once every minute
-interval_in_milliseconds = 60000
+# by default, export the save file once every five minutes
+interval_in_milliseconds = 300000
 
 [game.saves.auto_import]
 # should the latest game save be loaded on startup
