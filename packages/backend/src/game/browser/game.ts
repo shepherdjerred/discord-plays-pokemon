@@ -16,11 +16,6 @@ export async function setupGame(driver: WebDriver) {
   await wait(5000);
   logger.info("selecting frame");
   await focusContentFrame(driver);
-  logger.info("waiting for play now button");
-  const playNowButton = await driver.wait(until.elementLocated(By.xpath('//a[text()="Play Now"]')));
-  logger.info("clicking play now button");
-  await playNowButton.click();
-  logger.info("clicked button");
 }
 
 export async function sendGameCommand(driver: WebDriver, command: CommandInput) {
