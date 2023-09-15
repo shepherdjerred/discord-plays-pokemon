@@ -1,7 +1,7 @@
 import { By, WebDriver, until } from "selenium-webdriver";
-import { wait } from "../util.js";
-import { logger } from "../logger.js";
-import { getConfig } from "../config/index.js";
+import { wait } from "../../util.js";
+import { logger } from "../../logger.js";
+import { getConfig } from "../../config/index.js";
 
 export async function setupDiscord(driver: WebDriver) {
   if (await isLoggedIn(driver)) {
@@ -12,7 +12,6 @@ export async function setupDiscord(driver: WebDriver) {
   }
   await updateSettings(driver);
   await navigateToTextChannel(driver);
-
 }
 
 async function isLoggedIn(driver: WebDriver): Promise<boolean> {

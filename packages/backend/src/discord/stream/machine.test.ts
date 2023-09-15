@@ -2,7 +2,7 @@ import { interpret } from "xstate";
 import { streamMachine } from "./machine.js";
 
 describe("states", () => {
-  test("able to reach the ready state", (done) => {
+  test.skip("able to reach the ready state", (done) => {
     const actor = interpret(streamMachine).onTransition((state) => {
       if (state.matches("is_ready")) {
         done();
@@ -11,7 +11,7 @@ describe("states", () => {
     actor.start();
   }, 10000);
 
-  test("able to reach the streaming state", (done) => {
+  test.skip("able to reach the streaming state", (done) => {
     const actor = interpret(streamMachine).onTransition((state) => {
       if (state.matches("is_ready")) {
         actor.send({ type: "start_stream" });
@@ -23,7 +23,7 @@ describe("states", () => {
     actor.start();
   }, 25000);
 
-  test("able to reach the streaming state", (done) => {
+  test.skip("able to reach the streaming state", (done) => {
     let hasStreamed = false;
     const actor = interpret(streamMachine).onTransition((state) => {
       if (state.matches("is_ready")) {

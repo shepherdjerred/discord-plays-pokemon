@@ -1,26 +1,32 @@
 import { exportSave, sendGameCommand } from "./game/browser/game.js";
-import { handleMessages } from "./game/discord/messageHandler.js";
+import { handleMessages } from "./discord/messageObservable.js";
 import { WebDriver } from "selenium-webdriver";
-import { handleSlashCommands } from "./game/discord/slashCommands/index.js";
+import { handleSlashCommands } from "./discord/slashCommands/index.js";
 import { CommandInput } from "./game/command/commandInput.js";
 import { createWebServer } from "./webserver/index.js";
-import { registerSlashCommands } from "./game/discord/slashCommands/rest.js";
+import { registerSlashCommands } from "./discord/slashCommands/rest.js";
 import { logger } from "./logger.js";
-import { handleChannelUpdate } from "./game/discord/channelHandler.js";
+import { handleChannelUpdate } from "./discord/channelHandler.js";
 import { match } from "ts-pattern";
 import { LoginResponse, StatusResponse } from "@discord-plays-pokemon/common";
 import { getConfig } from "./config/index.js";
-import { streamMachine } from "./stream/machine.js";
+import { streamMachine } from "./discord/stream/machine.js";
 import { interpret } from "xstate";
+import { gameMachine } from "./game/machine.js";
 
 const stream = interpret(streamMachine);
 
 if (getConfig().stream.enabled) {
-  logger.info("initializing stream");
+  logger.info("starting stream");
   stream.start();
 }
 
-let gameDriver: WebDriver | undefined;
+const game = interpret(gameMachine);
+
+if (getConfig().game.enabled) {
+  logger.info("starting game");
+  game.start();
+}
 
 if (getConfig().bot.commands.update) {
   await registerSlashCommands();
@@ -39,13 +45,7 @@ if (getConfig().web.enabled) {
       match(event)
         .with({ request: { kind: "command" } }, (event) => {
           logger.info("handling command request", event.request);
-          if (gameDriver !== undefined) {
-            try {
-              void sendGameCommand(gameDriver, { command: event.request.value, quantity: 1 });
-            } catch (e) {
-              logger.error(e);
-            }
-          }
+          game.send({ type: "command" });
         })
         .with({ request: { kind: "login" } }, (event) => {
           logger.info("handling login request", event.request);
@@ -59,6 +59,7 @@ if (getConfig().web.enabled) {
         })
         .with({ request: { kind: "screenshot" } }, (event) => {
           logger.info("handling screenshot request", event.request);
+          game.send({ type: "screenshot" });
         })
         .with({ request: { kind: "status" } }, (event) => {
           logger.info("handling status request", event.request);
@@ -79,20 +80,18 @@ if (getConfig().game.enabled) {
   logger.info("browser is enabled");
 
   if (getConfig().bot.commands.enabled) {
-    handleSlashCommands(gameDriver);
+    const observable = handleSlashCommands();
+    observable.subscribe((_event) => {
+      game.send({ type: "screenshot" });
+    });
   }
 }
 
 if (getConfig().game.enabled && getConfig().game.commands.enabled) {
   logger.info("game and discord commands are enabled");
-  handleMessages(async (commandInput: CommandInput): Promise<void> => {
-    if (gameDriver !== undefined) {
-      try {
-        await sendGameCommand(gameDriver, commandInput);
-      } catch (e) {
-        logger.error(e);
-      }
-    }
+  const observable = handleMessages();
+  observable.subscribe((_event) => {
+    game.send({ type: "command" });
   });
 }
 

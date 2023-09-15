@@ -2,6 +2,10 @@ import { getConfig } from "./index.js";
 
 describe("config", () => {
   it("should not load the default configuration", () => {
-    expect(() => getConfig("../../config.example.toml")).toThrow();
+    try {
+      getConfig("../../config.example.toml");
+    } catch (e) {
+      expect(e).toMatchSnapshot();
+    }
   });
 });

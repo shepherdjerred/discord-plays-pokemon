@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`config should not load the default configuration 1`] = `
+[Error: Config validation error:
+       server_id String must contain at least 1 character(s)
+       bot.discord_token String must contain at least 1 character(s)
+       bot.application_id String must contain at least 1 character(s)
+       bot.notifications.channel_id String must contain at least 1 character(s)
+       stream.channel_id String must contain at least 1 character(s)
+       stream.userbot.id String must contain at least 1 character(s)
+       stream.userbot.username String must contain at least 1 character(s)
+       stream.userbot.password String must contain at least 1 character(s)
+       game.commands.channel_id String must contain at least 1 character(s)]
+`;
