@@ -1,5 +1,5 @@
-import { type Chord } from "../command/chord.js";
-import { getConfig } from "../../config/index.js";
+import { type Chord } from "../game/command/chord.js";
+import { getConfig } from "../config/index.js";
 
 export function isValid(chord: Chord): boolean {
   if (chord.length > getConfig().game.commands.chord.max_commands) {

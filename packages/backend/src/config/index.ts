@@ -5,8 +5,7 @@ import { addErrorLinks, assertPathExists } from "../util.js";
 import { ZodError } from "zod";
 import { logger } from "../logger.js";
 
-export function getConfig(file?: string) {
-  file = file || "config.toml";
+export function getConfig(file: string = "config.toml") {
   const path = resolve(file);
 
   assertPathExists(path, "config file");

@@ -1,12 +1,8 @@
-import { exportSave, sendGameCommand } from "./game/browser/game.js";
-import { handleMessages } from "./discord/messageObservable.js";
-import { WebDriver } from "selenium-webdriver";
+import { createMessageObservable, createVoiceStateObservable } from "./discord/messageObservable.js";
 import { handleSlashCommands } from "./discord/slashCommands/index.js";
-import { CommandInput } from "./game/command/commandInput.js";
 import { createWebServer } from "./webserver/index.js";
 import { registerSlashCommands } from "./discord/slashCommands/rest.js";
 import { logger } from "./logger.js";
-import { handleChannelUpdate } from "./discord/channelHandler.js";
 import { match } from "ts-pattern";
 import { LoginResponse, StatusResponse } from "@discord-plays-pokemon/common";
 import { getConfig } from "./config/index.js";
@@ -89,7 +85,7 @@ if (getConfig().game.enabled) {
 
 if (getConfig().game.enabled && getConfig().game.commands.enabled) {
   logger.info("game and discord commands are enabled");
-  const observable = handleMessages();
+  const observable = createMessageObservable();
   observable.subscribe((_event) => {
     game.send({ type: "command" });
   });
@@ -97,23 +93,16 @@ if (getConfig().game.enabled && getConfig().game.commands.enabled) {
 
 if (getConfig().game.saves.auto_export.enabled) {
   logger.info("auto export saves is enabled");
-  // eslint-disable-next-line @typescript-eslint/no-misused-promises
-  setInterval(async () => {
-    logger.info("exporting save");
-    if (gameDriver) {
-      try {
-        await exportSave(gameDriver);
-        logger.info("save exported successfully");
-      } catch (e) {
-        logger.error(e);
-      }
-    }
+  setInterval(() => {
+    game.send({ type: "export" });
   }, getConfig().game.saves.auto_export.interval_in_milliseconds);
 }
 
 if (getConfig().stream.dynamic_streaming) {
-  logger.info("dynamic streaming is enabled");
-  handleChannelUpdate(async (participants) => {
+  const observable = createVoiceStateObservable();
+  observable.subscribe((_event) => {
+    // TODO
+    const participants = 1;
     logger.info("handling channel update.");
     logger.info(participants);
     if (stream) {
@@ -122,15 +111,8 @@ if (getConfig().stream.dynamic_streaming) {
         stream.send({ type: "start_stream" });
       } else {
         logger.info("stop sharing screen since there are no longer participants");
-        try {
-          logger.info("saving game before disconnecting");
-          if (gameDriver) {
-            await exportSave(gameDriver);
-          }
-          stream.send({ type: "end_stream" });
-        } catch (e) {
-          logger.error(e);
-        }
+        game.send({ type: "export" });
+        stream.send({ type: "end_stream" });
       }
     }
   });
