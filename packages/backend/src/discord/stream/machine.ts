@@ -1,13 +1,17 @@
 import { Builder, Browser, WebDriver } from "selenium-webdriver";
 import { Options } from "selenium-webdriver/firefox.js";
 import { assign, createMachine } from "xstate";
-import { disconnect, joinVoiceChat, setupDiscord, shareScreen } from "./discord.js";
 import lodash from "lodash";
 import { getConfig } from "../../config/index.js";
 import { logger } from "../../logger.js";
+import { shareScreen } from "./stream.js";
+import { joinVoiceChat, disconnect } from "./voice.js";
+import { isLoggedIn, login } from "./login.js";
+import { updateSettings } from "./settings.js";
+import { navigateToTextChannel } from "./index.js";
 
 export const streamMachine = createMachine({
-  /** @xstate-layout N4IgpgJg5mDOIC5QAoC2BDAxgCwJYDswBKAOl1gH1YAXdAJ2oKgGIIB7Qs-ANzYGswJNFjyFS5KrQZMEBXpnSMOAbQAMAXTXrEoAA5tYuJfh0gAHogBMlgIwlVANksAWAJwBWSwHYAzDfcONpYANCAAnlY+qiRelg4BNq6ulgAcKV4pAL6ZocI4BMRklDT0jPgsYHR0bHQkugA2igBmNahCGPliRZKlMnJsCsZaWqb6hsamFgjWdo4uHt5+CSHhiCl2bkmuTinODn7J2bkdooUSdGDoEGHMJQySF+ioI0ggY0a4HJOIbu4kie4-DZdqo9ikPKEItN3K4SM5ATYogFnBlQUcQHlTqQ7mUoA9LqhWBxBP0BO0RAVsVJcfinrIeANFJ98MMNKMDB8vq8putYQjbKoUu54YEHJDEJ5LCQPH5bK5fOlBejMZSSDimLTCZVqrUGs1WuTOoV1eVNfT5EyVBoXnoORNuWtEiR+TZBcKEmLVtNLD4YnEAqkUpZ5a4fJZlSdVWB8BANTRHoT2JxSYIVV1o7HTfGCebGUNrWzXu97aApjN7E5fot-IEVlCw85-l5th5gR4g74IxT0zG49QE8xtTU6o1qC06G004UM32E7nBszWdoi3bmd9vbNKwtfDWguKED4UtFYvE9sG-OtwzkMZGutmnkxBzHNTa3quuaXHXzZa6hSKbJ6ULuF40TwlErhBLEXhuA4XZGlSCaPjiL6Fra4xrg6CDbL6qioqGGSeDYez7iiDj2BkNjAgEnheIC2TXvgbAQHAphTkQ7LoR+5iIAAtIBvGwdebHdCaUAcZyJiYc4daIK4jbWPEDiqO46yXs4WRCbeZyUEOdDiSW3FYQ4KTOvh+zpLYF77i4jZgUE2xCo4qg+IJxzdtpFCPNc+kYZ+B5Hv8YbNtBJ5ES41kwtKCJIg4KJHs4cFYmq1KzgSPlcVM8TRD4rjKRkLjQblMnTC5cLRWGPjuMpKKJVGvZZv2aUrpxkl+dJ+5hlKUR7Ns3gZH4PgJZp7kIQSTDpa1hnyo2DhJABKRKZYKlJPuCLOnhzgokk7jAfRmRAA */
+  /** @xstate-layout N4IgpgJg5mDOIC5QAoC2BDAxgCwJYDswBKAOl1gH1YAXdAJ2oKgGIIB7Qs-ANzYGswJNFjyFS5KrQZMEBXpnSMOAbQAMAXTXrEoAA5tYuJfh0gAHogC0ARgBs1kgHYAzABZrAVg93VATgBMAByOrgA0IACeiNbWjiSuvh6qgUkpjo4etrYAvtnhwjgExGSUNPSM+CxgdHRsdCS6ADaKAGZ1qEIYhWIlkuUycmwKxlpapvqGxqYWCDb2Tm6e3rZ+QSHhUbPOgSS+gdaugdsuqq7pth65+V2ixRKNbFBQTBQErByCgwKdIkXilA8ni8CLIeENFLgVBoxkgQBMjJCTLCZnZ-CQVtZ9tZfL5VBdYhtEEE0bY9v5-LF3BTnHYriACrd-hRAc9Kq98MxqrV6k1Wu0ft07gDHqyoOzQfIIVDNBpxgYERxptFbCTVJiYji8d5HISENZVM4SP5XElHEckh5yYc6Qy-r0WZB2e9OF9BLaevcRY6QYNhojRrLYfCpsjEIdDc5-Hi1aoDVljc5da4guiQo49qp0o4LoEbTc7Z6nt6OVy6g1mtQ2nQOu6hcyvRBxb6pfgA9og-KQ6AZuGSJHo-q4yrXInIkSTfFHHYzslXLZc3l6fmPZQ6GB0BAIswygxJGv0KgYXpO4ilQgMjsKbi5+l-CqYkm3PFjYEoysVlGjnnfj0dxUxTQ+6oM6nxgt8takH+LyAeuqASuCIzQoGx6TKeoZ6skaJeEk1jOAEyZqrYSYBCQni4QEzhJLY2aXIuEEkFBbIwQenI1GWvKVvy9GMQB1BAfBfrSkecInoq6H6q+JDYWqeHGlGdi6nhOykq+nj7IERwZN+gqkGA+AQNBfGwSBXC8OBy7FHpBlMUZB4CS2bZyqhYndmGRx9m+MZDgmuqZL46L+OmQQJPqloLtcP6WfphlAax3Llny1YCoyJBWTFsH2YhMrtihCpIq5CC9v2GKxs48Yjkm2akSEgSnKceHWP4zjONpKXMagTCcvpe6wcJwZoQVElYV4Mn4fJRFjgg85xM46S+LNLh3uSOR0RZkG2R1lTblI1A9QefWifl5jRP4mSkWq6azbEU6ZkmE6BbYZWuCawSBMmuSLvgbAQHApgQU5eVnpYs2GumWQeAkHghCDuo2He8T7OGwTOKc5ytQWpQ7UwANdsdWynU4vjg5D0MuLD8OnQk5J+Bpfgoy1q2RUyLLAkd-UuXjNjxCsU7bIcb6NRNmwxB4uxTrYc6PR4bivq46MrvWRaNgQOMDXjNL+adtUZNOtWHLqWukXs2K1Zm81E7REU6b0pZ0KrHMoneDj2CEHi+CL+r65NlhogEaneMadgeCkb3y3W+6bvbR0zBLhqeBcXgUvqGSjpsI6uLsxrpiaj3UZ4Yfrf0NlAVHZ7u4a7gjoEKp4Y4qinUmMTPoccaUcmloF6l0XF7BpfoTSGda-qjWZp4te+WcAVBcmgSJO4nftdjHbOdHJ3UU45LBIk0sHK+vmxk42bbHhSRBPOH3ZEAA */
   predictableActionArguments: true,
   schema: {
     events: {} as { type: "start_stream" } | { type: "end_stream" },
@@ -27,9 +31,7 @@ export const streamMachine = createMachine({
             options.setPreference(key, value);
           });
 
-          const driver = await new Builder().forBrowser(Browser.FIREFOX).setFirefoxOptions(options).build();
-          await setupDiscord(driver);
-          return driver;
+          return await new Builder().forBrowser(Browser.FIREFOX).setFirefoxOptions(options).build();
         },
         onError: {
           target: "is_error",
@@ -38,11 +40,57 @@ export const streamMachine = createMachine({
           },
         },
         onDone: {
-          target: "is_ready",
+          target: "is_logging_in",
           actions: assign({ driver: (_context, event) => event.data }),
         },
       },
       states: {},
+    },
+    is_logging_in: {
+      invoke: {
+        src: async ({ driver }, _event) => {
+          if (driver) {
+            if (await isLoggedIn(driver)) {
+              logger.info("already logged in");
+            } else {
+              logger.info("logged in");
+              await login(driver);
+            }
+          } else {
+            throw Error("unreachable state");
+          }
+        },
+        onDone: {
+          target: "is_logged_in",
+        },
+        onError: {
+          target: "is_error",
+          actions: (_context, event) => {
+            logger.error(event);
+          },
+        },
+      },
+    },
+    is_logged_in: {
+      invoke: {
+        src: async ({ driver }, _event) => {
+          if (driver) {
+            await updateSettings(driver);
+            await navigateToTextChannel(driver);
+          } else {
+            throw Error("unreachable state");
+          }
+        },
+        onDone: {
+          target: "is_ready",
+        },
+        onError: {
+          target: "is_error",
+          actions: (_context, event) => {
+            logger.error(event);
+          },
+        },
+      },
     },
     is_error: {
       type: "final",

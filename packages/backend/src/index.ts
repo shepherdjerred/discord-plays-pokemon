@@ -1,7 +1,7 @@
 import { createMessageObservable, createVoiceStateObservable } from "./discord/messageObservable.js";
-import { handleSlashCommands } from "./discord/slashCommands/index.js";
+import { handleSlashCommands } from "./discord/bot/slashCommands/index.js";
 import { createWebServer } from "./webserver/index.js";
-import { registerSlashCommands } from "./discord/slashCommands/rest.js";
+import { registerSlashCommands } from "./discord/bot/slashCommands/rest.js";
 import { logger } from "./logger.js";
 import { match } from "ts-pattern";
 import { LoginResponse, StatusResponse } from "@discord-plays-pokemon/common";

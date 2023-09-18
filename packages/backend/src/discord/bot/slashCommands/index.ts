@@ -2,7 +2,7 @@ import { Events } from "discord.js";
 import "./rest.js";
 import client from "../client.js";
 import { help } from "./commands/help.js";
-import { logger } from "../../logger.js";
+import { logger } from "../../../logger.js";
 import { Observable } from "rxjs";
 
 export function handleSlashCommands() {
