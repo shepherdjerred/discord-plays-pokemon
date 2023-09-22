@@ -3,7 +3,7 @@
   "[shellscript]": {
     "editor.defaultFormatter": "mkhl.shfmt"
   },
-  "jest.jestCommandLine": "/Users/jerred/.local/share/rtx/installs/node/18.17.1/bin/npx jest",
+  "jest.jestCommandLine": "NODE_OPTIONS=--experimental-vm-modules  /Users/jerred/.local/share/rtx/installs/node/18.17.1/bin/npx jest",
   "jest.nodeEnv": {
     "node": "/Users/jerred/.local/share/rtx/installs/node/18.17.1/bin/node"
   },

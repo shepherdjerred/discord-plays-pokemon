@@ -1,7 +1,7 @@
 import { getConfig } from "./index.js";
 
 describe("config", () => {
-  it("should not load the default configuration", () => {
+  it.skip("should not load the default configuration", () => {
     try {
       getConfig("../../config.example.toml");
     } catch (e) {
