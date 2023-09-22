@@ -4,6 +4,8 @@
     "outDir": "dist",
     "module": "NodeNext",
     "target": "ESNext",
-    "moduleResolution": "nodenext"
+    "moduleResolution": "nodenext",
+    // required for ts-jest to transform esm modules
+    "allowJs": true
   }
 }

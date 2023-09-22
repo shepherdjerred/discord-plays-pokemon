@@ -13,8 +13,8 @@
     "lint:check": "npm run lint:eslint:check",
     "lint:eslint:check": "npx eslint .",
     "lint:eslint:fix": "npx eslint . --fix",
-    "test": "npx jest",
-    "test:watch": "npx jest --watch"
+    "test": "NODE_OPTIONS=--experimental-vm-modules npx jest",
+    "test:watch": "NODE_OPTIONS=--experimental-vm-modules npx jest --watch"
   },
   "dependencies": {
     "@d6v/zconf": "^0.0.4",

@@ -1,4 +1,3 @@
-import { createMessageObservable, createVoiceStateObservable } from "./discord/messageObservable.js";
 import { handleSlashCommands } from "./discord/bot/slashCommands/index.js";
 import { createWebServer } from "./webserver/index.js";
 import { registerSlashCommands } from "./discord/bot/slashCommands/rest.js";
@@ -9,6 +8,7 @@ import { getConfig } from "./config/index.js";
 import { streamMachine } from "./discord/stream/machine.js";
 import { interpret } from "xstate";
 import { gameMachine } from "./game/machine.js";
+import { createMessageObservable, createVoiceStateObservable } from "./discord/bot/messageObservable.js";
 
 const stream = interpret(streamMachine);
 
