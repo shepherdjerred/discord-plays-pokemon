@@ -1,3 +1,4 @@
+import { describe, test, expect } from "vitest";
 import { commandToGameboyAdvanceKeyInput, parseGameboyAdvanceKeyInput } from "./keybinds.js";
 
 describe("keybinds", () => {

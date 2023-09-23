@@ -1,3 +1,4 @@
+import { describe, it } from "vitest";
 import { createServer } from "http";
 import { createSocket } from "./socket.js";
 import { io as Client } from "socket.io-client";
@@ -22,6 +23,7 @@ describe("socket", () => {
           },
         };
         clientSocket.emit("request", request);
+        clientSocket.close();
       });
     });
 

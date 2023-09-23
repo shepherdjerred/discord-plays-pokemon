@@ -1,3 +1,4 @@
+import { describe, test, expect } from "vitest";
 import { parseCommandInput } from "./commandInput.js";
 
 describe("commandInput", () => {

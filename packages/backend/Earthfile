@@ -31,6 +31,5 @@ build:
 
 test:
   FROM +src
-  COPY jest* .
   RUN npm run test
   SAVE ARTIFACT coverage AS LOCAL coverage

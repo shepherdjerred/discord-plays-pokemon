@@ -12,7 +12,7 @@
     "bradlc.vscode-tailwindcss",
     "lightyen.tailwindcss-intellisense-twin",
     "tamasfe.even-better-toml",
-    "orta.vscode-jest",
-    "statelyai.stately-vscode"
+    "statelyai.stately-vscode",
+    "zixuanchen.vitest-explorer"
   ]
 }

@@ -1,14 +1,19 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`config should not load the default configuration 1`] = `
-[Error: Config validation error:
-       server_id String must contain at least 1 character(s)
-       bot.discord_token String must contain at least 1 character(s)
-       bot.application_id String must contain at least 1 character(s)
-       bot.notifications.channel_id String must contain at least 1 character(s)
-       stream.channel_id String must contain at least 1 character(s)
-       stream.userbot.id String must contain at least 1 character(s)
-       stream.userbot.username String must contain at least 1 character(s)
-       stream.userbot.password String must contain at least 1 character(s)
-       game.commands.channel_id String must contain at least 1 character(s)]
+exports[`config > should not accept the default configuration > the configuration should require non-empty fields 1`] = `
+[Error: Your configuration at /Users/jerred/git/discord-plays-pokemon/config.example.toml _is_ valid TOML, but it is not a valid configuration for this application.
+
+Code: too_small ~ Path: server_id ~ Message: String must contain at least 1 character(s)
+Code: too_small ~ Path: bot.discord_token ~ Message: String must contain at least 1 character(s)
+Code: too_small ~ Path: bot.application_id ~ Message: String must contain at least 1 character(s)
+Code: too_small ~ Path: bot.notifications.channel_id ~ Message: String must contain at least 1 character(s)
+Code: too_small ~ Path: stream.channel_id ~ Message: String must contain at least 1 character(s)
+Code: too_small ~ Path: stream.userbot.id ~ Message: String must contain at least 1 character(s)
+Code: too_small ~ Path: stream.userbot.username ~ Message: String must contain at least 1 character(s)
+Code: too_small ~ Path: stream.userbot.password ~ Message: String must contain at least 1 character(s)
+Code: too_small ~ Path: game.commands.channel_id ~ Message: String must contain at least 1 character(s)
+
+For more information, read the setup guide (https://docs.discord-plays-pokemon.com/user/)
+If you are unable to resolve this error, please open an issue (https://github.com/shepherdjerred/discord-plays-pokemon/issues)
+]
 `;

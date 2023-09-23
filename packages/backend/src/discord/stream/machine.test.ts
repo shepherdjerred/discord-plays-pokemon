@@ -1,3 +1,5 @@
+import { describe, test } from "vitest";
+
 import { interpret } from "xstate";
 import { streamMachine } from "./machine.js";
 
