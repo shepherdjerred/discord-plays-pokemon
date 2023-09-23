@@ -20,10 +20,3 @@ export function assertPathExists(s: string, pathName: string) {
     throw Error(`${path} does not exist`);
   }
 }
-
-export const onError = {
-  target: "is_error",
-  actions: (_context: unknown, event: unknown) => {
-    logger.error(event);
-  },
-};

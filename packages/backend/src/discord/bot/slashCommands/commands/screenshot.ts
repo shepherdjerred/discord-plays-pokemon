@@ -10,7 +10,6 @@ import {
 } from "discord.js";
 import { WebDriver } from "selenium-webdriver";
 import { Buffer } from "buffer";
-import client from "../../client.js";
 import { getConfig } from "../../../../config/index.js";
 
 export const screenshotCommand = new SlashCommandBuilder()
