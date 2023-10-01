@@ -34,7 +34,7 @@
   "devDependencies": {
     "@iconify-json/carbon": "^1.1.21",
     "@iconify-json/mdi": "^1.1.54",
-    "@iconify/json": "^2.2.114",
+    "@iconify/json": "^2.2.122",
     "@storybook/addon-essentials": "^7.4.1",
     "@storybook/addon-interactions": "^7.4.1",
     "@storybook/addon-links": "^7.4.1",
