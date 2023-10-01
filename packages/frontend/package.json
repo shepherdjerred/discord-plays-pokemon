@@ -19,7 +19,7 @@
     "test": "true"
   },
   "dependencies": {
-    "@tanstack/react-query": "^4.35.0",
+    "@tanstack/react-query": "^4.35.3",
     "keyboardjs": "^2.7.0",
     "lodash": "^4.17.21",
     "react": "^18.2.0",
