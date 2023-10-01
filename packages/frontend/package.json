@@ -40,7 +40,7 @@
     "@storybook/addon-links": "^7.4.1",
     "@storybook/blocks": "^7.4.1",
     "@storybook/react": "^7.4.1",
-    "@storybook/react-vite": "^7.4.1",
+    "@storybook/react-vite": "^7.4.5",
     "@storybook/testing-library": "^0.2.0",
     "@svgr/core": "^8.1.0",
     "@svgr/plugin-jsx": "^8.1.0",
