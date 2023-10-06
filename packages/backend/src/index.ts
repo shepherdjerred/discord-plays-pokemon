@@ -23,7 +23,10 @@ if (getConfig().game.enabled) {
 }
 
 if (getConfig().bot.commands.update) {
-  await registerSlashCommands();
+  await registerSlashCommands({
+    areScreenshotsEnabled: getConfig().bot.commands.screenshot.enabled,
+    botToken: getConfig().bot.discord_token,
+  });
 }
 
 if (getConfig().web.enabled) {
@@ -70,48 +73,9 @@ if (getConfig().web.enabled) {
   }
 }
 
-if (getConfig().game.enabled) {
-  logger.info("browser is enabled");
-
-  if (getConfig().bot.commands.enabled) {
-    const observable = handleSlashCommands();
-    observable.subscribe((_event) => {
-      game.send({ type: "screenshot" });
-    });
-  }
-}
-
-if (getConfig().game.enabled && getConfig().game.commands.enabled) {
-  logger.info("game and discord commands are enabled");
-  const observable = createMessageObservable();
-  observable.subscribe((_event) => {
-    game.send({ type: "command" });
-  });
-}
-
 if (getConfig().game.saves.auto_export.enabled) {
   logger.info("auto export saves is enabled");
   setInterval(() => {
     game.send({ type: "export" });
   }, getConfig().game.saves.auto_export.interval_in_milliseconds);
-}
-
-if (getConfig().stream.dynamic_streaming) {
-  const observable = createVoiceStateObservable();
-  observable.subscribe((_event) => {
-    // TODO
-    const participants = 1;
-    logger.info("handling channel update.");
-    logger.info(participants);
-    if (stream) {
-      if (participants > 0) {
-        logger.info("sharing screen since there are now participants");
-        stream.send({ type: "start_stream" });
-      } else {
-        logger.info("stop sharing screen since there are no longer participants");
-        game.send({ type: "export" });
-        stream.send({ type: "end_stream" });
-      }
-    }
-  });
 }
