@@ -30,24 +30,24 @@ export const streamMachine = createMachine(
     context: {
       driver: undefined,
     },
-    initial: "is_starting",
+    initial: "starting",
     states: {
-      is_starting: {
+      starting: {
         invoke: {
           src: "start",
           onError: {
-            target: "is_error",
+            target: "error",
             actions: logger.error,
           },
           onDone: {
-            target: "is_logging_in",
+            target: "logging_in",
             actions: "setDriver",
           },
         },
         states: {},
       },
 
-      is_logging_in: {
+      logging_in: {
         invoke: {
           src: async ({ driver }, _event) => {
             if (driver) {
@@ -62,16 +62,16 @@ export const streamMachine = createMachine(
             }
           },
           onDone: {
-            target: "is_logged_in",
+            target: "logged_in",
           },
           onError: {
-            target: "is_error",
+            target: "error",
             actions: logger.error,
           },
         },
       },
 
-      is_logged_in: {
+      logged_in: {
         invoke: {
           src: async ({ driver }, _event) => {
             if (driver) {
@@ -82,20 +82,20 @@ export const streamMachine = createMachine(
             }
           },
           onDone: {
-            target: "is_ready",
+            target: "ready",
           },
           onError: {
-            target: "is_error",
+            target: "error",
             actions: logger.error,
           },
         },
       },
 
-      is_error: {
+      error: {
         type: "final",
       },
 
-      is_ready: {
+      ready: {
         on: {
           start_stream: {
             target: "starting_stream",
@@ -117,7 +117,7 @@ export const streamMachine = createMachine(
             target: "streaming",
           },
           onError: {
-            target: "is_error",
+            target: "error",
             actions: logger.error,
           },
         },
@@ -133,10 +133,10 @@ export const streamMachine = createMachine(
             }
           },
           onDone: {
-            target: "is_ready",
+            target: "ready",
           },
           onError: {
-            target: "is_error",
+            target: "error",
             actions: logger.error,
           },
         },

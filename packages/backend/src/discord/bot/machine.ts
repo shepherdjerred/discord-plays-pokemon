@@ -38,7 +38,7 @@ export function createBotMachine({
       },
       initial: "logging_in",
       states: {
-        is_error: {
+        error: {
           type: "final",
         },
         logging_in: {
@@ -49,7 +49,7 @@ export function createBotMachine({
               actions: "setClient",
             },
             onError: {
-              target: "is_error",
+              target: "error",
               actions: logger.error,
             },
           },
@@ -58,7 +58,7 @@ export function createBotMachine({
           invoke: {
             src: "listen",
             onError: {
-              target: "is_error",
+              target: "error",
               actions: logger.error,
             },
           },

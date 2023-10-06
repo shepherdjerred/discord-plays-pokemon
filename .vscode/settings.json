@@ -2,5 +2,11 @@
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "[shellscript]": {
     "editor.defaultFormatter": "mkhl.shfmt"
+  },
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/bower_components": true,
+    "**/*.code-search": true,
+    "**/machine.typegen.d.ts": true
   }
 }

@@ -30,9 +30,9 @@ export const gameMachine = createMachine(
     context: {
       driver: undefined,
     },
-    initial: "is_starting",
+    initial: "starting",
     states: {
-      is_starting: {
+      starting: {
         invoke: {
           src: "start",
           onDone: {
@@ -40,12 +40,12 @@ export const gameMachine = createMachine(
             actions: "setDriver",
           },
           onError: {
-            target: "is_error",
+            target: "error",
             actions: logger.error,
           },
         },
       },
-      is_error: {
+      error: {
         type: "final",
       },
       importing: {
@@ -61,7 +61,7 @@ export const gameMachine = createMachine(
             target: "reload",
           },
           onError: {
-            target: "is_error",
+            target: "error",
             actions: logger.error,
           },
         },
@@ -79,7 +79,7 @@ export const gameMachine = createMachine(
             target: "start_playing",
           },
           onError: {
-            target: "is_error",
+            target: "error",
             actions: logger.error,
           },
         },
@@ -101,7 +101,7 @@ export const gameMachine = createMachine(
             target: "playing",
           },
           onError: {
-            target: "is_error",
+            target: "error",
             actions: logger.error,
           },
         },
@@ -135,7 +135,7 @@ export const gameMachine = createMachine(
             target: "playing",
           },
           onError: {
-            target: "is_error",
+            target: "error",
             actions: logger.error,
           },
         },
