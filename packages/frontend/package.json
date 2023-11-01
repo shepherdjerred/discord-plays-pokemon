@@ -64,7 +64,7 @@
     "postcss": "^8.4.31",
     "prop-types": "^15.8.1",
     "storybook": "^7.4.6",
-    "tailwindcss": "^3.3.3",
+    "tailwindcss": "^3.3.5",
     "twin.macro": "^3.4.0",
     "typescript": "^5.2.2",
     "unplugin-fonts": "^1.0.3",
