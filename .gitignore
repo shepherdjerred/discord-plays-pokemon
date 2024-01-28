@@ -11,3 +11,4 @@ error.png
 logs
 saves
 .DS_Store
+machine.typegen.d.ts
