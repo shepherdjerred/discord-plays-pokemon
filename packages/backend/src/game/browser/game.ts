@@ -1,10 +1,10 @@
 import { By, WebDriver, until } from "selenium-webdriver";
-import { CommandInput, isBurst, isHold, isHoldB } from "../game/command/commandInput.js";
-import { toGameboyAdvanceKeyInput } from "../game/command/keybinds.js";
-import { wait } from "../util.js";
-import { getLatestSave } from "../game/saves/index.js";
-import { logger } from "../logger.js";
-import { getConfig } from "../config/index.js";
+import { CommandInput, isBurst, isHold, isHoldB } from "../command/commandInput.js";
+import { toGameboyAdvanceKeyInput } from "../command/keybinds.js";
+import { wait } from "../../util.js";
+import { getLatestSave } from "../saves/index.js";
+import { logger } from "../../logger.js";
+import { getConfig } from "../../config/index.js";
 
 export async function setupGame(driver: WebDriver) {
   logger.info("navigating to emulator page");
@@ -16,11 +16,6 @@ export async function setupGame(driver: WebDriver) {
   await wait(5000);
   logger.info("selecting frame");
   await focusContentFrame(driver);
-  logger.info("waiting for play now button");
-  const playNowButton = await driver.wait(until.elementLocated(By.xpath('//a[text()="Play Now"]')));
-  logger.info("clicking play now button");
-  await playNowButton.click();
-  logger.info("clicked button");
 }
 
 export async function sendGameCommand(driver: WebDriver, command: CommandInput) {

@@ -32,7 +32,6 @@ This document tracks the planned work for this repository.
 ## In Progress
 
 - Fullscreen mode
-- Require players to be in channel to send commands
 
 ## Complete
 
@@ -40,3 +39,5 @@ This document tracks the planned work for this repository.
 - Fix Discord text commands
 - Make development/production closer
 - Minimum watcher count
+- Require players to be in channel to send commands
+- State machine
