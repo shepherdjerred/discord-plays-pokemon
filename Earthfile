@@ -2,19 +2,6 @@ VERSION 0.7
 PROJECT sjerred/discord-plays-pokemon
 ARG --global EARTHLY_CI
 
-pipeline.pr:
-  PIPELINE
-  TRIGGER pr main
-  BUILD +ci
-
-pipeline.push:
-  PIPELINE --push
-  TRIGGER push main
-  BUILD +ci
-  BUILD +devcontainer
-  BUILD ./packages/frontend+deploy.storybook --prod=true
-  BUILD ./docs+deploy --prod=true
-
 ci:
   BUILD +image
   BUILD +build
@@ -70,7 +57,7 @@ deps:
   RUN npm ci
 
 image:
-  FROM ghcr.io/selkies-project/nvidia-egl-desktop
+  FROM --platform=linux/amd64 ghcr.io/selkies-project/nvidia-egl-desktop:latest
   ARG DEBIAN_FRONTEND=noninteractive
   USER root
   RUN apt update
@@ -106,17 +93,3 @@ up:
 down:
   LOCALLY
   RUN (cd packages/backend/ && docker compose down)
-
-devcontainer:
-  FROM earthly/dind:ubuntu
-  WORKDIR /workspace
-  ARG TARGETARCH
-  ARG version=0.2.1
-  RUN curl --location --fail --silent --show-error -o /usr/local/bin/devpod https://github.com/loft-sh/devpod/releases/download/v$version/devpod-linux-$TARGETARCH
-  RUN chmod +x /usr/local/bin/devpod
-  COPY .devcontainer/devcontainer.json .
-  RUN --push --secret GITHUB_TOKEN=github_token echo $GITHUB_TOKEN | docker login ghcr.io -u shepherdjerred --password-stdin
-  WITH DOCKER
-    RUN devpod provider add docker && \
-      devpod build github.com/shepherdjerred/discord-plays-pokemon --repository ghcr.io/shepherdjerred/discord-plays-pokemon --platform linux/amd64,linux/arm64
-  END
