@@ -84,9 +84,6 @@ if (getConfig().stream.enabled || getConfig().game.enabled) {
   gameDriver = await new Builder().forBrowser(Browser.FIREFOX).setFirefoxOptions(options).build();
   streamDriver = await new Builder().forBrowser(Browser.FIREFOX).setFirefoxOptions(options).build();
 
-  logger.info("fullscreening");
-  await gameDriver.manage().window().fullscreen();
-
   try {
     await start(gameDriver, streamDriver);
   } catch (error) {
@@ -125,7 +122,7 @@ if (getConfig().game.saves.auto_export.enabled) {
     logger.info("exporting save");
     if (gameDriver) {
       try {
-        await exportSave(gameDriver);
+        // TODO: press CTRL + 1 and download file, or see if the handler does this for us
         logger.info("save exported successfully");
       } catch (e) {
         logger.error(e);
@@ -153,7 +150,7 @@ if (getConfig().stream.dynamic_streaming) {
         logger.info("stop sharing screen since there are no longer participants");
         try {
           logger.info("saving game before disconnecting");
-          await exportSave(streamDriver);
+          // TODO: press CTRL + 1 and download file, or see if the handler does this for us
           await disconnect(streamDriver);
         } catch (e) {
           logger.error(e);

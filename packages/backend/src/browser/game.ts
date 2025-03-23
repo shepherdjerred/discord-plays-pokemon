@@ -80,31 +80,6 @@ export async function sendGameCommand(driver: WebDriver, command: CommandInput) 
   throw new Error(`unknown modifier ${JSON.stringify(command)}`);
 }
 
-export async function exportSave(driver: WebDriver) {
-  await focusGameFrame(driver);
-  logger.info("waiting for export save button");
-  const exportSaveButton = await driver.wait(until.elementLocated(By.xpath("/html/body/div[2]/div[3]/div[4]")));
-  logger.info("clicking export save button");
-  await exportSaveButton.click();
-  logger.info("clicked export button");
-}
-
-export async function importSave(driver: WebDriver) {
-  const latestSave = await getLatestSave();
-
-  if (latestSave) {
-    logger.info("latest save is ", latestSave);
-    await focusMainFrame(driver);
-
-    logger.info("finding upload button");
-    await driver.findElement(By.css("#upload")).sendKeys(latestSave);
-    logger.info("uploaded save");
-    await wait(1000);
-  } else {
-    logger.info("no save to load");
-  }
-}
-
 export async function focusMainFrame(driver: WebDriver) {
   await driver.switchTo().defaultContent();
   const element = await driver.findElement(By.css("body"));
@@ -121,20 +96,4 @@ export async function focusGameFrame(driver: WebDriver) {
   await focusContentFrame(driver);
   const frame = await driver.findElement(By.id("game-frame"));
   await driver.switchTo().frame(frame);
-}
-
-export async function fullscreenGame(driver: WebDriver) {
-  await wait(500);
-
-  await focusGameFrame(driver);
-  logger.info("waiting for fullscreen button");
-  const fullscreenButton = await driver.wait(until.elementLocated(By.css("[data-btn=fullscreen]")));
-
-  logger.info("clicking fullscreen button");
-  const actions = driver.actions({ async: true });
-  await actions
-    .move(await fullscreenButton.getLocation())
-    .click(fullscreenButton)
-    .perform();
-  logger.info("clicked fullscreen button");
 }
