@@ -1,4 +1,4 @@
-import { exportSave, sendGameCommand } from "./browser/game.js";
+import { sendGameCommand } from "./browser/game.js";
 import { handleMessages } from "./discord/messageHandler.js";
 import { Browser, Builder, WebDriver } from "selenium-webdriver";
 import { writeFile } from "fs/promises";
