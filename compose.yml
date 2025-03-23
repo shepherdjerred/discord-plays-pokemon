@@ -16,9 +16,9 @@ services:
     cap_add:
       - SYS_ADMIN
     volumes:
-      - ./saves:/home/user/Downloads
-      - ./config.toml:/home/user/config.toml
-      - ./logs:/home/user/logs
+      - ./saves:/home/ubuntu/Downloads
+      - ./config.toml:/home/ubuntu/config.toml
+      - ./logs:/home/ubuntu/logs
     environment:
       SIZEW: 1920
       SIZEH: 1080

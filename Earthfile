@@ -57,7 +57,7 @@ deps:
   RUN npm ci
 
 image:
-  FROM --platform=linux/amd64 ghcr.io/selkies-project/nvidia-egl-desktop:20.04-20230906134218
+  FROM --platform=linux/amd64 ghcr.io/selkies-project/nvidia-egl-desktop:24.04-20241222100454
   ARG DEBIAN_FRONTEND=noninteractive
   USER root
   RUN apt update
@@ -65,9 +65,9 @@ image:
   RUN curl -sL https://deb.nodesource.com/setup_lts.x -o /tmp/nodesource_setup.sh
   RUN bash /tmp/nodesource_setup.sh
   RUN apt install -y nodejs
-  WORKDIR /home/user
+  WORKDIR /home/ubuntu
   RUN mkdir -p data
-  USER user
+  USER ubuntu
   RUN kwriteconfig5 --file kscreenlockerrc --group Daemon --key Autolock false
   RUN kwriteconfig5 --file ~/.config/powermanagementprofilesrc --group AC --group DPMSControl --key idleTime 540
   COPY ./packages/backend/package* .
@@ -79,7 +79,7 @@ image:
   RUN cat supervisord.conf | sudo tee -a /etc/supervisord.conf
   RUN rm supervisord.conf
   RUN mkdir Downloads
-  RUN sudo chown -R user:user Downloads
+  RUN sudo chown -R ubuntu:ubuntu Downloads
   SAVE IMAGE --push ghcr.io/shepherdjerred/discord-plays-pokemon:latest
 
 up:
