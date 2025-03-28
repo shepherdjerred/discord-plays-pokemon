@@ -10,7 +10,12 @@ export async function setupDiscord(driver: WebDriver) {
     logger.info("logged in");
     await login(driver);
   }
+  await navigateToTextChannel(driver);
+  await joinVoiceChat(driver);
+
+  // update settings after joining voice chat at least once
   await updateSettings(driver);
+
   await navigateToTextChannel(driver);
   await joinVoiceChat(driver);
   await shareScreen(driver);
@@ -94,6 +99,8 @@ async function updateSettings(driver: WebDriver) {
       currentSettings.stream.modeOptions.threshold = -100;
       currentSettings.default.echoCancellation = false;
       currentSettings.stream.echoCancellation = false;
+      currentSettings.default.noiseCancellation = false;
+      currentSettings.stream.noiseCancellation = false;
       currentSettings.default.automaticGainControl = false;
       currentSettings.stream.automaticGainControl = false;
       window.localStorage.setItem("MediaEngineStore", JSON.stringify(currentSettings));

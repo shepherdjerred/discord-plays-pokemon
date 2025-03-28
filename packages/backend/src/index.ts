@@ -1,4 +1,4 @@
-import { sendGameCommand } from "./browser/game.js";
+import { saveState, sendGameCommand } from "./browser/game.js";
 import { handleMessages } from "./discord/messageHandler.js";
 import { Browser, Builder, WebDriver } from "selenium-webdriver";
 import { writeFile } from "fs/promises";
@@ -84,6 +84,7 @@ if (getConfig().stream.enabled || getConfig().game.enabled) {
   gameDriver = await new Builder().forBrowser(Browser.FIREFOX).setFirefoxOptions(options).build();
   streamDriver = await new Builder().forBrowser(Browser.FIREFOX).setFirefoxOptions(options).build();
 
+
   try {
     await start(gameDriver, streamDriver);
   } catch (error) {
@@ -122,7 +123,7 @@ if (getConfig().game.saves.auto_export.enabled) {
     logger.info("exporting save");
     if (gameDriver) {
       try {
-        // TODO: press CTRL + 1 and download file, or see if the handler does this for us
+        await saveState(gameDriver);
         logger.info("save exported successfully");
       } catch (e) {
         logger.error(e);
@@ -150,7 +151,7 @@ if (getConfig().stream.dynamic_streaming) {
         logger.info("stop sharing screen since there are no longer participants");
         try {
           logger.info("saving game before disconnecting");
-          // TODO: press CTRL + 1 and download file, or see if the handler does this for us
+          await saveState(streamDriver);
           await disconnect(streamDriver);
         } catch (e) {
           logger.error(e);

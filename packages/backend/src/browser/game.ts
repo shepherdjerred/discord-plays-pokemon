@@ -80,6 +80,15 @@ export async function sendGameCommand(driver: WebDriver, command: CommandInput) 
   throw new Error(`unknown modifier ${JSON.stringify(command)}`);
 }
 
+export async function saveState(driver: WebDriver) {
+  await focusGameFrame(driver);
+  logger.info("waiting for save state button");
+  const saveStateButton = await driver.wait(until.elementLocated(By.css("[data-btn=save-state]")));
+  logger.info("clicking save state button");
+  await saveStateButton.click();
+  logger.info("clicked save state button");
+}
+
 export async function focusMainFrame(driver: WebDriver) {
   await driver.switchTo().defaultContent();
   const element = await driver.findElement(By.css("body"));
@@ -96,4 +105,20 @@ export async function focusGameFrame(driver: WebDriver) {
   await focusContentFrame(driver);
   const frame = await driver.findElement(By.id("game-frame"));
   await driver.switchTo().frame(frame);
+}
+
+export async function fullscreenGame(driver: WebDriver) {
+  await wait(500);
+
+  await focusGameFrame(driver);
+  logger.info("waiting for fullscreen button");
+  const fullscreenButton = await driver.wait(until.elementLocated(By.css("[data-btn=fullscreen]")));
+
+  logger.info("clicking fullscreen button");
+  const actions = driver.actions({ async: true });
+  await actions
+    .move(await fullscreenButton.getLocation())
+    .click(fullscreenButton)
+    .perform();
+  logger.info("clicked fullscreen button");
 }

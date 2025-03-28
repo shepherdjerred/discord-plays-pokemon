@@ -5,13 +5,6 @@ services:
     container_name: discord-plays-pokemon
     stdin_open: true
     tty: true
-    # deploy:
-    #   resources:
-    #     reservations:
-    #       devices:
-    #         - driver: nvidia
-    #           count: 1
-    #           capabilities: [gpu]
     privileged: true
     cap_add:
       - SYS_ADMIN
@@ -20,13 +13,14 @@ services:
       - ./config.toml:/home/ubuntu/config.toml
       - ./logs:/home/ubuntu/logs
     environment:
+      KASMVNC_ENABLE: true
       SIZEW: 1920
       SIZEH: 1080
       REFRESH: 60
       PASSWD: password
       BASIC_AUTH_PASSWORD: password
     ports:
-      - 8080:8080
-      - 8081:8081
+      - 8080:8080 # VNC
+      - 8081:8081 # UI
 volumes:
   saves:
