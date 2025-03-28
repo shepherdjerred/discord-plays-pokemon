@@ -19,7 +19,7 @@
     "zod": "^3.22.2"
   },
   "devDependencies": {
-    "@tsconfig/recommended": "1.0.2",
+    "@tsconfig/recommended": "1.0.8",
     "@types/lodash": "^4.14.198",
     "@types/node": "^20.6.0",
     "@typescript-eslint/eslint-plugin": "^6.7.0",
