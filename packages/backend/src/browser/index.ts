@@ -10,10 +10,10 @@ export async function start(gameDriver: WebDriver, streamDriver: WebDriver) {
   }
   if (getConfig().game.enabled) {
     await setupGame(gameDriver);
-    await fullscreenGame(gameDriver);
+    // await fullscreenGame(gameDriver);
     await focusContentFrame(gameDriver);
 
-    // logger.info("fullscreening window");
-    // await gameDriver.manage().window().fullscreen();
+    logger.info("fullscreening window");
+    await gameDriver.manage().window().fullscreen();
   }
 }

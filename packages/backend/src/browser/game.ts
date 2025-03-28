@@ -2,7 +2,6 @@ import { By, WebDriver, until } from "selenium-webdriver";
 import { CommandInput, isBurst, isHold, isHoldB } from "../game/command/commandInput.js";
 import { toGameboyAdvanceKeyInput } from "../game/command/keybinds.js";
 import { wait } from "../util.js";
-import { getLatestSave } from "../game/saves/index.js";
 import { logger } from "../logger.js";
 import { getConfig } from "../config/index.js";
 
@@ -14,13 +13,17 @@ export async function setupGame(driver: WebDriver) {
     await driver.get(getConfig().game.emulator_url);
   }
   await wait(5000);
-  logger.info("selecting frame");
-  await focusContentFrame(driver);
-  logger.info("waiting for play now button");
-  const playNowButton = await driver.wait(until.elementLocated(By.xpath('//a[text()="Play Now"]')));
-  logger.info("clicking play now button");
-  await playNowButton.click();
-  logger.info("clicked button");
+
+  // click anywhere to start the game
+  await driver.actions().click().perform();
+
+  // logger.info("selecting frame");
+  // await focusContentFrame(driver);
+  // logger.info("waiting for play now button");
+  // const playNowButton = await driver.wait(until.elementLocated(By.xpath('//a[text()="Start Game"]')));
+  // logger.info("clicking play now button");
+  // await playNowButton.click();
+  // logger.info("clicked button");
 }
 
 export async function sendGameCommand(driver: WebDriver, command: CommandInput) {
@@ -80,15 +83,6 @@ export async function sendGameCommand(driver: WebDriver, command: CommandInput) 
   throw new Error(`unknown modifier ${JSON.stringify(command)}`);
 }
 
-export async function saveState(driver: WebDriver) {
-  await focusGameFrame(driver);
-  logger.info("waiting for save state button");
-  const saveStateButton = await driver.wait(until.elementLocated(By.css("[data-btn=save-state]")));
-  logger.info("clicking save state button");
-  await saveStateButton.click();
-  logger.info("clicked save state button");
-}
-
 export async function focusMainFrame(driver: WebDriver) {
   await driver.switchTo().defaultContent();
   const element = await driver.findElement(By.css("body"));
@@ -96,15 +90,15 @@ export async function focusMainFrame(driver: WebDriver) {
 }
 
 export async function focusContentFrame(driver: WebDriver) {
-  await driver.switchTo().defaultContent();
-  const frame = await driver.findElement(By.id("ejs-content-frame"));
-  await driver.switchTo().frame(frame);
+  // await driver.switchTo().defaultContent();
+  // const frame = await driver.findElement(By.id("ejs-content-frame"));
+  // await driver.switchTo().frame(frame);
 }
 
 export async function focusGameFrame(driver: WebDriver) {
-  await focusContentFrame(driver);
-  const frame = await driver.findElement(By.id("game-frame"));
-  await driver.switchTo().frame(frame);
+  // await focusContentFrame(driver);
+  // const frame = await driver.findElement(By.id("game-frame"));
+  // await driver.switchTo().frame(frame);
 }
 
 export async function fullscreenGame(driver: WebDriver) {

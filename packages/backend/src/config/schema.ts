@@ -52,16 +52,6 @@ export const ConfigSchema = z.strictObject({
     browser: z.strictObject({
       preferences: z.record(z.string(), z.union([z.boolean(), z.number()])),
     }),
-    saves: z.strictObject({
-      auto_export: z.strictObject({
-        enabled: z.boolean(),
-        interval_in_milliseconds: z.number().nonnegative(),
-      }),
-      auto_import: z.strictObject({
-        enabled: z.boolean(),
-        path: z.string(),
-      }),
-    }),
     commands: z.strictObject({
       enabled: z.boolean(),
       channel_id: z

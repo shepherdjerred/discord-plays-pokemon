@@ -148,15 +148,19 @@
     2: {},
     3: {}
   }
-  EJS_onSaveState = ({ screenshot, state }) => {
-    console.log('save state', screenshot, state)
-    // download
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(new Blob([state], { type: 'application/octet-stream' }));
-    const date = new Date();
-    a.download = `${date.toLocaleString()}.state`;
-    a.click();
+
+  async function save() {
+    var e = EJS_emulator.gameManager.getState();
+    0 < EJS_emulator.callEvent("saveState", {
+      screenshot: await EJS_emulator.gameManager.screenshot(),
+      state: e
+    }) || (c && URL.revokeObjectURL(c), "browser" === EJS_emulator.settings["save-state-location"] && EJS_emulator.saveInBrowserSupported() ? (EJS_emulator.storage.states.put(EJS_emulator.getBaseFileName() + ".state", e), EJS_emulator.displayMessage(EJS_emulator.localization("SAVE SAVED TO BROWSER"))) : (e = new Blob([e]), c = URL.createObjectURL(e), (e = EJS_emulator.createElement("a")).href = c, e.download = EJS_emulator.getBaseFileName() + ".state", e.click()))
   }
+
+  // run save every minute
+  setInterval(() => {
+    save()
+  }, 60000);
 </script>
 <!-- <script src="https://www.emulatorjs.com/loader.js"></script> -->
 <script src="https://cdn.emulatorjs.org/stable/data/loader.js"></script>

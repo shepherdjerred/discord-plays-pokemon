@@ -1,4 +1,4 @@
-import { saveState, sendGameCommand } from "./browser/game.js";
+import { sendGameCommand } from "./browser/game.js";
 import { handleMessages } from "./discord/messageHandler.js";
 import { Browser, Builder, WebDriver } from "selenium-webdriver";
 import { writeFile } from "fs/promises";
@@ -84,7 +84,6 @@ if (getConfig().stream.enabled || getConfig().game.enabled) {
   gameDriver = await new Builder().forBrowser(Browser.FIREFOX).setFirefoxOptions(options).build();
   streamDriver = await new Builder().forBrowser(Browser.FIREFOX).setFirefoxOptions(options).build();
 
-
   try {
     await start(gameDriver, streamDriver);
   } catch (error) {
@@ -116,22 +115,6 @@ if (getConfig().game.enabled && getConfig().game.commands.enabled) {
   });
 }
 
-if (getConfig().game.saves.auto_export.enabled) {
-  logger.info("auto export saves is enabled");
-  // eslint-disable-next-line @typescript-eslint/no-misused-promises
-  setInterval(async () => {
-    logger.info("exporting save");
-    if (gameDriver) {
-      try {
-        await saveState(gameDriver);
-        logger.info("save exported successfully");
-      } catch (e) {
-        logger.error(e);
-      }
-    }
-  }, getConfig().game.saves.auto_export.interval_in_milliseconds);
-}
-
 if (getConfig().stream.dynamic_streaming) {
   logger.info("dynamic streaming is enabled");
   handleChannelUpdate(async (participants) => {
@@ -150,8 +133,6 @@ if (getConfig().stream.dynamic_streaming) {
       } else {
         logger.info("stop sharing screen since there are no longer participants");
         try {
-          logger.info("saving game before disconnecting");
-          await saveState(streamDriver);
           await disconnect(streamDriver);
         } catch (e) {
           logger.error(e);
