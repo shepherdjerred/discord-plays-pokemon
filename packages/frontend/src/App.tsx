@@ -1,4 +1,3 @@
-import "twin.macro";
 import { Notifications } from "./stories/Notifications";
 import { Notification } from "./model/Notification";
 import lodash from "lodash";
@@ -126,9 +125,9 @@ export function App() {
 
   return (
     <>
-      <div tw="bg-white dark:bg-slate-900 min-h-screen min-w-full">
+      <div className="bg-white dark:bg-slate-900 min-h-screen min-w-full">
         <Container>
-          <div tw="flex flex-col justify-center h-full gap-y-5">{page}</div>
+          <div className="flex flex-col justify-center h-full gap-y-5">{page}</div>
         </Container>
       </div>
       <Notifications notifications={notifications} onClose={handleNotificationClose} />

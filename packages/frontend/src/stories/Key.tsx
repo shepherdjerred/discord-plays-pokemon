@@ -1,6 +1,5 @@
 import { KeyboardKey } from "@discord-plays-pokemon/common";
 import useKeyboardJs from "react-use/lib/useKeyboardJs";
-import tw from "twin.macro";
 
 export function Key({
   keyboardKey: { display, key, api },
@@ -14,9 +13,8 @@ export function Key({
   if (isPressed) {
     onKeyDown();
   }
-  const pressedStyles = tw`bg-slate-400`;
   return (
-    <kbd css={[tw`p-3 bg-slate-600 block text-center m-1`, isPressed && pressedStyles]}>
+    <kbd className={`${`p-3 bg-slate-600 block text-center m-1`} ${isPressed ? `bg-slate-400` : ``}`}>
       {display} ({api})
     </kbd>
   );

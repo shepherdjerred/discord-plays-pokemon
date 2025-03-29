@@ -12,5 +12,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-  args: {},
+  args: {
+    onClose: () => {
+      console.log("Notification closed");
+    },
+  },
 };

@@ -14,5 +14,8 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: {
     notifications: [{ title: "", id: "", level: "Info", message: "" }],
+    onClose: () => {
+      console.log("Notification closed");
+    },
   },
 };
