@@ -11,7 +11,7 @@ deps:
 
 src:
   FROM +deps
-  COPY tsconfig*.json vite.config.ts tailwind.config.js postcss.config.js index.html .
+  COPY tsconfig*.json vite.config.ts index.html .
   COPY --dir src public types .
 
 lint:
@@ -28,25 +28,6 @@ build:
   FROM +src
   RUN npm run build
   SAVE ARTIFACT dist AS LOCAL dist
-
-build.storybook:
-  FROM +src
-  COPY --dir .storybook .
-  RUN npm run build:storybook
-  SAVE ARTIFACT storybook-static AS LOCAL storybook-static
-
-deploy.storybook:
-  ARG prod=false
-  FROM ../../+node
-  ENV NETLIFY_SITE_ID=90c26685-f81c-4187-8a22-5fe5a85a6748
-  RUN npm i -g netlify-cli
-  COPY +build.storybook/storybook-static dist
-  RUN --push --secret NETLIFY_AUTH_TOKEN=netlify_token npx netlify-cli link
-  IF [ $prod = "true" ]
-    RUN --push --secret NETLIFY_AUTH_TOKEN=netlify_token npx netlify-cli deploy --dir=dist --prod
-  ELSE
-    RUN --push --secret NETLIFY_AUTH_TOKEN=netlify_token npx netlify-cli deploy --dir=dist
-  END
 
 test:
   FROM +src
