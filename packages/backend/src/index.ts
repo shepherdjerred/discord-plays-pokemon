@@ -13,7 +13,7 @@ import { logger } from "./logger.js";
 import { disconnect, joinVoiceChat, shareScreen } from "./browser/discord.js";
 import { handleChannelUpdate } from "./discord/channelHandler.js";
 import { match } from "ts-pattern";
-import { LoginResponse, StatusResponse } from "@discord-plays-pokemon/common";
+import { LoginResponse, StatusResponse, ScreenshotResponse } from "@discord-plays-pokemon/common";
 import { getConfig } from "./config/index.js";
 
 let gameDriver: WebDriver | undefined;
@@ -56,6 +56,16 @@ if (getConfig().web.enabled) {
         })
         .with({ request: { kind: "screenshot" } }, (event) => {
           logger.info("handling screenshot request", event.request);
+          try {
+            const screenshot = gameDriver.takeScreenshot();
+            const response: ScreenshotResponse = {
+              kind: "screenshot",
+              value: screenshot,
+            }
+            event.socket.emit("response", response);
+          } catch (e) {
+            logger.error(e);
+          }
         })
         .with({ request: { kind: "status" } }, (event) => {
           logger.info("handling status request", event.request);
