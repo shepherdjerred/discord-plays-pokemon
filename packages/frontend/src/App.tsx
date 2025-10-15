@@ -7,7 +7,7 @@ import { P, match } from "ts-pattern";
 import { GamePage } from "./pages/GamePage";
 import { LoginPage } from "./pages/LoginPage";
 import { useInterval } from "react-use";
-import { randomId } from "./util";
+import { randomId, downloadScreenshot } from "./util";
 import { Connection } from "./model/Connection";
 import { socket } from "./socket";
 import {
@@ -56,6 +56,9 @@ export function App() {
           })
           .with({ kind: "status" }, (response) => {
             setStatus(response.value);
+          })
+          .with({ kind: "screenshot" }, (response) => {
+            downloadScreenshot(response.screenshot);
           })
           .exhaustive();
       }
