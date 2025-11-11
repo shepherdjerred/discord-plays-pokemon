@@ -3,7 +3,7 @@
 ## Requirements
 
 - [NodeJS LTS (18.x)](https://nodejs.org/en)
-- [Earthly](https://earthly.dev/get-earthly)
+- [Dagger](https://docs.dagger.io/install)
 - [Docker](https://www.docker.com/products/docker-desktop/)
 
 ## Structure
@@ -18,19 +18,19 @@ packages/
 ├─ frontend/
 ```
 
-## Using Earthly
+## Using Dagger
 
-You can build the source code by running `earthly +build`. This will build the frontend, backend, documentation, and common components. A Docker image can be created by running `earthly +image`.
+You can build the source code by running `dagger call build --source=.`. This will build the frontend, backend, and common components. A Docker image can be created by running `dagger call build-image --source=.`.
 
 !!! note
 
-    Earthly automatically tracks dependencies and performs necessary ordering, caching, parallelization, etc. You don't ever need to run one target before another.
+    Dagger automatically handles dependencies, caching, and parallelization for optimal build performance.
 
-`earthly +up` and `earthly +down` can be used to build and start the project.
+To run the full CI pipeline locally, use `dagger call ci --source=. --version=dev --git-sha=$(git rev-parse HEAD) --env=dev`.
 
-The root Earthfile has more targets, which can be listed by running `earthly +ls`.
+Available Dagger functions can be viewed by running `dagger functions`.
 
-## Without Earthly
+## Without Dagger
 
 Sometimes it is useful to not be working with a container. In this case, you can build the project directly on your machine.
 

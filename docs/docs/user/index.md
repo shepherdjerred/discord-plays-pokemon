@@ -77,7 +77,11 @@ Put your desired ROM in `packages/frontend/public/roms/`. Edit `packages/fronten
 
     This application only works out-of-the-box with Game Boy Advance ROMs, although it wouldn't be too hard to extend this application for additional systems that EmulatorJS supports.
 
-Run `earthly +up`. This will build the application and start the Docker containers. On your machine, navigate to [http://localhost:8080](http://localhost:8080). Login with the credentials `user` and `password`. This will stream the virtual Linux desktop's screen to your browser, where you can see program execution and interact with the game and Discord application directly.
+Use Docker Compose to build and start the application: `docker compose up --build`. On your machine, navigate to [http://localhost:8080](http://localhost:8080). Login with the credentials `user` and `password`. This will stream the virtual Linux desktop's screen to your browser, where you can see program execution and interact with the game and Discord application directly.
+
+!!! note
+
+    For development and CI/CD, this project uses Dagger. See the [development guide](../development/index.md) for more information.
 
 ## Discord Settings
 
