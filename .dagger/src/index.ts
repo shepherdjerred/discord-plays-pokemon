@@ -1,32 +1,28 @@
 import { func, argument, Directory, object, Secret, Container, dag } from "@dagger.io/dagger";
+import { logWithTimestamp, withTiming } from "@shepherdjerred/dagger-utils";
 import { lintCommon, buildCommon, testCommon } from "./common";
 import { lintBackend, buildBackend, testBackend } from "./backend";
 import { lintFrontend, buildFrontend, testFrontend } from "./frontend";
 import { buildDockerImage, publishDockerImage } from "./docker";
 import { getNodeContainer } from "./base";
 
-// Helper function to log with timestamp
-function logWithTimestamp(message: string): void {
-  console.log(`[${new Date().toISOString()}] ${message}`);
-}
-
-// Helper function to measure execution time
-async function withTiming<T>(operation: string, fn: () => Promise<T>): Promise<T> {
-  const start = Date.now();
-  logWithTimestamp(`Starting ${operation}...`);
-  try {
-    const result = await fn();
-    const duration = Date.now() - start;
-    logWithTimestamp(`✅ ${operation} completed in ${duration.toString()}ms`);
-    return result;
-  } catch (error) {
-    const duration = Date.now() - start;
-    logWithTimestamp(
-      `❌ ${operation} failed after ${duration.toString()}ms: ${error instanceof Error ? error.message : String(error)}`,
-    );
-    throw error;
-  }
-}
+/**
+ * Common ignore patterns for source directories
+ */
+const SOURCE_IGNORE_PATTERNS = [
+  "node_modules",
+  "dist",
+  "build",
+  ".cache",
+  "*.log",
+  ".env*",
+  "!.env.example",
+  ".dagger",
+  "coverage",
+  "common.tgz",
+  "packages/frontend/public/emulatorjs",
+  "packages/frontend/public/roms",
+];
 
 @object()
 export class DiscordPlaysPokemon {
@@ -38,20 +34,7 @@ export class DiscordPlaysPokemon {
   @func()
   async check(
     @argument({
-      ignore: [
-        "node_modules",
-        "dist",
-        "build",
-        ".cache",
-        "*.log",
-        ".env*",
-        "!.env.example",
-        ".dagger",
-        "coverage",
-        "common.tgz",
-        "packages/frontend/public/emulatorjs",
-        "packages/frontend/public/roms",
-      ],
+      ignore: SOURCE_IGNORE_PATTERNS,
       defaultPath: ".",
     })
     source: Directory,
@@ -86,7 +69,7 @@ export class DiscordPlaysPokemon {
     // Run all operations in parallel
     await Promise.all(operations.map((op) => op()));
 
-    return "✅ All checks passed successfully!";
+    return "All checks passed successfully!";
   }
 
   /**
@@ -99,20 +82,7 @@ export class DiscordPlaysPokemon {
   @func()
   async build(
     @argument({
-      ignore: [
-        "node_modules",
-        "dist",
-        "build",
-        ".cache",
-        "*.log",
-        ".env*",
-        "!.env.example",
-        ".dagger",
-        "coverage",
-        "common.tgz",
-        "packages/frontend/public/emulatorjs",
-        "packages/frontend/public/roms",
-      ],
+      ignore: SOURCE_IGNORE_PATTERNS,
       defaultPath: ".",
     })
     source: Directory,
@@ -137,7 +107,7 @@ export class DiscordPlaysPokemon {
     // Run all operations in parallel
     await Promise.all(operations.map((op) => op()));
 
-    return `✅ All packages built successfully for version ${version} (${gitSha})`;
+    return `All packages built successfully for version ${version} (${gitSha})`;
   }
 
   /**
@@ -148,34 +118,19 @@ export class DiscordPlaysPokemon {
   @func()
   async prettier(
     @argument({
-      ignore: [
-        "node_modules",
-        "dist",
-        "build",
-        ".cache",
-        "*.log",
-        ".env*",
-        "!.env.example",
-        ".dagger",
-        "coverage",
-        "common.tgz",
-        "packages/frontend/public/emulatorjs",
-        "packages/frontend/public/roms",
-      ],
+      ignore: SOURCE_IGNORE_PATTERNS,
       defaultPath: ".",
     })
     source: Directory,
   ): Promise<string> {
     await withTiming("Prettier check", async () => {
-      await getNodeContainer()
-        .withDirectory("/workspace", source)
-        .withWorkdir("/workspace")
+      await getNodeContainer(source)
         .withExec(["npm", "ci"])
         .withExec(["npm", "run", "prettier"])
         .sync();
     });
 
-    return "✅ Prettier formatting check passed!";
+    return "Prettier formatting check passed!";
   }
 
   /**
@@ -186,20 +141,7 @@ export class DiscordPlaysPokemon {
   @func()
   async markdownlint(
     @argument({
-      ignore: [
-        "node_modules",
-        "dist",
-        "build",
-        ".cache",
-        "*.log",
-        ".env*",
-        "!.env.example",
-        ".dagger",
-        "coverage",
-        "common.tgz",
-        "packages/frontend/public/emulatorjs",
-        "packages/frontend/public/roms",
-      ],
+      ignore: SOURCE_IGNORE_PATTERNS,
       defaultPath: ".",
     })
     source: Directory,
@@ -214,7 +156,7 @@ export class DiscordPlaysPokemon {
         .sync();
     });
 
-    return "✅ Markdownlint check passed!";
+    return "Markdownlint check passed!";
   }
 
   /**
@@ -227,20 +169,7 @@ export class DiscordPlaysPokemon {
   @func()
   async buildImage(
     @argument({
-      ignore: [
-        "node_modules",
-        "dist",
-        "build",
-        ".cache",
-        "*.log",
-        ".env*",
-        "!.env.example",
-        ".dagger",
-        "coverage",
-        "common.tgz",
-        "packages/frontend/public/emulatorjs",
-        "packages/frontend/public/roms",
-      ],
+      ignore: SOURCE_IGNORE_PATTERNS,
       defaultPath: ".",
     })
     source: Directory,
@@ -264,20 +193,7 @@ export class DiscordPlaysPokemon {
   @func()
   async publishImage(
     @argument({
-      ignore: [
-        "node_modules",
-        "dist",
-        "build",
-        ".cache",
-        "*.log",
-        ".env*",
-        "!.env.example",
-        ".dagger",
-        "coverage",
-        "common.tgz",
-        "packages/frontend/public/emulatorjs",
-        "packages/frontend/public/roms",
-      ],
+      ignore: SOURCE_IGNORE_PATTERNS,
       defaultPath: ".",
     })
     source: Directory,
@@ -304,20 +220,7 @@ export class DiscordPlaysPokemon {
   @func()
   async ci(
     @argument({
-      ignore: [
-        "node_modules",
-        "dist",
-        "build",
-        ".cache",
-        "*.log",
-        ".env*",
-        "!.env.example",
-        ".dagger",
-        "coverage",
-        "common.tgz",
-        "packages/frontend/public/emulatorjs",
-        "packages/frontend/public/roms",
-      ],
+      ignore: SOURCE_IGNORE_PATTERNS,
       defaultPath: ".",
     })
     source: Directory,
@@ -361,7 +264,7 @@ export class DiscordPlaysPokemon {
       logWithTimestamp(`Published Docker image: ${refs.join(", ")}`);
     }
 
-    const completionMessage = `✅ CI pipeline completed successfully for version ${version} (${gitSha}) in ${env || "dev"} environment`;
+    const completionMessage = `CI pipeline completed successfully for version ${version} (${gitSha}) in ${env || "dev"} environment`;
     logWithTimestamp(completionMessage);
     return completionMessage;
   }

@@ -1,5 +1,5 @@
 import { Directory, Container } from "@dagger.io/dagger";
-import { getNodeContainer } from "./base";
+import { getNodeContainer } from "@shepherdjerred/dagger-utils";
 import { getCommonPackage } from "./common";
 
 /**
