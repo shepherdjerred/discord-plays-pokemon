@@ -6,24 +6,6 @@ import { lintFrontend, buildFrontend, testFrontend } from "./frontend";
 import { buildDockerImage, publishDockerImage } from "./docker";
 import { getNodeContainer } from "./base";
 
-/**
- * Common ignore patterns for source directories
- */
-const SOURCE_IGNORE_PATTERNS = [
-  "node_modules",
-  "dist",
-  "build",
-  ".cache",
-  "*.log",
-  ".env*",
-  "!.env.example",
-  ".dagger",
-  "coverage",
-  "common.tgz",
-  "packages/frontend/public/emulatorjs",
-  "packages/frontend/public/roms",
-];
-
 @object()
 export class DiscordPlaysPokemon {
   /**
@@ -34,7 +16,7 @@ export class DiscordPlaysPokemon {
   @func()
   async check(
     @argument({
-      ignore: SOURCE_IGNORE_PATTERNS,
+      ignore: ["node_modules", "dist", "build", ".cache", "*.log", ".env*", "!.env.example", ".dagger", "coverage", "common.tgz", "packages/frontend/public/emulatorjs", "packages/frontend/public/roms"],
       defaultPath: ".",
     })
     source: Directory,
@@ -82,7 +64,7 @@ export class DiscordPlaysPokemon {
   @func()
   async build(
     @argument({
-      ignore: SOURCE_IGNORE_PATTERNS,
+      ignore: ["node_modules", "dist", "build", ".cache", "*.log", ".env*", "!.env.example", ".dagger", "coverage", "common.tgz", "packages/frontend/public/emulatorjs", "packages/frontend/public/roms"],
       defaultPath: ".",
     })
     source: Directory,
@@ -118,7 +100,7 @@ export class DiscordPlaysPokemon {
   @func()
   async prettier(
     @argument({
-      ignore: SOURCE_IGNORE_PATTERNS,
+      ignore: ["node_modules", "dist", "build", ".cache", "*.log", ".env*", "!.env.example", ".dagger", "coverage", "common.tgz", "packages/frontend/public/emulatorjs", "packages/frontend/public/roms"],
       defaultPath: ".",
     })
     source: Directory,
@@ -141,7 +123,7 @@ export class DiscordPlaysPokemon {
   @func()
   async markdownlint(
     @argument({
-      ignore: SOURCE_IGNORE_PATTERNS,
+      ignore: ["node_modules", "dist", "build", ".cache", "*.log", ".env*", "!.env.example", ".dagger", "coverage", "common.tgz", "packages/frontend/public/emulatorjs", "packages/frontend/public/roms"],
       defaultPath: ".",
     })
     source: Directory,
@@ -169,7 +151,7 @@ export class DiscordPlaysPokemon {
   @func()
   async buildImage(
     @argument({
-      ignore: SOURCE_IGNORE_PATTERNS,
+      ignore: ["node_modules", "dist", "build", ".cache", "*.log", ".env*", "!.env.example", ".dagger", "coverage", "common.tgz", "packages/frontend/public/emulatorjs", "packages/frontend/public/roms"],
       defaultPath: ".",
     })
     source: Directory,
@@ -193,7 +175,7 @@ export class DiscordPlaysPokemon {
   @func()
   async publishImage(
     @argument({
-      ignore: SOURCE_IGNORE_PATTERNS,
+      ignore: ["node_modules", "dist", "build", ".cache", "*.log", ".env*", "!.env.example", ".dagger", "coverage", "common.tgz", "packages/frontend/public/emulatorjs", "packages/frontend/public/roms"],
       defaultPath: ".",
     })
     source: Directory,
@@ -220,7 +202,7 @@ export class DiscordPlaysPokemon {
   @func()
   async ci(
     @argument({
-      ignore: SOURCE_IGNORE_PATTERNS,
+      ignore: ["node_modules", "dist", "build", ".cache", "*.log", ".env*", "!.env.example", ".dagger", "coverage", "common.tgz", "packages/frontend/public/emulatorjs", "packages/frontend/public/roms"],
       defaultPath: ".",
     })
     source: Directory,
