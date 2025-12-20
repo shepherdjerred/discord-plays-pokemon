@@ -11,9 +11,9 @@ export function randomId(): string {
 }
 
 export function downloadScreenshot(data: string) {
-  var blob = new Blob([data], {type: "image/png"});
+  const blob = new Blob([data], {type: "image/png"});
   const a = document.createElement('a');
-  var url = URL.createObjectURL(blob);
+  const url = URL.createObjectURL(blob);
   a.href = url;
   a.download = 'dscrdplyspkmn-screenshot.png';
   a.click();
