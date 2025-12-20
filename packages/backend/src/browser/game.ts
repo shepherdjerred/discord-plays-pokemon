@@ -89,13 +89,13 @@ export async function focusMainFrame(driver: WebDriver) {
   await element.click();
 }
 
-export async function focusContentFrame(driver: WebDriver) {
+export async function focusContentFrame(_driver: WebDriver) {
   // await driver.switchTo().defaultContent();
   // const frame = await driver.findElement(By.id("ejs-content-frame"));
   // await driver.switchTo().frame(frame);
 }
 
-export async function focusGameFrame(driver: WebDriver) {
+export async function focusGameFrame(_driver: WebDriver) {
   // await focusContentFrame(driver);
   // const frame = await driver.findElement(By.id("game-frame"));
   // await driver.switchTo().frame(frame);

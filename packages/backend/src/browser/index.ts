@@ -1,5 +1,5 @@
 import { WebDriver } from "selenium-webdriver";
-import { focusContentFrame, fullscreenGame, setupGame } from "./game.js";
+import { focusContentFrame, setupGame } from "./game.js";
 import { setupDiscord } from "./discord.js";
 import { getConfig } from "../config/index.js";
 import { logger } from "../logger.js";
