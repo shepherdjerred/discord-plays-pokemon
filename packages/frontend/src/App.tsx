@@ -58,7 +58,7 @@ export function App() {
             setStatus(response.value);
           })
           .with({ kind: "screenshot" }, (response) => {
-            downloadScreenshot(response.screenshot);
+            downloadScreenshot(response.value);
           })
           .exhaustive();
       }
