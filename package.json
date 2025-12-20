@@ -2,9 +2,9 @@
   "name": "@discord-plays-pokemon/monorepo",
   "version": "1.0.0",
   "scripts": {
-    "start": "npx tsx packages/backend/src/index.ts",
-    "build": "npm run build --workspaces",
-    "test": "npm run test --workspaces",
+    "start": "bun packages/backend/src/index.ts",
+    "build": "bun run --filter '*' build",
+    "test": "bun run --filter '*' test",
     "prettier": "prettier .",
     "prettier:fix": "prettier -w ."
   },
@@ -17,6 +17,5 @@
     "prettier": "^3.5.3",
     "prettier-plugin-tailwindcss": "^0.6.11"
   },
-  "engineStrict": true,
   "dependencies": {}
 }
