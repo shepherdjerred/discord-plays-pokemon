@@ -56,16 +56,22 @@ if (getConfig().web.enabled) {
         })
         .with({ request: { kind: "screenshot" } }, (event) => {
           logger.info("handling screenshot request", event.request);
-          try {
-            const screenshot = gameDriver.takeScreenshot();
-            const response: ScreenshotResponse = {
-              kind: "screenshot",
-              value: screenshot,
-            }
-            event.socket.emit("response", response);
-          } catch (e) {
-            logger.error(e);
+          if (gameDriver === undefined) {
+            logger.error("gameDriver is not initialized");
+            return;
           }
+          void (async () => {
+            try {
+              const screenshot = await gameDriver.takeScreenshot();
+              const response: ScreenshotResponse = {
+                kind: "screenshot",
+                value: screenshot,
+              };
+              event.socket.emit("response", response);
+            } catch (e) {
+              logger.error(e);
+            }
+          })();
         })
         .with({ request: { kind: "status" } }, (event) => {
           logger.info("handling status request", event.request);
