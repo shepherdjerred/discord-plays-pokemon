@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(gh pr list:*)",
+      "Bash(npm install:*)",
+      "Bash(npm run typecheck:*)",
+      "Bash(npm run lint)",
+      "Bash(git fetch:*)",
+      "Bash(git merge:*)",
+      "Bash(gh run list:*)",
+      "Bash(gh run view:*)",
+      "Bash(gh run watch:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(gh workflow run:*)",
+      "Bash(gh workflow:*)",
+      "Bash(npm run lint:*)",
+      "Bash(cat:*)",
+      "mcp__github__get_pull_request",
+      "mcp__github__get_pull_request_status",
+      "mcp__github__merge_pull_request",
+      "Bash(git checkout:*)",
+      "Bash(git pull:*)"
+    ]
+  }
+}
