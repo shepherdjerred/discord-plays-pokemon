@@ -33,10 +33,11 @@ export function createWebServer({
     }
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  /* eslint-disable @typescript-eslint/no-unsafe-assignment */
   return {
     server,
     socket,
     app,
   };
+  /* eslint-enable @typescript-eslint/no-unsafe-assignment */
 }
