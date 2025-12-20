@@ -16,7 +16,9 @@ export function createWebServer({
 }) {
   logger.info("creating web server");
 
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const app = createExpressApp({ isCorsEnabled, webAssetsPath });
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
   const server = createServer(app);
 
   let socket;
@@ -31,6 +33,7 @@ export function createWebServer({
     }
   });
 
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   return {
     server,
     socket,
