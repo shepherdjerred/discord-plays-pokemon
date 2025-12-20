@@ -1,6 +1,5 @@
 import { existsSync } from "fs";
 import { resolve } from "path";
-import { exit } from "process";
 import { logger } from "./logger.js";
 
 export function wait(milliseconds: number): Promise<void> {

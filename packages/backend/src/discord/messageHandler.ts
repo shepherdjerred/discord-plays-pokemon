@@ -11,12 +11,14 @@ export let lastCommand = new Date();
 
 export function handleMessages(fn: (commandInput: CommandInput) => Promise<void>) {
   logger.info("ready to handle commands");
-  client.on(Events.MessageCreate, async (event) => {
-    try {
-      return handleMessage(event, fn);
-    } catch (error) {
-      logger.info(error);
-    }
+  client.on(Events.MessageCreate, (event) => {
+    void (async () => {
+      try {
+        return handleMessage(event, fn);
+      } catch (error) {
+        logger.info(error);
+      }
+    })();
   });
 }
 

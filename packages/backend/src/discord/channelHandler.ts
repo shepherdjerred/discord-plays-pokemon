@@ -1,10 +1,11 @@
-import { Events, GuildMember } from "discord.js";
+import { Events } from "discord.js";
 import client from "./client.js";
 import { getConfig } from "../config/index.js";
 import { logger } from "../logger.js";
 
 export function handleChannelUpdate(updateFn: (participants: number) => Promise<void>) {
-  client.on(Events.VoiceStateUpdate, async (oldState, newState) => {
+  client.on(Events.VoiceStateUpdate, (oldState, newState) => {
+    void (async () => {
     logger.info("voice state update");
     const newChannel = newState.channelId;
     const oldChannel = oldState.channelId;
@@ -21,5 +22,6 @@ export function handleChannelUpdate(updateFn: (participants: number) => Promise<
         logger.error("channel is not voice based");
       }
     }
+    })();
   });
 }
