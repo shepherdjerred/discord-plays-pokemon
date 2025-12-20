@@ -1,8 +1,5 @@
 // https://codepen.io/vinztt/pen/XjEyvZ
-export function LoadingSpinner({} // height = 60,
-// width = 60,
-// border = 3,
-: {
+export function LoadingSpinner(_props: {
   height?: number;
   width?: number;
   border?: number;
