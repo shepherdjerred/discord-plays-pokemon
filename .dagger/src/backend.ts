@@ -1,5 +1,5 @@
 import { Directory, Container } from "@dagger.io/dagger";
-import { getNodeContainer } from "@shepherdjerred/dagger-utils";
+import { getBunContainer } from "@shepherdjerred/dagger-utils";
 import { getCommonPackage } from "./common";
 
 /**
@@ -11,17 +11,17 @@ export async function installBackendDeps(workspaceSource: Directory): Promise<Co
   // First get the common package
   const commonDir = await getCommonPackage(workspaceSource);
 
-  return getNodeContainer()
+  return getBunContainer()
     .withFile("/workspace/package.json", workspaceSource.file("package.json"))
-    .withFile("/workspace/package-lock.json", workspaceSource.file("package-lock.json"))
+    .withFile("/workspace/bun.lock", workspaceSource.file("bun.lock"))
     .withDirectory("/workspace/packages/backend", workspaceSource.directory("packages/backend"))
     .withDirectory("/workspace/packages/common", commonDir)
     .withWorkdir("/workspace")
-    .withExec(["npm", "ci"])
+    .withExec(["bun", "install", "--frozen-lockfile"])
     .withWorkdir("/workspace/packages/backend")
     .withFile("common.tgz", commonDir.file("discord-plays-pokemon-common-1.0.0.tgz"))
-    .withExec(["npm", "install", "common.tgz"])
-    .withExec(["npm", "install"]);
+    .withExec(["bun", "add", "./common.tgz"])
+    .withExec(["bun", "install"]);
 }
 
 /**
@@ -30,7 +30,7 @@ export async function installBackendDeps(workspaceSource: Directory): Promise<Co
  * @returns The container with linting results
  */
 export async function lintBackend(workspaceSource: Directory): Promise<Container> {
-  return (await installBackendDeps(workspaceSource)).withExec(["npm", "run", "lint:check"]);
+  return (await installBackendDeps(workspaceSource)).withExec(["bun", "run", "lint:check"]);
 }
 
 /**
@@ -39,7 +39,7 @@ export async function lintBackend(workspaceSource: Directory): Promise<Container
  * @returns The container with build artifacts
  */
 export async function buildBackend(workspaceSource: Directory): Promise<Container> {
-  return (await installBackendDeps(workspaceSource)).withExec(["npm", "run", "build"]);
+  return (await installBackendDeps(workspaceSource)).withExec(["bun", "run", "build"]);
 }
 
 /**
@@ -48,7 +48,7 @@ export async function buildBackend(workspaceSource: Directory): Promise<Containe
  * @returns The container with test results
  */
 export async function testBackend(workspaceSource: Directory): Promise<Container> {
-  return (await installBackendDeps(workspaceSource)).withExec(["npm", "run", "test"]);
+  return (await installBackendDeps(workspaceSource)).withExec(["bun", "run", "test"]);
 }
 
 /**

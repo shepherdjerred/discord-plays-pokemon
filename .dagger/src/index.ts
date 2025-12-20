@@ -4,7 +4,7 @@ import { lintCommon, buildCommon, testCommon } from "./common";
 import { lintBackend, buildBackend, testBackend } from "./backend";
 import { lintFrontend, buildFrontend, testFrontend } from "./frontend";
 import { buildDockerImage, publishDockerImage } from "./docker";
-import { getNodeContainer } from "./base";
+import { getBunContainer } from "./base";
 
 @object()
 export class DiscordPlaysPokemon {
@@ -106,9 +106,9 @@ export class DiscordPlaysPokemon {
     source: Directory,
   ): Promise<string> {
     await withTiming("Prettier check", async () => {
-      await getNodeContainer(source)
-        .withExec(["npm", "ci"])
-        .withExec(["npm", "run", "prettier"])
+      await getBunContainer(source)
+        .withExec(["bun", "install", "--frozen-lockfile"])
+        .withExec(["bun", "run", "prettier"])
         .sync();
     });
 
