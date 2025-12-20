@@ -1,5 +1,4 @@
-import { createServer, RequestListener } from "http";
-import { Application } from "express";
+import { createServer } from "http";
 import { logger } from "../logger.js";
 import { createExpressApp } from "./express.js";
 import { createSocket } from "./socket.js";
@@ -17,8 +16,8 @@ export function createWebServer({
 }) {
   logger.info("creating web server");
 
-  const app: Application = createExpressApp({ isCorsEnabled, webAssetsPath });
-  const server = createServer(app as unknown as RequestListener);
+  const app = createExpressApp({ isCorsEnabled, webAssetsPath });
+  const server = createServer(app);
 
   let socket;
   if (isApiEnabled) {
