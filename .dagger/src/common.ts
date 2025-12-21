@@ -7,10 +7,13 @@ import { getBaseBunContainer } from "./base";
  * @returns The container with dependencies installed
  */
 export function installCommonDeps(workspaceSource: Directory): Container {
+  // Mount the full workspace to satisfy bun workspace requirements
   return getBaseBunContainer()
     .withFile("/workspace/package.json", workspaceSource.file("package.json"))
     .withFile("/workspace/bun.lock", workspaceSource.file("bun.lock"))
     .withDirectory("/workspace/packages/common", workspaceSource.directory("packages/common"))
+    .withDirectory("/workspace/packages/backend", workspaceSource.directory("packages/backend"))
+    .withDirectory("/workspace/packages/frontend", workspaceSource.directory("packages/frontend"))
     .withWorkdir("/workspace")
     .withExec(["bun", "install", "--frozen-lockfile"])
     .withWorkdir("/workspace/packages/common")
