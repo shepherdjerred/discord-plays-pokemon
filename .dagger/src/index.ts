@@ -250,4 +250,90 @@ export class DiscordPlaysPokemon {
     logWithTimestamp(completionMessage);
     return completionMessage;
   }
+
+  /**
+   * Build the MkDocs documentation
+   * @param source The source directory
+   * @returns The built docs directory
+   */
+  @func()
+  async buildDocs(
+    @argument({
+      ignore: ["**/node_modules", "**/dist", "**/build", "**/.cache", "*.log", ".env*", "!.env.example", ".dagger", "**/coverage", "common.tgz", "packages/frontend/public/emulatorjs", "packages/frontend/public/roms"],
+      defaultPath: ".",
+    })
+    source: Directory,
+  ): Promise<Directory> {
+    logWithTimestamp("Building MkDocs documentation...");
+
+    const container = dag
+      .container()
+      .from("squidfunk/mkdocs-material:latest")
+      .withDirectory("/docs", source.directory("docs"))
+      .withWorkdir("/docs")
+      .withExec(["build"]);
+
+    const docsDir = container.directory("/docs/site");
+
+    logWithTimestamp("MkDocs documentation built successfully");
+    return docsDir;
+  }
+
+  /**
+   * Build a container with the MkDocs documentation
+   * @param source The source directory
+   * @returns A container with nginx serving the documentation
+   */
+  @func()
+  async buildDocsContainer(
+    @argument({
+      ignore: ["**/node_modules", "**/dist", "**/build", "**/.cache", "*.log", ".env*", "!.env.example", ".dagger", "**/coverage", "common.tgz", "packages/frontend/public/emulatorjs", "packages/frontend/public/roms"],
+      defaultPath: ".",
+    })
+    source: Directory,
+  ): Promise<Container> {
+    logWithTimestamp("Building docs container...");
+
+    const docsDir = await this.buildDocs(source);
+
+    const container = dag
+      .container()
+      .from("nginx:alpine")
+      .withDirectory("/usr/share/nginx/html", docsDir)
+      .withExposedPort(80);
+
+    logWithTimestamp("Docs container built successfully");
+    return container;
+  }
+
+  /**
+   * Publish the docs container to GHCR
+   * @param source The source directory
+   * @param imageName The full image name (e.g., ghcr.io/shepherdjerred/dpp-docs:latest)
+   * @param ghcrUsername The GHCR username
+   * @param ghcrPassword The GHCR password/token
+   * @returns The published image reference
+   */
+  @func()
+  async publishDocs(
+    @argument({
+      ignore: ["**/node_modules", "**/dist", "**/build", "**/.cache", "*.log", ".env*", "!.env.example", ".dagger", "**/coverage", "common.tgz", "packages/frontend/public/emulatorjs", "packages/frontend/public/roms"],
+      defaultPath: ".",
+    })
+    source: Directory,
+    @argument() imageName: string,
+    @argument() ghcrUsername: string,
+    ghcrPassword: Secret,
+  ): Promise<string> {
+    logWithTimestamp(`Publishing docs container to ${imageName}...`);
+
+    const container = await this.buildDocsContainer(source);
+
+    const publishedRef = await withTiming("publish docs to GHCR", async () => {
+      return container.withRegistryAuth("ghcr.io", ghcrUsername, ghcrPassword).publish(imageName);
+    });
+
+    logWithTimestamp(`Docs container published: ${publishedRef}`);
+    return publishedRef;
+  }
 }
