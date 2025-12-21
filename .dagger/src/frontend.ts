@@ -15,6 +15,7 @@ export async function installFrontendDeps(workspaceSource: Directory): Promise<C
     .withFile("/workspace/package.json", workspaceSource.file("package.json"))
     .withFile("/workspace/bun.lock", workspaceSource.file("bun.lock"))
     .withDirectory("/workspace/packages/frontend", workspaceSource.directory("packages/frontend"))
+    .withDirectory("/workspace/packages/backend", workspaceSource.directory("packages/backend"))
     .withDirectory("/workspace/packages/common", commonDir)
     .withWorkdir("/workspace")
     .withExec(["bun", "install", "--frozen-lockfile"])
