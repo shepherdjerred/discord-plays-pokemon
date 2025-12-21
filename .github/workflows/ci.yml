@@ -98,6 +98,23 @@ jobs:
 
           dagger call ci "${ARGS[@]}"
 
+      - name: Publish Docs to GHCR
+        if: steps.env.outputs.env == 'prod'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          dagger call publish-docs \
+            --source=. \
+            --image-name="ghcr.io/shepherdjerred/dpp-docs:latest" \
+            --ghcr-username="${{ github.actor }}" \
+            --ghcr-password=env://GITHUB_TOKEN
+
+          dagger call publish-docs \
+            --source=. \
+            --image-name="ghcr.io/shepherdjerred/dpp-docs:${{ github.sha }}" \
+            --ghcr-username="${{ github.actor }}" \
+            --ghcr-password=env://GITHUB_TOKEN
+
 permissions:
   contents: read
   packages: write
