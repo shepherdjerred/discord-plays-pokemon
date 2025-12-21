@@ -10,7 +10,7 @@ jobs:
     runs-on: [discord-plays-pokemon-runner-set]
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Set up Bun
         uses: oven-sh/setup-bun@v2
