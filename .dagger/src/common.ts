@@ -1,5 +1,5 @@
 import { Directory, Container } from "@dagger.io/dagger";
-import { getBunContainer } from "@shepherdjerred/dagger-utils";
+import { getBaseBunContainer } from "./base";
 
 /**
  * Install dependencies for the common package
@@ -7,7 +7,7 @@ import { getBunContainer } from "@shepherdjerred/dagger-utils";
  * @returns The container with dependencies installed
  */
 export function installCommonDeps(workspaceSource: Directory): Container {
-  return getBunContainer()
+  return getBaseBunContainer()
     .withFile("/workspace/package.json", workspaceSource.file("package.json"))
     .withFile("/workspace/bun.lock", workspaceSource.file("bun.lock"))
     .withDirectory("/workspace/packages/common", workspaceSource.directory("packages/common"))

@@ -1,5 +1,5 @@
 import { Directory, Container } from "@dagger.io/dagger";
-import { getBunContainer } from "@shepherdjerred/dagger-utils";
+import { getBaseBunContainer } from "./base";
 import { getCommonPackage } from "./common";
 
 /**
@@ -11,7 +11,7 @@ export async function installBackendDeps(workspaceSource: Directory): Promise<Co
   // First get the common package
   const commonDir = await getCommonPackage(workspaceSource);
 
-  return getBunContainer()
+  return getBaseBunContainer()
     .withFile("/workspace/package.json", workspaceSource.file("package.json"))
     .withFile("/workspace/bun.lock", workspaceSource.file("bun.lock"))
     .withDirectory("/workspace/packages/backend", workspaceSource.directory("packages/backend"))
