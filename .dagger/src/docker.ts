@@ -45,7 +45,7 @@ export async function buildDockerImage(
       "540",
     ])
     .withFile("package.json", backendDir.file("package.json"))
-    .withFile("bun.lock", backendDir.file("bun.lock"))
+    .withFile("bun.lock", workspaceSource.file("bun.lock"))
     .withDirectory("packages/backend", backendDir)
     .withDirectory("packages/frontend", frontendDist)
     .withFile("run.sh", workspaceSource.file("misc/run.sh"))
