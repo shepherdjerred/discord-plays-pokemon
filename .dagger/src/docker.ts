@@ -1,5 +1,4 @@
 import { Directory, Container, Secret, dag } from "@dagger.io/dagger";
-import { publishToGhcrMultiple } from "@shepherdjerred/dagger-utils";
 import { getBackendWithDeps } from "./backend";
 import { getFrontendBuild } from "./frontend";
 
@@ -86,13 +85,17 @@ export async function publishDockerImage(
     throw new Error("GHCR credentials are required for publishing");
   }
 
-  return publishToGhcrMultiple({
-    container: image,
-    imageRefs: [
-      `ghcr.io/shepherdjerred/discord-plays-pokemon:${version}`,
-      `ghcr.io/shepherdjerred/discord-plays-pokemon:latest`,
-    ],
-    username: registryUsername,
-    password: registryPassword,
-  });
+  // Apply registry auth to the container
+  const authenticatedImage = image.withRegistryAuth("ghcr.io", registryUsername, registryPassword);
+
+  // Publish to both version and latest tags
+  const versionRef = `ghcr.io/shepherdjerred/discord-plays-pokemon:${version}`;
+  const latestRef = `ghcr.io/shepherdjerred/discord-plays-pokemon:latest`;
+
+  const [versionResult, latestResult] = await Promise.all([
+    authenticatedImage.publish(versionRef),
+    authenticatedImage.publish(latestRef),
+  ]);
+
+  return [versionResult, latestResult];
 }
