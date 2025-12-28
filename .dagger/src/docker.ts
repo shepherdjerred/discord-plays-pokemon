@@ -22,6 +22,7 @@ export async function buildDockerImage(
   return dag
     .container()
     .from("ghcr.io/selkies-project/nvidia-egl-desktop:24.04-20241222100454")
+    .withoutEntrypoint()
     .withEnvVariable("DEBIAN_FRONTEND", "noninteractive")
     .withUser("root")
     .withExec(["apt", "update"])
