@@ -51,7 +51,7 @@ export async function buildDockerImage(
     .withFile("run.sh", workspaceSource.file("misc/run.sh"))
     .withFile("supervisord.conf", workspaceSource.file("misc/supervisord.conf"))
     .withExec(["sh", "-c", "cat supervisord.conf | sudo tee -a /etc/supervisord.conf"])
-    .withExec(["rm", "supervisord.conf"])
+    .withExec(["sudo", "rm", "supervisord.conf"])
     .withExec(["mkdir", "Downloads"])
     .withExec(["sudo", "chown", "-R", "ubuntu:ubuntu", "Downloads"])
     .withLabel("org.opencontainers.image.title", "discord-plays-pokemon")
