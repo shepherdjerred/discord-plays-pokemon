@@ -27,7 +27,7 @@ export async function buildDockerImage(
     .withExec(["apt", "update"])
     .withExec(["apt", "install", "-y", "curl", "kde-config-screenlocker", "unzip"])
     .withExec(["sh", "-c", "curl -fsSL https://bun.sh/install | bash"])
-    .withEnvVariable("PATH", "/root/.bun/bin:/home/ubuntu/.bun/bin:$PATH")
+    .withEnvVariable("PATH", "/root/.bun/bin:/home/ubuntu/.bun/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin")
     .withWorkdir("/home/ubuntu")
     .withExec(["mkdir", "-p", "data"])
     .withUser("ubuntu")
