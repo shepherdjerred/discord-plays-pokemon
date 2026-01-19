@@ -103,7 +103,7 @@ jobs:
       - name: Deploy Docs to S3
         if: steps.env.outputs.env == 'prod'
         run: |
-          dagger call deploy-docs-to-s3 \
+          dagger call deploy-docs-to-s-3 \
             --source=. \
             --s3-access-key-id=env:S3_ACCESS_KEY_ID \
             --s3-secret-access-key=env:S3_SECRET_ACCESS_KEY
