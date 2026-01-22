@@ -14,7 +14,7 @@
     "test": "true"
   },
   "dependencies": {
-    "lodash": "4.17.21",
+    "lodash": "4.17.23",
     "ts-pattern": "^5.7.0",
     "zod": "^3.24.2"
   },
