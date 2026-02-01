@@ -13,7 +13,7 @@
     "test": "true"
   },
   "dependencies": {
-    "@sentry/react": "^9.3.0",
+    "@sentry/react": "^10.0.0",
     "@discord-plays-pokemon/common": "1.0.0",
     "@tailwindcss/vite": "^4.0.17",
     "@tanstack/react-query": "^5.70.0",
