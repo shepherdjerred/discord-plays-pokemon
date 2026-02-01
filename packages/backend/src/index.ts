@@ -1,3 +1,10 @@
+import * as Sentry from "@sentry/node";
+
+Sentry.init({
+  dsn: process.env.SENTRY_DSN ?? "https://9c905c2bb5924e55b4dea32e2a95f0d1@bugsink.sjer.red/8",
+  environment: process.env.NODE_ENV ?? "development",
+});
+
 import { sendGameCommand } from "./browser/game.js";
 import { handleMessages } from "./discord/messageHandler.js";
 import { Browser, Builder, WebDriver } from "selenium-webdriver";

@@ -17,6 +17,7 @@
     "test:watch": "bun test --watch"
   },
   "dependencies": {
+    "@sentry/node": "^9.3.0",
     "@d6v/zconf": "^0.0.4",
     "@discord-plays-pokemon/common": "1.0.0",
     "cors": "^2.8.5",
